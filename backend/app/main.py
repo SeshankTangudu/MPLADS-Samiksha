@@ -7,16 +7,19 @@ and Swagger documentation.
 import os
 from datetime import datetime, timezone
 from typing import Any, Dict
-from fastapi import FastAPI, HTTPException, Request, status
+from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+from backend.app.routers import stats, projects
 
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",")
 
 app = FastAPI(
-    title="MPLADS Samiksha Risk Intelligence API",
-    description="Read-only intelligence layer over Member of Parliament Local Area Development Scheme data.",
+    title="MPLADS Samiksha API",
+    description="Parliamentary Fund Intelligence & Anomaly Review Platform for MPLADS",
     version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -99,3 +102,8 @@ async def root() -> Dict[str, Any]:
         "health": "/health",
         "disclaimer": "Risk indicators are analytical signals intended to support review. They do not constitute proof of wrongdoing."
     }
+
+# Mount contract-bound feature routers under /api
+app.include_router(stats.router, prefix="/api")
+app.include_router(projects.router, prefix="/api")
+

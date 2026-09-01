@@ -104,7 +104,7 @@
     "agent": "Backend",
     "priority": "P0",
     "depends_on": ["T08"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Frozen API contract",
     "outputs": "GET /api/stats/overview, GET /api/projects, GET /api/projects/{id} routes",
     "definition_of_done": "Pytest contract tests pass; pagination, sorting, filtering verified."
@@ -126,7 +126,7 @@
     "agent": "AI/ML",
     "priority": "P0",
     "depends_on": ["T10"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Cohort stats + project records",
     "outputs": "ml/risk_engine.py with deterministic anomaly scoring rules",
     "definition_of_done": "Unit tests pass on edge cases and hand-verified fixture records; pure deterministic logic."
@@ -137,7 +137,7 @@
     "agent": "AI/ML",
     "priority": "P0",
     "depends_on": ["T11"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "risk_engine.py, DB records",
     "outputs": "Populated risk_scores and risk_flags tables in SQLite",
     "definition_of_done": "Batch execution completes; overall flag rate sits in 1-6% band; 1 project manually verified end-to-end."
@@ -181,7 +181,7 @@
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T14"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Mocks -> live API (/api/projects)",
     "outputs": "Project Explorer page with filters, search, sort, and pagination",
     "definition_of_done": "Search/filter/sort/pagination live and reactive with zero console errors."
