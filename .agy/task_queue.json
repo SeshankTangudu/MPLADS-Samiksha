@@ -27,7 +27,7 @@
     "agent": "DevOps",
     "priority": "P0",
     "depends_on": ["T01"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Stack §12, §14",
     "outputs": "requirements.txt, frontend/package.json, run.bat/run.sh scripts",
     "definition_of_done": "Installs cleanly with pinned versions; environments verified."
@@ -82,7 +82,7 @@
     "agent": "Backend",
     "priority": "P0",
     "depends_on": ["T01", "T02"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "Master Guide §B.7",
     "outputs": "backend/app/main.py, /health route, CORS middleware, global exception handler",
     "definition_of_done": "FastAPI app runs, Swagger docs load at /docs, 404/422 structured error responses verified."
@@ -159,7 +159,7 @@
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T01", "T02"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "Part A §16 design specification",
     "outputs": "frontend shell, Vite setup, Tailwind/CSS tokens, React Router, apiClient, loading/error boundary states",
     "definition_of_done": "All route placeholders render; mock-driven client verified; government palette applied."
