@@ -1,4 +1,4 @@
-"""Automated verification tests for T10 Cohort Statistics Computation."""
+"""Automated verification tests for T10 Cohort Statistics & Methodology."""
 
 import os
 import json
@@ -7,7 +7,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 from backend.app.database import DATABASE_URL
-from ml.cohort_stats import compute_cohort_stats, OUTPUT_JSON_PATH
+from ml.cohort_stats import compute_cohort_stats, OUTPUT_JSON_PATH, MIN_COHORT_SIZE
 
 
 @pytest.fixture(scope="module")
@@ -23,7 +23,7 @@ def cohort_data():
 def test_cohort_json_exists(cohort_data):
     assert os.path.exists(OUTPUT_JSON_PATH)
     assert cohort_data["meta"]["total_records"] == 1675
-    assert len(cohort_data["cohorts"]) > 0
+    assert len(cohort_data["cohorts"]) == 74
 
 
 def test_global_baselines(cohort_data):
@@ -65,7 +65,27 @@ def test_spot_check_five_cohorts(cohort_data):
         assert key in cohort_data["cohorts"], f"Cohort {key} missing from baselines"
 
         sub_df = df[(df["category"] == cat) & (df["state"] == state)]
-        if len(sub_df) >= 10:
+        if len(sub_df) >= MIN_COHORT_SIZE:
             expected_median = round(float(sub_df["expenditure"].median()), 2)
             actual_median = cohort_data["cohorts"][key]["expenditure_median"]
             assert actual_median == expected_median, f"Median mismatch for {key}: {actual_median} vs {expected_median}"
+
+
+def test_cohort_fallback_behavior(cohort_data):
+    """Verifies that all cohorts with N < 10 fallback to Category (National) baselines."""
+    for key, c in cohort_data["cohorts"].items():
+        if c.get("is_fallback"):
+            cat_name = key.split("::")[0]
+            cat_median = cohort_data["categories"][cat_name]["expenditure_median"]
+            assert c["expenditure_median"] == cat_median, f"Fallback median mismatch for {key}"
+            assert c["original_count"] < MIN_COHORT_SIZE
+
+
+def test_reproducibility():
+    """Verifies that computing baselines multiple times is strictly deterministic."""
+    p1 = compute_cohort_stats()
+    p2 = compute_cohort_stats()
+    # Exclude timestamp
+    del p1["meta"]["generated_at"]
+    del p2["meta"]["generated_at"]
+    assert json.dumps(p1, sort_keys=True) == json.dumps(p2, sort_keys=True)
