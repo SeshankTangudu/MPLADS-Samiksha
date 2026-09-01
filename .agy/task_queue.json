@@ -38,7 +38,7 @@
     "agent": "Data Eng",
     "priority": "P0",
     "depends_on": ["T00"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Sources §11",
     "outputs": "data/raw/* files + data/raw/PROVENANCE.md",
     "definition_of_done": "Raw data files preserved; date, source URL, and sha256/counts recorded."
@@ -49,7 +49,7 @@
     "agent": "Data Eng",
     "priority": "P0",
     "depends_on": ["T03"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "Raw data files",
     "outputs": "data/processed/projects_clean.csv, docs/data_quality_report.md",
     "definition_of_done": "Clean CSV generated idempotently; DQ checks passed/documented; <5% critical nulls."
@@ -60,7 +60,7 @@
     "agent": "Data Eng",
     "priority": "P1",
     "depends_on": ["T03"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "District lists, community centroids",
     "outputs": "data/reference/centroids.csv",
     "definition_of_done": ">=90% districts matched with centroids; otherwise map feature demoted."
