@@ -1,0 +1,16 @@
+{
+  "active_blockers": [],
+  "resolved_blockers": [],
+  "capability_notes": [
+    {
+      "capability": "DEPLOY",
+      "classification": "AGY-GENERATES-COMMAND",
+      "impact": "Cloud deployments (e.g. Vercel/Render) require user accounts/tokens or dashboard click-through. AGY will generate build artifacts, deployment configurations, and exact CLI/UI commands. Localhost deployment is AGY-EXECUTABLE."
+    },
+    {
+      "capability": "BROWSER-SESSION",
+      "classification": "USER-ACTION",
+      "impact": "Authenticated sessions requiring external manual login/2FA require user interaction. Public web requests and scraping are AGY-EXECUTABLE."
+    }
+  ]
+}
