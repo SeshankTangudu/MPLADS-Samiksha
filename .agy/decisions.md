@@ -25,3 +25,14 @@
 - **Date**: 2026-09-01
 - **Author**: PM / Orchestrator Agent
 - **Decision**: No application code will be generated until prerequisite gates are satisfied. T01 (Scaffold) and T03 (Data Download) are the only tasks unlocked after T00. DB and API contracts will not be frozen until after the real data compatibility gate (T04/T05).
+
+## DEC-004: Data Unit of Observation & Terminology Realignment
+- **Date**: 2026-09-01
+- **Author**: Architect & Data Engineer Agents
+- **Decision**: The unit of observation for the platform's open snapshot is explicitly defined as **"Constituency-Level Parliamentary Term Work & Fund Allocations"** (15th, 16th, 17th Lok Sabha). All documentation, API schemas, and UI components must:
+  1. Distinguish between constituency allocations, itemized portal records, and physical on-site civil works.
+  2. Treat `source_record_id` as a dataset index key, not a government work ID.
+  3. Treat `progress percentage` strictly as a "financial utilization proxy" (`expenditure / sanctioned_cost`), never claiming physical construction completion.
+  4. Use district centroids for spatial context without claiming individual project GPS pins.
+  5. Frame anomaly signals as review indicators derived from reported financial and administrative compliance data.
+
