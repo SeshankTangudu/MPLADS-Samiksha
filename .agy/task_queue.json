@@ -16,7 +16,7 @@
     "agent": "Architect",
     "priority": "P0",
     "depends_on": ["T00"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Part A §20",
     "outputs": "mplads-samiksha/ directory tree, .gitignore, .env.example, docs/contracts/ placeholders, initial git commit",
     "definition_of_done": "Structure matches §20; git status clean; .env.example contains placeholder values only."
@@ -27,7 +27,7 @@
     "agent": "DevOps",
     "priority": "P0",
     "depends_on": ["T01"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "Stack §12, §14",
     "outputs": "requirements.txt, frontend/package.json, run.bat/run.sh scripts",
     "definition_of_done": "Installs cleanly with pinned versions; environments verified."
