@@ -1,0 +1,1016 @@
+district_id,state,district,clean_district_name,latitude,longitude
+1,National / Multi-State,Andaman And Nicobar Islands,Andaman And Nicobar Islands,20.2657,79.1949
+2,National / Multi-State,Vijayawada,Vijayawada,16.5062,80.648
+3,National / Multi-State,Hindupur,Hindupur,20.8017,79.2429
+4,National / Multi-State,Mvvv Visakhapatnam,Mvvv Visakhapatnam,17.6868,83.2185
+5,National / Multi-State,Narasapuram,Narasapuram,21.2017,78.2429
+6,National / Multi-State,Tirupati(Sc),Tirupati,13.6288,79.4192
+7,National / Multi-State,Anakapalle,Anakapalle,20.3697,79.4269
+8,National / Multi-State,Anantapur,Anantapur,14.6819,77.6006
+9,National / Multi-State,Nandyal,Nandyal,21.0817,78.4509
+10,National / Multi-State,Narasaraopet,Narasaraopet,20.5377,78.4909
+11,National / Multi-State,Srikakulam,Srikakulam,18.2949,83.8938
+12,National / Multi-State,Araku(St),Araku,19.8817,78.6269
+13,National / Multi-State,Kurnool,Kurnool,15.8281,78.0373
+14,National / Multi-State,Ongole,Ongole,20.0737,78.7629
+15,National / Multi-State,Kadapa,Kadapa,14.4673,78.8242
+16,National / Multi-State,Vizianagaram,Vizianagaram,19.8337,78.3389
+17,National / Multi-State,Rajahmundry,Rajahmundry,21.0497,79.5069
+18,National / Multi-State,Chittoor,Chittoor,19.9217,78.2349
+19,National / Multi-State,Guntur,Guntur,16.3067,80.4365
+20,National / Multi-State,Bapatla,Bapatla,19.9857,79.1709
+21,National / Multi-State,Nellore(Sc),Nellore,14.4426,79.9865
+22,National / Multi-State,Machilipatnam,Machilipatnam,25.5941,85.1376
+23,National / Multi-State,Rajampet,Rajampet,21.2097,79.2589
+24,National / Multi-State,Kakinada,Kakinada,20.2177,78.4989
+25,National / Multi-State,Amalapuram(Sc),Amalapuram,20.2897,78.4669
+26,National / Multi-State,Eluru,Eluru,19.8657,79.2989
+27,National / Multi-State,Arunachal West,Arunachal West,20.8097,78.6349
+28,National / Multi-State,Arunachal East,Arunachal East,19.9857,78.4669
+29,National / Multi-State,Dibrugarh,Dibrugarh,20.2017,79.3229
+30,National / Multi-State,Tezpur,Tezpur,20.5457,78.9789
+31,National / Multi-State,Kaliabor,Kaliabor,19.8897,78.8429
+32,National / Multi-State,Dhubri,Dhubri,20.2657,79.2749
+33,National / Multi-State,Silchar,Silchar,19.8017,78.7229
+34,National / Multi-State,Kokrajhar (St),Kokrajhar,20.5857,78.4509
+35,National / Multi-State,Autonomous District(St),Autonomous District,20.6177,79.5869
+36,National / Multi-State,Guwahati,Guwahati,21.2337,78.7149
+37,National / Multi-State,Barpeta,Barpeta,20.7217,79.2349
+38,National / Multi-State,Nowgong,Nowgong,20.8097,79.4429
+39,National / Multi-State,Karimganj (Sc),Karimganj,19.8577,78.7469
+40,National / Multi-State,Mangaldoi,Mangaldoi,21.0897,79.5869
+41,National / Multi-State,Jorhat,Jorhat,21.0497,79.1949
+42,National / Multi-State,Lakhimpur,Lakhimpur,19.9137,78.9949
+43,National / Multi-State,Madhepura,Madhepura,20.8897,79.1789
+44,National / Multi-State,Patna Sahib,Patna Sahib,25.5941,85.1376
+45,National / Multi-State,Buxar,Buxar,20.2257,78.2909
+46,National / Multi-State,Madhubani,Madhubani,20.5857,78.8589
+47,National / Multi-State,Nalanda,Nalanda,20.0977,79.4829
+48,National / Multi-State,Karakat,Karakat,20.0337,79.4509
+49,National / Multi-State,Muzaffarpur,Muzaffarpur,26.1209,85.3647
+50,National / Multi-State,Arrah,Arrah,20.7777,79.2509
+51,National / Multi-State,Banka,Banka,19.8417,79.0189
+52,National / Multi-State,Samastipur(Sc),Samastipur,21.1377,79.3309
+53,National / Multi-State,Bhagalpur,Bhagalpur,25.2425,86.9842
+54,National / Multi-State,Valmiki Nagar,Valmiki Nagar,21.0177,79.6589
+55,National / Multi-State,Jamui(Sc),Jamui,20.1697,78.7229
+56,National / Multi-State,Purnea,Purnea,20.8977,79.5469
+57,National / Multi-State,Jhanjharpur,Jhanjharpur,20.4257,78.8269
+58,National / Multi-State,Begusarai,Begusarai,20.4657,79.2909
+59,National / Multi-State,Aurangabad,Aurangabad,19.8762,75.3433
+60,National / Multi-State,Saran,Saran,20.5857,78.5869
+61,National / Multi-State,Ujjarpur,Ujjarpur,20.8017,79.0189
+62,National / Multi-State,Paschim Champaran,Paschim Champaran,21.1217,78.7869
+63,National / Multi-State,Katihar,Katihar,21.2017,78.6749
+64,National / Multi-State,Sasaram(Sc),Sasaram,20.1217,79.5069
+65,National / Multi-State,Araria,Araria,20.9537,78.7949
+66,National / Multi-State,Pataliputra,Pataliputra,19.9217,79.2669
+67,National / Multi-State,Khagaria,Khagaria,19.9217,78.8269
+68,National / Multi-State,Jahanabad,Jahanabad,20.3457,79.0189
+69,National / Multi-State,Supaul,Supaul,20.8177,78.2669
+70,National / Multi-State,Munger,Munger,21.0177,79.5869
+71,National / Multi-State,Hajipur(Sc),Hajipur,20.0417,79.1389
+72,National / Multi-State,Siwan,Siwan,21.1377,79.2989
+73,National / Multi-State,Vaishali,Vaishali,20.0737,79.2669
+74,National / Multi-State,Kishanganj,Kishanganj,20.1297,78.5789
+75,National / Multi-State,Gaya (Sc),Gaya,24.7914,85.0002
+76,National / Multi-State,Nawada,Nawada,19.9617,79.0109
+77,National / Multi-State,Sitamarhi,Sitamarhi,20.1217,78.6829
+78,National / Multi-State,Purvi Champaran,Purvi Champaran,21.0257,78.6909
+79,National / Multi-State,Gopalganj (Sc),Gopalganj,20.0417,78.2509
+80,National / Multi-State,Maharajganj,Maharajganj,21.3617,79.4989
+81,National / Multi-State,Darbhanga,Darbhanga,20.5137,79.6589
+82,National / Multi-State,Sheohar,Sheohar,19.8257,78.2109
+83,National / Multi-State,Chandigarh,Chandigarh,20.5297,79.0909
+84,National / Multi-State,Korba,Korba,20.1697,78.2509
+85,National / Multi-State,Kanker(St),Kanker,20.6417,79.2989
+86,National / Multi-State,Rajnandgaon,Rajnandgaon,20.2657,79.3229
+87,National / Multi-State,Raipur,Raipur,21.2514,81.6296
+88,National / Multi-State,Raigarh(St),Raigarh,21.2897,79.1469
+89,National / Multi-State,Janjgir Champa(Sc),Janjgir Champa,19.8817,78.5629
+90,National / Multi-State,Sarguja(St),Sarguja,20.2017,78.2109
+91,National / Multi-State,Bastar(St),Bastar,21.1697,78.6269
+92,National / Multi-State,Mahasamund,Mahasamund,20.7937,78.7149
+93,National / Multi-State,Durg,Durg,20.9057,78.1629
+94,National / Multi-State,Bilaspur,Bilaspur,22.0797,82.1409
+95,National / Multi-State,Dadra Nagar Haveli (St),Dadra Nagar Haveli,20.3697,78.2029
+96,National / Multi-State,Daman Diu,Daman Diu,21.2257,79.3469
+97,National / Multi-State,West Delhi,West Delhi,20.0897,79.2269
+98,National / Multi-State,East Delhi,East Delhi,20.5857,78.9069
+99,National / Multi-State,New Delhi,New Delhi,20.8417,79.6269
+100,National / Multi-State,Chandini Chowk,Chandini Chowk,21.2337,78.8349
+101,National / Multi-State,South Delhi,South Delhi,21.0577,78.8429
+102,National / Multi-State,North West Delhi(Sc),North West Delhi,20.8817,78.5149
+103,National / Multi-State,North East Delhi,North East Delhi,21.1377,79.2269
+104,National / Multi-State,South Goa,South Goa,20.1057,79.5069
+105,National / Multi-State,North Goa,North Goa,20.8257,78.8109
+106,National / Multi-State,Kheda,Kheda,20.6097,78.2749
+107,National / Multi-State,Chhota Udaipur(St),Chhota Udaipur,24.5854,73.7125
+108,National / Multi-State,Mahesana,Mahesana,20.5617,78.5069
+109,National / Multi-State,Amreli,Amreli,21.1217,78.9949
+110,National / Multi-State,Banaskantha,Banaskantha,21.3137,78.4429
+111,National / Multi-State,Ahmedabad West(Sc),Ahmedabad West,23.0225,72.5714
+112,National / Multi-State,Bardoli(St),Bardoli,21.2497,78.8909
+113,National / Multi-State,Kachchh(Sc),Kachchh,20.4497,79.0509
+114,National / Multi-State,Anand,Anand,20.5057,79.3469
+115,National / Multi-State,Gandhinagar,Gandhinagar,19.9937,78.6589
+116,National / Multi-State,Dahod(St),Dahod,21.3537,79.1149
+117,National / Multi-State,Junagadh,Junagadh,21.2257,78.2509
+118,National / Multi-State,Navsari,Navsari,20.0337,79.3469
+119,National / Multi-State,Valsad(St),Valsad,21.2817,79.6509
+120,National / Multi-State,Patan,Patan,20.6577,79.5149
+121,National / Multi-State,Rajkot,Rajkot,22.3039,70.8022
+122,National / Multi-State,Vadodara,Vadodara,22.3072,73.1812
+123,National / Multi-State,Bharuch,Bharuch,20.8577,79.3309
+124,National / Multi-State,Surat,Surat,21.1702,72.8311
+125,National / Multi-State,Jamnagar,Jamnagar,21.0097,78.6509
+126,National / Multi-State,Surendranagar,Surendranagar,19.9857,78.9389
+127,National / Multi-State,Ahmedabad East,Ahmedabad East,23.0225,72.5714
+128,National / Multi-State,Bhavnagar,Bhavnagar,20.4097,79.4189
+129,National / Multi-State,Sabarkantha,Sabarkantha,20.4497,79.2749
+130,National / Multi-State,Porbandar,Porbandar,20.8817,78.4989
+131,National / Multi-State,Panchmahal,Panchmahal,20.8017,78.5229
+132,National / Multi-State,Faridabad,Faridabad,28.4089,77.3178
+133,National / Multi-State,Sirsa(Sc),Sirsa,20.8017,79.2829
+134,National / Multi-State,Rohtak,Rohtak,21.1857,78.2589
+135,National / Multi-State,Sonepat,Sonepat,20.4497,79.1869
+136,National / Multi-State,Bhiwani Mahendragarh,Bhiwani Mahendragarh,20.6337,79.5629
+137,National / Multi-State,Hisar,Hisar,20.2257,78.3069
+138,National / Multi-State,Kurukshetra,Kurukshetra,21.3137,78.7229
+139,National / Multi-State,Gurgaon,Gurgaon,21.1777,79.0509
+140,National / Multi-State,Ambala (Sc),Ambala,20.8257,79.3389
+141,National / Multi-State,Karnal,Karnal,20.6897,79.4829
+142,National / Multi-State,Kangra,Kangra,20.5697,78.4269
+143,National / Multi-State,Mandi,Mandi,21.0497,79.6029
+144,National / Multi-State,Shimla (Sc),Shimla,31.1048,77.1734
+145,National / Multi-State,Hamirpur,Hamirpur,19.8497,79.0029
+146,National / Multi-State,Baramullah,Baramullah,19.9937,79.3389
+147,National / Multi-State,Udhampur,Udhampur,20.1297,78.7789
+148,National / Multi-State,Anantnag,Anantnag,20.8337,78.6349
+149,National / Multi-State,Jammu,Jammu,20.9857,79.7149
+150,National / Multi-State,Srinagar,Srinagar,21.0657,78.2029
+151,National / Multi-State,Godda,Godda,20.2097,79.4989
+152,National / Multi-State,Giridih,Giridih,21.2097,78.6029
+153,National / Multi-State,Lohardaga(St),Lohardaga,19.8177,78.3949
+154,National / Multi-State,Palamu(Sc),Palamu,20.8817,79.2589
+155,National / Multi-State,Dhanbad,Dhanbad,21.0977,78.7549
+156,National / Multi-State,Khunti(St),Khunti,20.3537,78.5309
+157,National / Multi-State,Ranchi,Ranchi,23.3441,85.3096
+158,National / Multi-State,Rajmahal(St),Rajmahal,20.9137,78.2109
+159,National / Multi-State,Singhbhum(St),Singhbhum,20.5697,79.3549
+160,National / Multi-State,Jamshedpur,Jamshedpur,22.8046,86.2029
+161,National / Multi-State,Dumka(St),Dumka,21.2897,79.0669
+162,National / Multi-State,Hazaribagh,Hazaribagh,20.9217,78.9309
+163,National / Multi-State,Kodarma,Kodarma,19.8497,79.7549
+164,National / Multi-State,Chatra,Chatra,21.3777,78.1789
+165,National / Multi-State,Chamarajanagar(Sc),Chamarajanagar,21.2577,79.5309
+166,National / Multi-State,Gulbarga(Sc),Gulbarga,20.3697,78.7789
+167,National / Multi-State,Dakshina Kannada,Dakshina Kannada,19.8337,78.7389
+168,National / Multi-State,Bangalore Central,Bangalore Central,12.9716,77.5946
+169,National / Multi-State,Belgaum,Belgaum,15.8497,74.4977
+170,National / Multi-State,Udupi Chikmagalur,Udupi Chikmagalur,20.2737,78.9069
+171,National / Multi-State,Hassan,Hassan,20.3297,79.2429
+172,National / Multi-State,Dharwad,Dharwad,20.5777,79.1709
+173,National / Multi-State,Bidar,Bidar,20.2337,78.7149
+174,National / Multi-State,Bangalore Rural,Bangalore Rural,12.9716,77.5946
+175,National / Multi-State,Koppal,Koppal,20.2577,79.3949
+176,National / Multi-State,Bagalkot,Bagalkot,21.1537,79.2749
+177,National / Multi-State,Bijapur(Sc),Bijapur,19.8097,79.4829
+178,National / Multi-State,Bangalore South,Bangalore South,12.9716,77.5946
+179,National / Multi-State,Mandya,Mandya,21.2657,78.8349
+180,National / Multi-State,Chikkodi,Chikkodi,20.4737,78.3549
+181,National / Multi-State,Davanagere,Davanagere,21.3377,78.3469
+182,National / Multi-State,Chikballapur,Chikballapur,20.0017,78.9869
+183,National / Multi-State,Bellary(St),Bellary,21.0337,79.3469
+184,National / Multi-State,Raichur(St),Raichur,21.3377,79.3789
+185,National / Multi-State,Uttara Kannada,Uttara Kannada,19.9697,79.0269
+186,National / Multi-State,Haveri,Haveri,21.2097,79.1469
+187,National / Multi-State,Shimoga,Shimoga,19.9537,78.2029
+188,National / Multi-State,Kolar(Sc),Kolar,19.9777,79.4989
+189,National / Multi-State,Tumkur,Tumkur,21.3697,79.4109
+190,National / Multi-State,Bangalore North,Bangalore North,12.9716,77.5946
+191,National / Multi-State,Mysore,Mysore,20.0497,79.1709
+192,National / Multi-State,Chitradurga(Sc),Chitradurga,20.6577,79.2109
+193,National / Multi-State,Kannur,Kannur,20.8817,78.4509
+194,National / Multi-State,Vadakara,Vadakara,20.8177,79.0829
+195,National / Multi-State,Alathur(Sc),Alathur,20.2817,79.3469
+196,National / Multi-State,Kollam,Kollam,20.2577,78.7469
+197,National / Multi-State,Alappuzha,Alappuzha,20.3617,79.2829
+198,National / Multi-State,Attingal,Attingal,21.3537,79.7149
+199,National / Multi-State,Chalakudy,Chalakudy,19.9537,79.1229
+200,National / Multi-State,Idukki,Idukki,20.3137,79.6589
+201,National / Multi-State,Ponnani,Ponnani,20.0977,78.5709
+202,National / Multi-State,Thiruvananthapuram,Thiruvananthapuram,8.5241,76.9366
+203,National / Multi-State,Palakkad,Palakkad,19.9857,79.2749
+204,National / Multi-State,Kasaragod,Kasaragod,21.2817,78.5789
+205,National / Multi-State,Kottayam,Kottayam,20.7937,79.2189
+206,National / Multi-State,Wayanad,Wayanad,20.2737,79.5069
+207,National / Multi-State,Ernakulam,Ernakulam,19.8657,79.7549
+208,National / Multi-State,Kozhikode,Kozhikode,11.2588,75.7804
+209,National / Multi-State,Thrissur,Thrissur,20.7297,78.4909
+210,National / Multi-State,Pathanamthitta,Pathanamthitta,19.8657,78.9469
+211,National / Multi-State,Malappuram,Malappuram,20.0977,78.1709
+212,National / Multi-State,Mavelikkara(Sc),Mavelikkara,20.9137,79.5549
+213,National / Multi-State,Ladakh,Ladakh,20.4577,78.6349
+214,National / Multi-State,Lakshadweep(St),Lakshadweep,19.9537,78.7949
+215,National / Multi-State,Khandwa,Khandwa,20.0097,78.3709
+216,National / Multi-State,Chhindwara,Chhindwara,21.0497,78.7869
+217,National / Multi-State,Hoshangabad,Hoshangabad,20.0577,78.4509
+218,National / Multi-State,Vidisha,Vidisha,20.2977,79.4429
+219,National / Multi-State,Satna,Satna,19.8577,79.4189
+220,National / Multi-State,Jabalpur,Jabalpur,23.1815,79.9864
+221,National / Multi-State,Dewas(Sc),Dewas,20.5457,79.2989
+222,National / Multi-State,Rajgarh,Rajgarh,21.2657,79.2269
+223,National / Multi-State,Rewa,Rewa,20.8657,78.3309
+224,National / Multi-State,Bhind(Sc),Bhind,19.8257,79.5709
+225,National / Multi-State,Indore,Indore,22.7196,75.8577
+226,National / Multi-State,Shahdol (St),Shahdol,21.1137,79.0349
+227,National / Multi-State,Dhar(St),Dhar,20.7457,79.4989
+228,National / Multi-State,Khajuraho,Khajuraho,20.0097,79.0589
+229,National / Multi-State,Guna,Guna,21.3857,78.9389
+230,National / Multi-State,Khargone(St),Khargone,20.4657,78.4669
+231,National / Multi-State,Bhopal,Bhopal,23.2599,77.4126
+232,National / Multi-State,Sidhi,Sidhi,20.5297,78.9069
+233,National / Multi-State,Balaghat,Balaghat,19.8417,79.3709
+234,National / Multi-State,Mandla(St),Mandla,20.4657,78.1629
+235,National / Multi-State,Ujjain(Sc),Ujjain,19.8657,78.9629
+236,National / Multi-State,Damoh,Damoh,20.4577,78.7549
+237,National / Multi-State,Sagar,Sagar,20.0897,79.4429
+238,National / Multi-State,Gwalior,Gwalior,26.2183,78.1828
+239,National / Multi-State,Morena,Morena,20.8657,78.9709
+240,National / Multi-State,Betul(St),Betul,20.3537,78.6669
+241,National / Multi-State,Ratlam(St),Ratlam,19.9457,79.7229
+242,National / Multi-State,Tikamgarh(Sc),Tikamgarh,20.0177,78.9789
+243,National / Multi-State,Mandsour,Mandsour,21.0497,79.4189
+244,National / Multi-State,Mumbai North East,Mumbai North East,19.076,72.8777
+245,National / Multi-State,Satara,Satara,20.3777,79.1709
+246,National / Multi-State,Latur(Sc),Latur,19.8097,79.6589
+247,National / Multi-State,Bhandara-Gondiya,Bhandaragondiya,21.2657,78.3389
+248,National / Multi-State,Maval,Maval,21.3857,79.4589
+249,National / Multi-State,Yavatmal-Washim,Yavatmalwashim,20.5217,78.8989
+250,National / Multi-State,Palghar(St),Palghar,21.1537,78.6669
+251,National / Multi-State,Chandrapur,Chandrapur,20.8977,78.7869
+252,National / Multi-State,Hingoli,Hingoli,20.2737,78.6749
+253,National / Multi-State,Mumbai North-Central,Mumbai Northcentral,19.076,72.8777
+254,National / Multi-State,Nanded,Nanded,21.2737,79.3069
+255,National / Multi-State,Ramtek(Sc),Ramtek,20.3537,78.7709
+256,National / Multi-State,Kalyan,Kalyan,20.3697,79.0989
+257,National / Multi-State,Wardha,Wardha,20.0737,79.1629
+258,National / Multi-State,Mumbai South,Mumbai South,19.076,72.8777
+259,National / Multi-State,Baramati,Baramati,20.2817,79.5069
+260,National / Multi-State,Shirur,Shirur,20.4417,79.3309
+261,National / Multi-State,Thane,Thane,19.2183,72.9781
+262,National / Multi-State,Raigad,Raigad,21.1297,79.6029
+263,National / Multi-State,Ahmednagar,Ahmednagar,21.3217,78.4829
+264,National / Multi-State,Mumbai South Central,Mumbai South Central,19.076,72.8777
+265,National / Multi-State,Buldhana,Buldhana,21.2977,79.3949
+266,National / Multi-State,Nandurbar(St),Nandurbar,20.7297,79.4269
+267,National / Multi-State,Akola,Akola,20.6737,78.4349
+268,National / Multi-State,Dhule,Dhule,19.8097,79.4829
+269,National / Multi-State,Kolhapur,Kolhapur,19.9457,79.5949
+270,National / Multi-State,Jalna,Jalna,21.0817,78.3709
+271,National / Multi-State,Parbhani,Parbhani,20.5697,78.4429
+272,National / Multi-State,Nashik,Nashik,19.9975,73.7898
+273,National / Multi-State,Beed,Beed,20.3457,79.6669
+274,National / Multi-State,Osmanabad,Osmanabad,20.9457,79.5229
+275,National / Multi-State,Pune,Pune,18.5204,73.8567
+276,National / Multi-State,Mumbai North,Mumbai North,19.076,72.8777
+277,National / Multi-State,Hatkanangle,Hatkanangle,21.3537,78.8429
+278,National / Multi-State,Gadchiroli-Chimur(St),Gadchirolichimur,20.7217,79.7549
+279,National / Multi-State,Nagpur,Nagpur,21.1458,79.0882
+280,National / Multi-State,Mumbai North West,Mumbai North West,19.076,72.8777
+281,National / Multi-State,Solapur(Sc),Solapur,21.2817,78.6589
+282,National / Multi-State,Sangli,Sangli,20.2657,79.0829
+283,National / Multi-State,Amravati(Sc),Amravati,20.6097,78.9869
+284,National / Multi-State,Shirdi(Sc),Shirdi,20.1377,79.0749
+285,National / Multi-State,Raver,Raver,20.7057,79.2029
+286,National / Multi-State,Madha,Madha,21.0657,79.7309
+287,National / Multi-State,Jalgaon,Jalgaon,19.9857,79.2509
+288,National / Multi-State,Ratnagiri-Sindhudurg,Ratnagirisindhudurg,20.8737,79.6189
+289,National / Multi-State,Bhiwandi,Bhiwandi,21.2337,79.1949
+290,National / Multi-State,Dindori(St),Dindori,20.5617,78.5069
+291,National / Multi-State,Inner Manipur,Inner Manipur,20.5777,79.6109
+292,National / Multi-State,Outer Manipur(St),Outer Manipur,20.8817,79.2989
+293,National / Multi-State,Shillong,Shillong,20.5217,79.3469
+294,National / Multi-State,Tura,Tura,20.3297,79.0829
+295,National / Multi-State,Mizoram (St),Mizoram,20.1217,78.9789
+296,National / Multi-State,Nagaland,Nagaland,20.0417,79.4909
+297,National / Multi-State,Dhenkanal,Dhenkanal,20.6097,78.2909
+298,National / Multi-State,Jagatsinghpur(Sc),Jagatsinghpur,21.0977,79.5549
+299,National / Multi-State,Mayurbhanj (St),Mayurbhanj,20.9857,78.2429
+300,National / Multi-State,Sambalpur,Sambalpur,21.1137,79.3389
+301,National / Multi-State,Bhadrak(Sc),Bhadrak,20.6897,78.2429
+302,National / Multi-State,Aska,Aska,20.1777,79.6909
+303,National / Multi-State,Kandhamal,Kandhamal,21.3137,78.4749
+304,National / Multi-State,Kalahandi,Kalahandi,20.7777,78.8509
+305,National / Multi-State,Puri,Puri,20.0657,79.3389
+306,National / Multi-State,Sundargarh (St),Sundargarh,20.0097,78.2749
+307,National / Multi-State,Berhampur,Berhampur,20.3777,78.7709
+308,National / Multi-State,Keonjhar(St),Keonjhar,20.1857,78.7949
+309,National / Multi-State,Nabarangpur(St),Nabarangpur,19.8577,79.6109
+310,National / Multi-State,Bhubaneswar,Bhubaneswar,20.2961,85.8245
+311,National / Multi-State,Bolangir,Bolangir,20.4977,79.0669
+312,National / Multi-State,Balasore,Balasore,21.1457,78.4749
+313,National / Multi-State,Kendrapara,Kendrapara,20.4657,79.4589
+314,National / Multi-State,Bargarh,Bargarh,20.0017,78.3629
+315,National / Multi-State,Jajpur(Sc),Jajpur,20.8577,78.8109
+316,National / Multi-State,Cuttack,Cuttack,20.4625,85.8828
+317,National / Multi-State,Koraput(St),Koraput,20.6017,78.2429
+318,National / Multi-State,Pondicherry,Pondicherry,20.3697,79.0589
+319,National / Multi-State,Fatehgarh Sahib(Sc),Fatehgarh Sahib,21.3217,79.7309
+320,National / Multi-State,Amritsar,Amritsar,31.634,74.8723
+321,National / Multi-State,Sangrur,Sangrur,20.5457,79.7069
+322,National / Multi-State,Jalandhar(Sc),Jalandhar,19.8657,79.0669
+323,National / Multi-State,Firozpur,Firozpur,20.1537,78.2189
+324,National / Multi-State,Anandpur Sahib,Anandpur Sahib,20.3697,78.2109
+325,National / Multi-State,Bhatinda,Bhatinda,20.2897,79.4829
+326,National / Multi-State,Patiala,Patiala,20.1537,78.3629
+327,National / Multi-State,Hoshiarpur(Sc),Hoshiarpur,20.0657,78.9789
+328,National / Multi-State,Gurdaspur,Gurdaspur,20.8497,79.2109
+329,National / Multi-State,Ludhiana,Ludhiana,30.901,75.8573
+330,National / Multi-State,Khadoor Sahib,Khadoor Sahib,20.2497,79.1309
+331,National / Multi-State,Faridkot(Sc),Faridkot,20.5857,78.2989
+332,National / Multi-State,Rajsamand,Rajsamand,19.9137,78.8349
+333,National / Multi-State,Kota,Kota,25.2138,75.8648
+334,National / Multi-State,Alwar,Alwar,20.5137,78.6109
+335,National / Multi-State,Chittorgarh,Chittorgarh,21.2017,78.5389
+336,National / Multi-State,Barmer,Barmer,20.8177,78.5469
+337,National / Multi-State,Ganganagar(Sc),Ganganagar,21.3857,78.9149
+338,National / Multi-State,Udaipur(St),Udaipur,24.5854,73.7125
+339,National / Multi-State,Bikaner(Sc),Bikaner,20.9777,78.8429
+340,National / Multi-State,Bharatpur(Sc),Bharatpur,21.0737,78.7229
+341,National / Multi-State,Jaipur,Jaipur,26.9124,75.7873
+342,National / Multi-State,Jalore,Jalore,21.2097,79.4589
+343,National / Multi-State,Sikar,Sikar,21.1297,79.4749
+344,National / Multi-State,Jaipur Rural,Jaipur Rural,26.9124,75.7873
+345,National / Multi-State,Dausa(St),Dausa,21.1297,79.3069
+346,National / Multi-State,Pali,Pali,20.3937,79.7229
+347,National / Multi-State,Banswara(St),Banswara,20.7377,79.6669
+348,National / Multi-State,Jhalawar-Baran,Jhalawarbaran,20.4257,79.7549
+349,National / Multi-State,Jhunjhunu,Jhunjhunu,20.7057,78.7229
+350,National / Multi-State,Ajmer,Ajmer,20.5857,78.1869
+351,National / Multi-State,Churu,Churu,21.1697,79.4749
+352,National / Multi-State,Karauli-Dholpur(Sc),Karaulidholpur,19.8417,78.4749
+353,National / Multi-State,Nagaur,Nagaur,21.1777,78.5069
+354,National / Multi-State,Bhilwara,Bhilwara,19.8977,79.6749
+355,National / Multi-State,Jodhpur,Jodhpur,26.2389,73.0243
+356,National / Multi-State,Tonk-Sawai Madhopur,Tonksawai Madhopur,20.8817,79.4669
+357,National / Multi-State,Sikkim,Sikkim,20.6017,78.5629
+358,National / Multi-State,D Viluppuram(Sc),D Viluppuram,21.2497,78.6349
+359,National / Multi-State,Thoothukkudi,Thoothukkudi,21.1457,78.6669
+360,National / Multi-State,Dm Vellore,Dm Vellore,20.9537,78.8189
+361,National / Multi-State,Kancheepuram(Sc),Kancheepuram,21.2977,79.5309
+362,National / Multi-State,Kanniyakumari,Kanniyakumari,21.2497,79.6509
+363,National / Multi-State,Theni,Theni,20.6737,78.5789
+364,National / Multi-State,Erode,Erode,20.7377,79.1469
+365,National / Multi-State,Nagapattinam(Sc),Nagapattinam,21.0817,79.3389
+366,National / Multi-State,Cuddalore,Cuddalore,20.2657,79.0109
+367,National / Multi-State,Chennai Central,Chennai Central,13.0827,80.2707
+368,National / Multi-State,Thanjavur,Thanjavur,20.1937,79.4669
+369,National / Multi-State,Tiruvallur(Sc),Tiruvallur,19.8657,78.5629
+370,National / Multi-State,Ramanathapuram,Ramanathapuram,20.0177,79.0509
+371,National / Multi-State,Mayiladuthurai,Mayiladuthurai,20.2817,78.7389
+372,National / Multi-State,Krishnagiri,Krishnagiri,16.18,81.13
+373,National / Multi-State,Chidambaram(Sc),Chidambaram,21.2577,79.5549
+374,National / Multi-State,Virudhunagar,Virudhunagar,20.3697,79.5789
+375,National / Multi-State,Perambalur,Perambalur,19.9537,79.3149
+376,National / Multi-State,Sriperumbudur,Sriperumbudur,20.1457,79.0509
+377,National / Multi-State,Dharamapuri,Dharamapuri,20.2657,79.4029
+378,National / Multi-State,Tiruchirappalli,Tiruchirappalli,10.7905,78.7047
+379,National / Multi-State,Tirunelveli,Tirunelveli,20.7937,79.6829
+380,National / Multi-State,Chennai South,Chennai South,13.0827,80.2707
+381,National / Multi-State,Nilgiris(Sc),Nilgiris,19.9137,78.7949
+382,National / Multi-State,Tenkasi(Sc),Tenkasi,21.1377,78.6349
+383,National / Multi-State,Sivaganga,Sivaganga,20.7857,79.1469
+384,National / Multi-State,Salem,Salem,11.6643,78.146
+385,National / Multi-State,Tiruppur,Tiruppur,20.1057,78.5869
+386,National / Multi-State,Namakkal,Namakkal,20.6097,79.4029
+387,National / Multi-State,Madurai,Madurai,9.9252,78.1198
+388,National / Multi-State,Chennai North,Chennai North,13.0827,80.2707
+389,National / Multi-State,Arani,Arani,21.2257,78.8429
+390,National / Multi-State,Pollachi,Pollachi,20.4497,79.6509
+391,National / Multi-State,Tiruvannamalai,Tiruvannamalai,21.3537,79.0029
+392,National / Multi-State,Kallakurichi,Kallakurichi,20.8897,78.8269
+393,National / Multi-State,Arakkonam,Arakkonam,20.1377,78.7069
+394,National / Multi-State,Dindigul,Dindigul,20.4257,79.0189
+395,National / Multi-State,Coimbatore,Coimbatore,11.0168,76.9558
+396,National / Multi-State,Karur,Karur,20.1777,78.3629
+397,National / Multi-State,Zahirabad,Zahirabad,21.3057,78.5229
+398,National / Multi-State,Nagarkurnool(Sc),Nagarkurnool,15.8281,78.0373
+399,National / Multi-State,Nizamabad,Nizamabad,20.8817,79.7469
+400,National / Multi-State,Adilabad(St),Adilabad,20.1937,79.5629
+401,National / Multi-State,Secunderabad,Secunderabad,20.5857,78.2749
+402,National / Multi-State,Nalgonda,Nalgonda,20.8337,79.7069
+403,National / Multi-State,Warangel(Sc),Warangel,20.2897,78.6589
+404,National / Multi-State,Khammam,Khammam,21.3137,78.7229
+405,National / Multi-State,Mahabubabad,Mahabubabad,20.4897,79.4429
+406,National / Multi-State,Malkajgiri,Malkajgiri,20.6577,78.7469
+407,National / Multi-State,Karimnagar,Karimnagar,20.7057,79.0349
+408,National / Multi-State,Mahabubnagar,Mahabubnagar,19.8817,78.1629
+409,National / Multi-State,Hyderabad,Hyderabad,17.385,78.4867
+410,National / Multi-State,Bhongir,Bhongir,20.0977,78.4109
+411,National / Multi-State,Peddapalle,Peddapalle,20.5697,79.2829
+412,National / Multi-State,Medak,Medak,20.0737,78.5309
+413,National / Multi-State,Chelvella,Chelvella,21.0017,78.6029
+414,National / Multi-State,Tripura West,Tripura West,20.5857,78.4109
+415,National / Multi-State,Tripura East(St),Tripura East,20.4497,78.5229
+416,National / Multi-State,Gautam Buddha Nagar,Gautam Buddha Nagar,20.5297,79.5309
+417,National / Multi-State,Pilibhit,Pilibhit,20.8817,78.6909
+418,National / Multi-State,Mainpuri,Mainpuri,19.9857,79.4509
+419,National / Multi-State,Saharanpur,Saharanpur,21.2417,79.4189
+420,National / Multi-State,Nagina(Sc),Nagina,21.0257,78.8349
+421,National / Multi-State,Hardoi (Sc),Hardoi,20.9777,79.4429
+422,National / Multi-State,Mirzapur,Mirzapur,19.9217,79.5709
+423,National / Multi-State,Aligarh,Aligarh,20.2337,78.3869
+424,National / Multi-State,Ballia,Ballia,21.2657,78.4509
+425,National / Multi-State,Varanasi,Varanasi,25.3176,82.9739
+426,National / Multi-State,Sitapur,Sitapur,19.9297,79.4669
+427,National / Multi-State,Kanpur,Kanpur,26.4499,80.3319
+428,National / Multi-State,Fatehpur Sikri,Fatehpur Sikri,20.5857,79.0909
+429,National / Multi-State,Agra(Sc),Agra,27.1767,78.0081
+430,National / Multi-State,Firozabad,Firozabad,21.1697,79.5149
+431,National / Multi-State,Machhlishahr(Sc),Machhlishahr,21.3377,79.3709
+432,National / Multi-State,Baghpat,Baghpat,21.2977,78.5229
+433,National / Multi-State,Meerut,Meerut,28.9845,77.7064
+434,National / Multi-State,Aonla,Aonla,21.0737,78.1789
+435,National / Multi-State,Sambhal,Sambhal,21.1937,78.3469
+436,National / Multi-State,Rampur,Rampur,20.2577,78.6509
+437,National / Multi-State,Etah,Etah,21.1297,78.2669
+438,National / Multi-State,Badaun,Badaun,20.1617,78.2269
+439,National / Multi-State,Basti,Basti,20.5057,79.3629
+440,National / Multi-State,Bareilly,Bareilly,20.2097,79.2269
+441,National / Multi-State,Hathras (Sc),Hathras,21.0897,79.3789
+442,National / Multi-State,Amethi,Amethi,20.0497,79.3629
+443,National / Multi-State,Rae Bareli,Rae Bareli,19.8737,78.3309
+444,National / Multi-State,Amroha,Amroha,20.7297,78.8109
+445,National / Multi-State,Azamgarh,Azamgarh,20.0177,78.5069
+446,National / Multi-State,Robertsganj(Sc),Robertsganj,20.0737,79.3469
+447,National / Multi-State,Phulpur,Phulpur,20.3057,79.2589
+448,National / Multi-State,Bansgaon(Sc),Bansgaon,20.2577,78.8269
+449,National / Multi-State,Bulandshahr(Sc),Bulandshahr,20.5617,79.2269
+450,National / Multi-State,Moradabad,Moradabad,19.8577,79.7549
+451,National / Multi-State,Fatehpur,Fatehpur,20.5137,78.1709
+452,National / Multi-State,Barabanki(Sc),Barabanki,20.1937,79.3229
+453,National / Multi-State,Jhansi,Jhansi,20.0737,78.4909
+454,National / Multi-State,Allahabad,Allahabad,20.1457,78.1789
+455,National / Multi-State,Jalaun(Sc),Jalaun,19.8817,78.9069
+456,National / Multi-State,Lucknow,Lucknow,26.8467,80.9462
+457,National / Multi-State,Misrikh(Sc),Misrikh,21.1137,78.1869
+458,National / Multi-State,Sultanpur,Sultanpur,20.9457,78.5309
+459,National / Multi-State,Muzaffarnagar,Muzaffarnagar,20.3777,78.5949
+460,National / Multi-State,Kaushambi(Sc),Kaushambi,19.7937,78.2429
+461,National / Multi-State,Dhaurahra,Dhaurahra,21.2497,78.5389
+462,National / Multi-State,Pratapgarh,Pratapgarh,20.8177,79.1709
+463,National / Multi-State,Ghazipur,Ghazipur,19.8097,79.2509
+464,National / Multi-State,Mathura,Mathura,20.5057,79.5309
+465,National / Multi-State,Kannauj,Kannauj,20.0497,79.6989
+466,National / Multi-State,Kushi Nagar,Kushi Nagar,20.9857,79.0269
+467,National / Multi-State,Akbarpur,Akbarpur,21.0577,78.8589
+468,National / Multi-State,Shrawasti,Shrawasti,20.5217,78.3709
+469,National / Multi-State,Banda,Banda,20.2897,78.9549
+470,National / Multi-State,Salempur,Salempur,11.6643,78.146
+471,National / Multi-State,Jaunpur,Jaunpur,19.8817,79.7469
+472,National / Multi-State,Ghaziabad,Ghaziabad,28.6692,77.4538
+473,National / Multi-State,Kaiserganj,Kaiserganj,20.2817,79.7229
+474,National / Multi-State,Deoria,Deoria,20.9457,78.5389
+475,National / Multi-State,Bijnor,Bijnor,21.1617,78.6669
+476,National / Multi-State,Sant Kabir Nagar,Sant Kabir Nagar,20.9617,78.5229
+477,National / Multi-State,Kheri,Kheri,20.3617,79.2669
+478,National / Multi-State,Ghosi,Ghosi,20.3057,78.8909
+479,National / Multi-State,Farrukhabad,Farrukhabad,20.2177,79.4989
+480,National / Multi-State,Mohanlalganj(Sc),Mohanlalganj,21.2337,78.4269
+481,National / Multi-State,Chandauli,Chandauli,20.0177,78.4029
+482,National / Multi-State,Faizabad,Faizabad,19.8177,78.2189
+483,National / Multi-State,Ambedkar Nagar,Ambedkar Nagar,20.1217,78.9629
+484,National / Multi-State,Lalganj (Sc),Lalganj,19.8577,79.0109
+485,National / Multi-State,Unnao,Unnao,20.0897,78.4989
+486,National / Multi-State,Bhadohi,Bhadohi,20.9297,79.4509
+487,National / Multi-State,Gorakhpur,Gorakhpur,21.3297,78.6749
+488,National / Multi-State,Kairana,Kairana,21.1297,79.5549
+489,National / Multi-State,Etawah(Sc),Etawah,19.8097,78.9229
+490,National / Multi-State,Domariyaganj,Domariyaganj,20.2977,78.9309
+491,National / Multi-State,Gonda,Gonda,20.4817,78.6429
+492,National / Multi-State,Bahraich(Sc),Bahraich,21.2497,79.4749
+493,National / Multi-State,Shahjahanpur(Sc),Shahjahanpur,20.2177,79.2189
+494,National / Multi-State,Garhwal,Garhwal,20.0017,79.2509
+495,National / Multi-State,Hardwar,Hardwar,19.8897,79.4829
+496,National / Multi-State,Almora(Sc),Almora,21.2017,79.0189
+497,National / Multi-State,Tehri Garhwal,Tehri Garhwal,21.1137,78.6429
+498,National / Multi-State,Nainital Udham Singh Nag.,Nainital Udham Singh Nag,21.1617,79.2669
+499,National / Multi-State,Bardhaman-Durgapur,Bardhamandurgapur,20.8497,78.4669
+500,National / Multi-State,Kanthi,Kanthi,20.5697,79.3149
+501,National / Multi-State,Bardhaman Purba(Sc),Bardhaman Purba,19.9137,78.9949
+502,National / Multi-State,Asansol,Asansol,20.3137,78.5309
+503,National / Multi-State,Joynagar(Sc),Joynagar,20.0177,79.2029
+504,National / Multi-State,Mathurapur(Sc),Mathurapur,20.7697,79.5469
+505,National / Multi-State,Barasat,Barasat,21.3297,78.7789
+506,National / Multi-State,Uluberia,Uluberia,21.3057,78.2029
+507,National / Multi-State,Kolkata Uttar,Kolkata Uttar,22.5726,88.3639
+508,National / Multi-State,Barrackpur,Barrackpur,20.5777,79.6509
+509,National / Multi-State,Jhargram(St),Jhargram,20.3297,79.5229
+510,National / Multi-State,Alipurduars(St),Alipurduars,21.3617,78.5149
+511,National / Multi-State,Jangipur,Jangipur,21.3137,78.4669
+512,National / Multi-State,Sreerampur,Sreerampur,19.8017,79.4749
+513,National / Multi-State,Raiganj,Raiganj,20.1217,78.6349
+514,National / Multi-State,Krishnanagar,Krishnanagar,16.18,81.13
+515,National / Multi-State,Jalpaiguri(Sc),Jalpaiguri,20.5297,78.2029
+516,National / Multi-State,Diamond Harbour,Diamond Harbour,21.1377,79.0349
+517,National / Multi-State,Bishnupur(Sc),Bishnupur,21.1297,79.6989
+518,National / Multi-State,Balurghat,Balurghat,20.8097,78.7549
+519,National / Multi-State,Kolkata Dakshin,Kolkata Dakshin,22.5726,88.3639
+520,National / Multi-State,Jadavpur,Jadavpur,20.5137,79.5309
+521,National / Multi-State,Darjeeling,Darjeeling,27.041,88.2663
+522,National / Multi-State,Bolpur(Sc),Bolpur,21.3857,78.7309
+523,National / Multi-State,Baharampur,Baharampur,20.4897,79.7309
+524,National / Multi-State,Purulia,Purulia,20.7937,78.2269
+525,National / Multi-State,Medinipur,Medinipur,19.7937,79.3149
+526,National / Multi-State,Howrah,Howrah,22.5958,88.2636
+527,National / Multi-State,Tamluk,Tamluk,20.6577,78.5629
+528,National / Multi-State,Ghatal,Ghatal,20.9537,79.5389
+529,National / Multi-State,Basirhat,Basirhat,20.0417,79.7069
+530,National / Multi-State,Ranaghat(Sc),Ranaghat,21.1937,78.4109
+531,National / Multi-State,Coochbehar(Sc),Coochbehar,20.7057,78.9869
+532,National / Multi-State,Murshidabad,Murshidabad,20.2417,79.1549
+533,National / Multi-State,Maldaha Uttar,Maldaha Uttar,21.2097,78.6989
+534,National / Multi-State,Arambag(Sc),Arambag,20.8017,78.4029
+535,National / Multi-State,Bankura,Bankura,21.3217,79.2909
+536,National / Multi-State,Maldaha Dakshin,Maldaha Dakshin,20.9697,78.9709
+537,National / Multi-State,Bangaon(Sc),Bangaon,20.1777,78.6109
+538,National / Multi-State,Dum Dum,Dum Dum,20.2817,78.3309
+539,National / Multi-State,Hooghly,Hooghly,20.1777,79.1629
+540,National / Multi-State,Birbhum,Birbhum,20.6337,79.6109
+541,A & N Islands,Andamans,Andamans,12.1001,92.3386
+542,Andhra Pradesh,Nellore,Nellore,14.4426,79.9865
+543,Andhra Pradesh,East Godavari,East Godavari,15.4889,79.868
+544,Andhra Pradesh,Visakhapatnam,Visakhapatnam,17.6868,83.2185
+545,Andhra Pradesh,Chittoor,Chittoor,15.2409,79.012
+546,Andhra Pradesh,Vizianagaram,Vizianagaram,15.1529,79.116
+547,Andhra Pradesh,West Godavari,West Godavari,16.2009,79.188
+548,Andhra Pradesh,Anantapur,Anantapur,14.6819,77.6006
+549,Andhra Pradesh,Guntur,Guntur,16.3067,80.4365
+550,Andhra Pradesh,Krishna,Krishna,16.18,81.13
+551,Andhra Pradesh,Srikakulam,Srikakulam,18.2949,83.8938
+552,Andhra Pradesh,Kurnool,Kurnool,15.8281,78.0373
+553,Andhra Pradesh,Cuddapah,Cuddapah,16.4249,79.244
+554,Andhra Pradesh,Prakasam,Prakasam,15.5,79.5
+555,Arunachal Pradesh,West Siang,West Siang,28.546,95.1758
+556,Arunachal Pradesh,Lohit,Lohit,27.938,95.2718
+557,Assam,Cachar,Cachar,26.2566,93.2816
+558,Assam,Dhubri,Dhubri,25.8726,93.2496
+559,Assam,Karbi Anglong,Karbi Anglong,26.8646,93.6816
+560,Assam,Nowgong,Nowgong,26.4166,93.4176
+561,Assam,Jorhat,Jorhat,26.6566,93.1696
+562,Assam,Dhemaji,Dhemaji,26.9286,93.4816
+563,Assam,Darrang,Darrang,26.8886,93.7296
+564,Assam,Dibrugarh,Dibrugarh,25.8086,93.2976
+565,Assam,Sonitpur,Sonitpur,25.7526,92.7536
+566,Assam,Nalbari,Nalbari,26.1446,93.5536
+567,Assam,Karim Ganj,Karim Ganj,26.3846,92.5856
+568,Assam,Lakhimpur,Lakhimpur,25.5206,92.9696
+569,Assam,Barpeta,Barpeta,26.3286,93.2096
+570,Assam,Kamrup Metropolitan,Kamrup Metropolitan,25.6806,92.3376
+571,Bihar,Khagaria,Khagaria,24.4241,85.1771
+572,Bihar,Muzaffarpur,Muzaffarpur,26.1209,85.3647
+573,Bihar,Jehanabad,Jehanabad,24.5441,85.7211
+574,Bihar,Bettiah (W.Champaran),Bettiah,25.0641,85.7291
+575,Bihar,Begusarai,Begusarai,24.9681,85.6411
+576,Bihar,Buxar,Buxar,24.7281,84.6411
+577,Bihar,Kishanganj,Kishanganj,24.6321,84.9291
+578,Bihar,Madhubani,Madhubani,25.0881,85.2091
+579,Bihar,Kaimur (Bhabua),Kaimur,25.0641,86.0811
+580,Bihar,Nawada,Nawada,24.4641,85.3611
+581,Bihar,Gopalganj,Gopalganj,25.7521,85.9771
+582,Bihar,Jamui,Jamui,24.7281,84.9531
+583,Bihar,Bihar Sharif/Nalanda,Bihar Sharifnalanda,24.8401,84.5371
+584,Bihar,Gaya,Gaya,24.7914,85.0002
+585,Bihar,Saran,Saran,25.0881,84.9371
+586,Bihar,Darbanga,Darbanga,25.4881,86.0171
+587,Bihar,Banka,Banka,24.3441,85.3691
+588,Bihar,Samastipur,Samastipur,24.7921,84.7851
+589,Bihar,Siwan,Siwan,25.6401,85.6491
+590,Bihar,Bhojpur(Arrah),Bhojpur,25.4001,85.5371
+591,Bihar,Mothihari (E.Champaran),Mothihari,24.5201,85.4331
+592,Bihar,Madhepura,Madhepura,25.3921,85.5291
+593,Bihar,Sitamarhi,Sitamarhi,24.6241,85.0331
+594,Bihar,Vaishali,Vaishali,24.5761,85.6171
+595,Bihar,Araria,Araria,25.4561,85.1451
+596,Bihar,Bhagalpur,Bhagalpur,25.2425,86.9842
+597,Bihar,Patna,Patna,17.6868,83.2185
+598,Bihar,Katihar,Katihar,25.7041,85.0251
+599,Bihar,Purnea,Purnea,25.4001,85.8971
+600,Bihar,Aurangabad,Aurangabad,19.8762,75.3433
+601,Bihar,Rohtas,Rohtas,25.7601,85.8331
+602,Bihar,Supaul,Supaul,25.3201,84.6171
+603,Chandigarh,Chandigarh,Chandigarh,30.6693,76.9074
+604,Chhattisgarh,Korba,Korba,20.8547,81.1541
+605,Chhattisgarh,Rajnandgaon,Rajnandgaon,20.9507,82.2261
+606,Chhattisgarh,Mahasamund,Mahasamund,21.4787,81.6181
+607,Chhattisgarh,Bastar,Bastar,21.7107,81.2821
+608,Chhattisgarh,Surguja,Surguja,21.1427,82.6421
+609,Chhattisgarh,Bilaspur,Bilaspur,22.0797,82.1409
+610,Chhattisgarh,Uttar Bastar Kanker,Uttar Bastar Kanker,22.0147,82.6181
+611,Chhattisgarh,Janjgir-Champa,Janjgirchampa,21.9587,81.6261
+612,Chhattisgarh,Raipur,Raipur,21.2514,81.6296
+613,Chhattisgarh,Durg,Durg,21.5907,81.0661
+614,Chhattisgarh,Raigarh,Raigarh,21.5107,81.1621
+615,D & N Haveli,Dadra And Nagar Haveli,Dadra And Nagar Haveli,20.9009,73.1129
+616,Daman & Diu,Daman,Daman,20.4123,72.4317
+617,Delhi,Commissioner North Delhi Municipal Corporation,Commissioner North Delhi Municipal Corporation,29.2961,76.3025
+618,Delhi,Commissioner East Delhi Municipal Corporation,Commissioner East Delhi Municipal Corporation,28.2561,77.8305
+619,Delhi,Commissioner South Delhi Municipal Corporation,Commissioner South Delhi Municipal Corporation,28.0641,77.0305
+620,Goa,South Goa,South Goa,14.8113,74.668
+621,Goa,North Goa,North Goa,15.5313,73.972
+622,Gujarat,Bhavnagar,Bhavnagar,22.0747,71.6484
+623,Gujarat,Valsad,Valsad,21.8587,70.8484
+624,Gujarat,Ahmedabad,Ahmedabad,23.0225,72.5714
+625,Gujarat,Banaskantha,Banaskantha,22.9787,70.6724
+626,Gujarat,Navsari,Navsari,21.6987,71.5764
+627,Gujarat,Dahod,Dahod,21.8587,71.0244
+628,Gujarat,Anand,Anand,22.1707,71.5764
+629,Gujarat,Kheda,Kheda,22.2747,70.5044
+630,Gujarat,Surendranagar,Surendranagar,21.6507,71.1684
+631,Gujarat,Sabarkantha,Sabarkantha,22.1147,71.5044
+632,Gujarat,Gandhinagar,Gandhinagar,21.6587,70.8884
+633,Gujarat,Bharuch,Bharuch,22.5227,71.5604
+634,Gujarat,Rajkot,Rajkot,22.3039,70.8022
+635,Gujarat,Patan,Patan,22.3227,71.7444
+636,Gujarat,Amreli,Amreli,22.7867,71.2244
+637,Gujarat,Surat,Surat,21.1702,72.8311
+638,Gujarat,Chhota Udaipur,Chhota Udaipur,24.5854,73.7125
+639,Gujarat,Panchmahals,Panchmahals,22.7947,70.8244
+640,Gujarat,Junagadh,Junagadh,22.8907,70.4804
+641,Gujarat,Vadodara,Vadodara,22.3072,73.1812
+642,Gujarat,Jamnagar,Jamnagar,22.6747,70.8804
+643,Gujarat,Mahesana,Mahesana,22.2267,70.7364
+644,Haryana,Karnal,Karnal,29.1548,76.6056
+645,Haryana,Rewari,Rewari,28.7548,75.3576
+646,Haryana,Sirsa,Sirsa,29.4668,75.7656
+647,Haryana,Mahendragarh,Mahendragarh,29.8268,76.2616
+648,Haryana,Rohtak,Rohtak,29.6508,75.3816
+649,Haryana,Hissar,Hissar,29.2748,76.8056
+650,Haryana,Faridabad,Faridabad,28.4089,77.3178
+651,Haryana,Ambala,Ambala,29.3468,75.3096
+652,Haryana,Kurukshetra,Kurukshetra,29.7788,75.8456
+653,Haryana,Sonepat,Sonepat,28.9148,76.3096
+654,Himachal Pradesh,Hamirpur,Hamirpur,30.3608,77.2134
+655,Himachal Pradesh,Mandi,Mandi,31.5608,77.8134
+656,Himachal Pradesh,Kangra,Kangra,31.0808,76.6374
+657,Himachal Pradesh,Solan,Solan,30.4408,76.3894
+658,Jammu & Kashmir,Kathua,Kathua,33.7222,76.9522
+659,Jammu & Kashmir,Srinagar,Srinagar,34.2502,75.8162
+660,Jammu & Kashmir,Jammu,Jammu,34.1702,77.3282
+661,Jammu & Kashmir,Baramullah,Baramullah,33.1782,76.9522
+662,Jammu & Kashmir,Leh,Leh,34.2982,76.5762
+663,Jammu & Kashmir,Anantnag,Anantnag,34.0182,76.2482
+664,Jharkhand,Giridih,Giridih,24.2262,84.9199
+665,Jharkhand,East Singhbum,East Singhbum,23.4662,86.0639
+666,Jharkhand,Khunti,Khunti,23.3222,85.5199
+667,Jharkhand,Hazaribagh,Hazaribagh,23.9382,85.2479
+668,Jharkhand,Godda,Godda,23.2262,85.8159
+669,Jharkhand,Chaibas (W.Singhbhum),Chaibas,23.6262,85.1039
+670,Jharkhand,Dhanbad,Dhanbad,24.1142,85.0719
+671,Jharkhand,Bokaro,Bokaro,23.8822,85.0079
+672,Jharkhand,Chatra,Chatra,24.3942,84.4959
+673,Jharkhand,Dumka,Dumka,23.6902,85.4959
+674,Jharkhand,Ranchi,Ranchi,23.3441,85.3096
+675,Jharkhand,Palamau,Palamau,23.4582,85.5759
+676,Jharkhand,Sahebganj,Sahebganj,23.8022,85.3999
+677,Karnataka,Chikballapur,Chikballapur,14.7253,75.7379
+678,Karnataka,Udupi,Udupi,14.7413,75.4739
+679,Karnataka,Raichur,Raichur,14.7733,75.3459
+680,Karnataka,Shivamogga,Shivamogga,15.7253,75.3539
+681,Karnataka,Ballari,Ballari,15.8533,76.3379
+682,Karnataka,Chitradurga,Chitradurga,16.0293,75.5459
+683,Karnataka,Bengaluru Urban,Bengaluru Urban,12.9716,77.5946
+684,Karnataka,Uttar Kannad,Uttar Kannad,15.8533,75.9699
+685,Karnataka,Mandya,Mandya,15.9893,75.5859
+686,Karnataka,Bidar,Bidar,14.9573,75.4659
+687,Karnataka,Ramanagara,Ramanagara,15.7893,75.8579
+688,Karnataka,Davangere,Davangere,15.8693,75.8979
+689,Karnataka,Kolar,Kolar,15.6133,75.2899
+690,Karnataka,Hassan,Hassan,15.0533,75.9939
+691,Karnataka,Belagavi,Belagavi,14.5493,76.4179
+692,Karnataka,Gulbarga,Gulbarga,14.9013,75.2979
+693,Karnataka,Bagalkot,Bagalkot,15.8773,76.0259
+694,Karnataka,Dharwar,Dharwar,15.6853,75.9939
+695,Karnataka,Mysore,Mysore,14.7733,75.9219
+696,Karnataka,Bijapur,Bijapur,15.4693,75.4259
+697,Karnataka,Dakshin Kannad,Dakshin Kannad,14.5333,76.0259
+698,Karnataka,Chamarajnagar,Chamarajnagar,14.6533,75.8819
+699,Karnataka,Koppal,Koppal,14.9813,76.1459
+700,Karnataka,Tumakuru,Tumakuru,14.5973,74.9619
+701,Karnataka,Haveri,Haveri,15.9333,75.8979
+702,Kerala,Malappuram,Malappuram,10.3545,75.4791
+703,Kerala,Thiruvananthapuram,Thiruvananthapuram,8.5241,76.9366
+704,Kerala,Ernakulam,Ernakulam,10.1225,77.0631
+705,Kerala,Idukki,Idukki,10.5705,76.9671
+706,Kerala,Pathanamthitta,Pathanamthitta,10.1225,76.2551
+707,Kerala,Kottayam,Kottayam,11.0505,76.5271
+708,Kerala,Alappuzha,Alappuzha,10.6185,76.5911
+709,Kerala,Thrissoor,Thrissoor,11.1545,75.7991
+710,Kerala,Wayanad,Wayanad,10.5305,76.8151
+711,Kerala,Palakkad,Palakkad,10.2425,76.5831
+712,Kerala,Kasaragod,Kasaragod,11.5385,75.8871
+713,Kerala,Kozhikode,Kozhikode,11.2588,75.7804
+714,Kerala,Kollam,Kollam,10.5145,76.0551
+715,Kerala,Kannur,Kannur,11.1385,75.7591
+716,Lakshadweep,Lakshadweep,Lakshadweep,9.9747,73.3377
+717,Madhya Pradesh,Ujjain,Ujjain,23.1334,78.3289
+718,Madhya Pradesh,Bhopal,Bhopal,23.2599,77.4126
+719,Madhya Pradesh,Bhind,Bhind,23.5014,77.8809
+720,Madhya Pradesh,Indore,Indore,22.7196,75.8577
+721,Madhya Pradesh,Tikamgarh,Tikamgarh,23.6214,79.3609
+722,Madhya Pradesh,Morena,Morena,23.2454,78.6649
+723,Madhya Pradesh,Balaghat,Balaghat,22.2214,79.0649
+724,Madhya Pradesh,Jhabua,Jhabua,23.6134,79.1369
+725,Madhya Pradesh,Guna,Guna,23.7654,78.6329
+726,Madhya Pradesh,Mandla,Mandla,22.9814,78.4889
+727,Madhya Pradesh,Shahdol,Shahdol,22.9334,79.3289
+728,Madhya Pradesh,Satna,Satna,22.2374,79.1129
+729,Madhya Pradesh,Sagar,Sagar,22.4694,79.1369
+730,Madhya Pradesh,Rewa,Rewa,23.2454,78.0249
+731,Madhya Pradesh,Chhindwara,Chhindwara,23.4294,78.4809
+732,Madhya Pradesh,Khandwa,Khandwa,22.3894,78.0649
+733,Madhya Pradesh,Damoh,Damoh,22.8374,78.4489
+734,Madhya Pradesh,Panna,Panna,22.1894,78.0169
+735,Madhya Pradesh,Dewas,Dewas,22.6294,78.6729
+736,Madhya Pradesh,Rajgarh,Rajgarh,23.6454,78.9209
+737,Madhya Pradesh,Gwalior,Gwalior,26.2183,78.1828
+738,Madhya Pradesh,Mandsaur,Mandsaur,23.7334,79.4169
+739,Madhya Pradesh,Jabalpur,Jabalpur,23.1815,79.9864
+740,Madhya Pradesh,Hoshangabad,Hoshangabad,22.4374,78.1449
+741,Madhya Pradesh,Betul,Betul,22.6774,78.5929
+742,Madhya Pradesh,Khargaon,Khargaon,22.6134,78.6489
+743,Madhya Pradesh,Sidhi,Sidhi,22.9094,78.6009
+744,Madhya Pradesh,Dhar,Dhar,22.4134,79.4489
+745,Madhya Pradesh,Raisen,Raisen,22.9654,78.8569
+746,Maharashtra,Dhule,Dhule,18.9675,76.2339
+747,Maharashtra,Mumbai Suburban,Mumbai Suburban,19.076,72.8777
+748,Maharashtra,Osmanabad,Osmanabad,20.1035,76.2739
+749,Maharashtra,Nandurbar,Nandurbar,19.6955,76.3539
+750,Maharashtra,Thane,Thane,19.2183,72.9781
+751,Maharashtra,Wasim,Wasim,19.9035,76.4259
+752,Maharashtra,Jalgaon,Jalgaon,19.1435,76.0019
+753,Maharashtra,Raigad,Raigad,20.2875,76.3539
+754,Maharashtra,Amravati,Amravati,19.3115,75.9779
+755,Maharashtra,Beed,Beed,19.5035,76.4179
+756,Maharashtra,Latur,Latur,19.0795,76.2419
+757,Maharashtra,Garchiroli,Garchiroli,19.5435,75.4499
+758,Maharashtra,Mumbai City,Mumbai City,19.076,72.8777
+759,Maharashtra,Nanded,Nanded,20.4315,76.0579
+760,Maharashtra,Aurangabad,Aurangabad,19.8762,75.3433
+761,Maharashtra,Pune,Pune,18.5204,73.8567
+762,Maharashtra,Palghar,Palghar,20.5195,75.3539
+763,Maharashtra,Nashik,Nashik,19.9975,73.7898
+764,Maharashtra,Kolhapur,Kolhapur,19.1035,76.3459
+765,Maharashtra,Chandrapur,Chandrapur,20.0555,75.5379
+766,Maharashtra,Ahmadnagar,Ahmadnagar,19.8075,74.9219
+767,Maharashtra,Nagpur,Nagpur,21.1458,79.0882
+768,Maharashtra,Buldana,Buldana,19.7835,75.9939
+769,Maharashtra,Hingoli,Hingoli,19.4315,75.4259
+770,Maharashtra,Bhandara,Bhandara,20.4875,75.9299
+771,Maharashtra,Sangli,Sangli,19.4235,75.8339
+772,Maharashtra,Wardha,Wardha,19.2315,75.9139
+773,Maharashtra,Jalna,Jalna,20.2395,75.1219
+774,Maharashtra,Akola,Akola,19.8315,75.1859
+775,Maharashtra,Parbhani,Parbhani,19.7275,75.1939
+776,Maharashtra,Satara,Satara,19.5355,75.9219
+777,Maharashtra,Solapur,Solapur,19.2955,76.2819
+778,Maharashtra,Sindhudurg,Sindhudurg,19.6235,75.1299
+779,Manipur,Imphal West,Imphal West,24.7917,94.4023
+780,Manipur,Churachandpur,Churachandpur,24.6957,93.3543
+781,Meghalaya,West Garo Hills,West Garo Hills,24.899,90.8542
+782,Meghalaya,East Khasi Hills,East Khasi Hills,24.763,90.6622
+783,Mizoram,Aizawl,Aizawl,23.3565,92.2816
+784,Nagaland,Dimapur,Dimapur,25.4224,93.9144
+785,Nominated,Thiruvananthapuram,Thiruvananthapuram,8.5241,76.9366
+786,Nominated,South Twenty Four Parganas,South Twenty Four Parganas,20.5937,78.9629
+787,Odisha,Jagatsinghpur,Jagatsinghpur,21.1357,85.6105
+788,Odisha,Baragarh,Baragarh,21.6717,84.3705
+789,Odisha,Kendrapara,Kendrapara,20.8237,85.5945
+790,Odisha,Bhadrak,Bhadrak,21.4397,84.4745
+791,Odisha,Cuttack,Cuttack,20.4625,85.8828
+792,Odisha,Kalahandi,Kalahandi,21.1357,84.9865
+793,Odisha,Nabarangpur,Nabarangpur,21.5197,85.5545
+794,Odisha,Sundargarh,Sundargarh,21.3037,84.9705
+795,Odisha,Rayagada,Rayagada,20.6477,84.8985
+796,Odisha,Bolangir,Bolangir,20.8557,85.2025
+797,Odisha,Kandhamal,Kandhamal,21.6717,84.6105
+798,Odisha,Angul,Angul,20.1757,85.4745
+799,Odisha,Balasore,Balasore,21.5037,84.6105
+800,Odisha,Ganjam,Ganjam,21.5837,84.5385
+801,Odisha,Puri,Puri,20.4237,85.4745
+802,Odisha,Mayurbhanj,Mayurbhanj,21.2397,85.1465
+803,Odisha,Khordha,Khordha,21.0797,85.3545
+804,Odisha,Dhenkanal,Dhenkanal,20.9677,84.4265
+805,Odisha,Keonjhar,Keonjhar,20.5997,85.8665
+806,Odisha,Jajpur,Jajpur,21.6557,84.2985
+807,Puducherry,Pondicherry,Pondicherry,11.7176,79.9043
+808,Punjab,Faridkot,Faridkot,31.0031,76.1332
+809,Punjab,Amritsar,Amritsar,31.634,74.8723
+810,Punjab,Patiala,Patiala,30.7071,74.7412
+811,Punjab,Sangrur,Sangrur,31.0991,76.0852
+812,Punjab,Ludhiana,Ludhiana,30.901,75.8573
+813,Punjab,Sahibzada Ajit Singh Nagar,Sahibzada Ajit Singh Nagar,31.0431,74.5972
+814,Punjab,Jalandhar,Jalandhar,30.8031,75.3892
+815,Punjab,Tarn Taran,Tarn Taran,30.6111,74.8932
+816,Punjab,Firozepur,Firozepur,31.6671,75.8212
+817,Punjab,Hoshiarpur,Hoshiarpur,30.4591,74.9732
+818,Punjab,Bhatinda,Bhatinda,30.8431,75.8612
+819,Punjab,Gurdaspur,Gurdaspur,31.4031,75.5892
+820,Punjab,Pathankot,Pathankot,30.7551,74.8372
+821,Rajasthan,Jaipur,Jaipur,26.9124,75.7873
+822,Rajasthan,Barmer,Barmer,27.2478,73.8019
+823,Rajasthan,Alwar,Alwar,26.9438,73.8659
+824,Rajasthan,Udaipur,Udaipur,24.5854,73.7125
+825,Rajasthan,Bharatpur,Bharatpur,27.3198,73.7139
+826,Rajasthan,Karauli,Karauli,26.3198,74.4339
+827,Rajasthan,Ajmer,Ajmer,27.0158,73.4419
+828,Rajasthan,Chittorgarh,Chittorgarh,27.6318,73.7939
+829,Rajasthan,Nagaur,Nagaur,27.6078,73.7619
+830,Rajasthan,Jhalawar,Jhalawar,26.5758,74.6419
+831,Rajasthan,Bikaner,Bikaner,26.2878,73.7059
+832,Rajasthan,Rajsamand,Rajsamand,26.3438,74.0899
+833,Rajasthan,Dausa,Dausa,27.1518,74.1699
+834,Rajasthan,Jalore,Jalore,27.6398,74.7139
+835,Rajasthan,Jodhpur,Jodhpur,26.2389,73.0243
+836,Rajasthan,Banswara,Banswara,26.6478,74.3299
+837,Rajasthan,Sriganganagar,Sriganganagar,27.0958,74.2899
+838,Rajasthan,Pali,Pali,26.8238,74.9779
+839,Rajasthan,Kota,Kota,25.2138,75.8648
+840,Rajasthan,Churu,Churu,27.5998,74.7299
+841,Rajasthan,Tonk,Tonk,26.4638,73.7539
+842,Rajasthan,Bhilwara,Bhilwara,26.3278,74.9299
+843,Rajasthan,Sikar,Sikar,27.5598,74.7299
+844,Rajasthan,Jhunjhunu,Jhunjhunu,27.1358,73.9779
+845,Sikkim,East District,East District,27.533,88.0402
+846,Tamil Nadu,Villupuram,Villupuram,10.8631,79.1369
+847,Tamil Nadu,Karur,Karur,10.7111,78.0569
+848,Tamil Nadu,Cuddalore,Cuddalore,10.7991,78.7049
+849,Tamil Nadu,Tiruvallur,Tiruvallur,10.7591,77.9529
+850,Tamil Nadu,Dharmapuri,Dharmapuri,11.0791,79.3849
+851,Tamil Nadu,Thiruvarur,Thiruvarur,11.2951,78.9529
+852,Tamil Nadu,Chennai,Chennai,13.0827,80.2707
+853,Tamil Nadu,Tirupur,Tirupur,10.4791,79.1849
+854,Tamil Nadu,Tiruvannamalai,Tiruvannamalai,11.8871,78.6969
+855,Tamil Nadu,Vellore,Vellore,11.3031,78.8809
+856,Tamil Nadu,Nilgiris,Nilgiris,10.3271,78.3529
+857,Tamil Nadu,Ramanathapuram,Ramanathapuram,10.5511,78.7449
+858,Tamil Nadu,Tuticorin,Tuticorin,10.6231,79.0889
+859,Tamil Nadu,Krishnagiri,Krishnagiri,16.18,81.13
+860,Tamil Nadu,Kanchipuram,Kanchipuram,10.9271,78.6649
+861,Tamil Nadu,Tirunelveli,Tirunelveli,11.3271,79.3769
+862,Tamil Nadu,Thanjavur,Thanjavur,10.7271,79.1609
+863,Tamil Nadu,Kanniyakumari,Kanniyakumari,11.7831,79.3449
+864,Tamil Nadu,Theni,Theni,11.2071,78.2729
+865,Tamil Nadu,Coimbatore,Coimbatore,11.0168,76.9558
+866,Tamil Nadu,Tiruchirappalli,Tiruchirappalli,10.7905,78.7047
+867,Tamil Nadu,Namakkal,Namakkal,11.1431,79.0969
+868,Tamil Nadu,Sivaganga,Sivaganga,11.3191,78.8409
+869,Tamil Nadu,Dindigul,Dindigul,10.9591,78.7129
+870,Tamil Nadu,Erode,Erode,11.2711,78.8409
+871,Tamil Nadu,Madurai,Madurai,9.9252,78.1198
+872,Tamil Nadu,Perambalur,Perambalur,10.4871,79.0089
+873,Tamil Nadu,Virudhunagar,Virudhunagar,10.9031,79.2729
+874,Tamil Nadu,Salem,Salem,11.6643,78.146
+875,Telangana,Yadadri Bhuvanagiri,Yadadri Bhuvanagiri,17.4564,78.4353
+876,Telangana,Mahabubabad,Mahabubabad,18.0084,79.4993
+877,Telangana,Mahbubnagar,Mahbubnagar,17.6484,78.2673
+878,Telangana,Hanumakonda,Hanumakonda,17.5844,79.1633
+879,Telangana,Hyderabad,Hyderabad,17.385,78.4867
+880,Telangana,Medchal Malkajgiri,Medchal Malkajgiri,17.9924,78.9153
+881,Telangana,Sangareddy,Sangareddy,17.8004,79.7313
+882,Telangana,Adilabad,Adilabad,18.4964,78.9953
+883,Telangana,Nagarkurnool,Nagarkurnool,15.8281,78.0373
+884,Telangana,Rangareddy,Rangareddy,18.2644,78.6033
+885,Telangana,Khamman,Khamman,18.6404,78.5873
+886,Telangana,Peddapally,Peddapally,17.4564,78.5473
+887,Telangana,Nalgonda,Nalgonda,18.3524,79.7633
+888,Telangana,Karimnagar,Karimnagar,18.2244,79.0913
+889,Telangana,Nizamabad,Nizamabad,18.4004,79.8033
+890,Tripura,Dhalai District,Dhalai District,24.6928,91.7882
+891,Tripura,West Tripura,West Tripura,23.1568,92.7002
+892,Uttar Pradesh,Shamli,Shamli,27.3267,81.1222
+893,Uttar Pradesh,Unnao,Unnao,26.3427,80.4822
+894,Uttar Pradesh,Agra,Agra,27.1767,78.0081
+895,Uttar Pradesh,Bahraich,Bahraich,26.6387,80.8182
+896,Uttar Pradesh,Auraiya,Auraiya,26.9027,80.3942
+897,Uttar Pradesh,Fatehpur,Fatehpur,26.7667,80.1542
+898,Uttar Pradesh,Ghaziabad,Ghaziabad,28.6692,77.4538
+899,Uttar Pradesh,Jaunpur,Jaunpur,26.1347,81.7302
+900,Uttar Pradesh,Gautambudhnagar,Gautambudhnagar,27.3507,80.3142
+901,Uttar Pradesh,Baghpat,Baghpat,27.5507,80.5062
+902,Uttar Pradesh,Bijnore,Bijnore,27.4947,81.2022
+903,Uttar Pradesh,Hardoi,Hardoi,27.5907,80.3942
+904,Uttar Pradesh,Chandauli,Chandauli,26.2707,80.3862
+905,Uttar Pradesh,Kanpur Nagar,Kanpur Nagar,26.4499,80.3319
+906,Uttar Pradesh,Muzaffarnagar,Muzaffarnagar,26.6307,80.5782
+907,Uttar Pradesh,Jhansi,Jhansi,26.3267,80.4742
+908,Uttar Pradesh,Rampur,Rampur,26.5107,80.6342
+909,Uttar Pradesh,Mahoba,Mahoba,26.0867,81.6662
+910,Uttar Pradesh,Budaun,Budaun,26.4947,80.6582
+911,Uttar Pradesh,Firozabad,Firozabad,27.4227,81.4982
+912,Uttar Pradesh,Gonda,Gonda,26.7347,80.6262
+913,Uttar Pradesh,Chitrakoot,Chitrakoot,26.9827,81.2662
+914,Uttar Pradesh,Ballia,Ballia,27.5187,80.4342
+915,Uttar Pradesh,Sonbhadra,Sonbhadra,26.5907,81.1142
+916,Uttar Pradesh,Sultanpur,Sultanpur,27.1987,80.5142
+917,Uttar Pradesh,Basti,Basti,26.7587,81.3462
+918,Uttar Pradesh,Kheri,Kheri,26.6147,81.2502
+919,Uttar Pradesh,Balrampur,Balrampur,26.9987,80.3702
+920,Uttar Pradesh,Bulandshahr,Bulandshahr,27.0707,80.2902
+921,Uttar Pradesh,Bareilly,Bareilly,26.4627,81.2102
+922,Uttar Pradesh,Mau,Mau,26.8547,81.4982
+923,Uttar Pradesh,Jalaun,Jalaun,27.2387,81.7302
+924,Uttar Pradesh,Ambedkarnagar,Ambedkarnagar,26.4547,80.4102
+925,Uttar Pradesh,Moradabad,Moradabad,26.1107,81.7382
+926,Uttar Pradesh,Gorakhpur,Gorakhpur,27.5827,80.6582
+927,Uttar Pradesh,Siddharth Nagar,Siddharth Nagar,27.3107,80.8822
+928,Uttar Pradesh,Deoria,Deoria,27.1987,80.5222
+929,Uttar Pradesh,Farrukhabad,Farrukhabad,26.4707,81.4822
+930,Uttar Pradesh,Varanasi,Varanasi,25.3176,82.9739
+931,Uttar Pradesh,Allahabad,Allahabad,26.3987,80.1622
+932,Uttar Pradesh,Azamgarh,Azamgarh,26.2707,80.4902
+933,Uttar Pradesh,Sitapur,Sitapur,26.1827,81.4502
+934,Uttar Pradesh,Amethi,Amethi,26.3027,81.3462
+935,Uttar Pradesh,Kushinagar (Padrauna),Kushinagar,26.0547,81.6742
+936,Uttar Pradesh,Lucknow,Lucknow,26.8467,80.9462
+937,Uttar Pradesh,Saharanpur,Saharanpur,27.4947,81.4022
+938,Uttar Pradesh,Meerut,Meerut,28.9845,77.7064
+939,Uttar Pradesh,Etah,Etah,27.3827,80.2502
+940,Uttar Pradesh,Jyotiba Pholenagar,Jyotiba Pholenagar,26.8787,81.6342
+941,Uttar Pradesh,Pratapgarh,Pratapgarh,27.0707,81.1542
+942,Uttar Pradesh,Faizabad,Faizabad,26.0707,80.2022
+943,Uttar Pradesh,Ghazipur,Ghazipur,26.0627,81.2342
+944,Uttar Pradesh,Mahrajganj,Mahrajganj,26.3827,81.2182
+945,Uttar Pradesh,Sant Kabir Nagar,Sant Kabir Nagar,27.2147,80.5062
+946,Uttar Pradesh,Hathras,Hathras,26.6787,80.2102
+947,Uttar Pradesh,Kannauj,Kannauj,26.3027,81.6822
+948,Uttar Pradesh,Pilibhit,Pilibhit,27.1347,80.6742
+949,Uttar Pradesh,Bhadohi,Bhadohi,27.1827,81.4342
+950,Uttar Pradesh,Mirzapur,Mirzapur,26.1747,81.5542
+951,Uttar Pradesh,Aligarh,Aligarh,26.4867,80.3702
+952,Uttar Pradesh,Mainpuri,Mainpuri,26.2387,81.4342
+953,Uttar Pradesh,Rae Bareli,Rae Bareli,26.1267,80.3142
+954,Uttar Pradesh,Shahjahanpur,Shahjahanpur,26.5267,81.6662
+955,Uttar Pradesh,Bhimnagar(Sambhal),Bhimnagar,26.4227,80.3462
+956,Uttar Pradesh,Kaushambi,Kaushambi,27.1827,81.4902
+957,Uttar Pradesh,Mathura,Mathura,26.7587,81.5142
+958,Uttar Pradesh,Barabanki,Barabanki,26.3907,80.3702
+959,Uttarakhand,Haridwar,Haridwar,29.9457,78.1642
+960,Uttarakhand,Almora,Almora,29.3868,78.5073
+961,Uttarakhand,Pauri Garhwal,Pauri Garhwal,30.6988,78.4753
+962,Uttarakhand,Udhamsingh Nagar,Udhamsingh Nagar,29.5868,79.0753
+963,Uttarakhand,Tehri Garhwal,Tehri Garhwal,30.5868,78.6993
+964,West Bengal,South Dinajpur,South Dinajpur,22.7708,87.687
+965,West Bengal,North Twenty Four Parganas,North Twenty Four Parganas,23.7228,87.215
+966,West Bengal,Hooghly,Hooghly,22.5708,88.055
+967,West Bengal,Paschimi Medinipur,Paschimi Medinipur,22.8108,87.879
+968,West Bengal,Birbhum,Birbhum,23.0268,88.503
+969,West Bengal,Nadia,Nadia,22.4748,87.799
+970,West Bengal,Malda,Malda,22.8268,87.639
+971,West Bengal,Murshidabad,Murshidabad,22.6348,88.047
+972,West Bengal,Burdwan,Burdwan,23.5548,87.887
+973,West Bengal,Purulia,Purulia,23.1868,87.119
+974,West Bengal,South Twenty Four Parganas,South Twenty Four Parganas,23.5468,87.687
+975,West Bengal,Jalpaiguri,Jalpaiguri,23.0028,88.151
+976,West Bengal,Alipurduar,Alipurduar,23.5868,87.271
+977,West Bengal,Purba Medinipur,Purba Medinipur,23.2668,88.551
+978,West Bengal,Bankura,Bankura,23.7148,88.183
+979,West Bengal,North Dinajpur,North Dinajpur,23.3548,88.327
+980,West Bengal,Cooch Behar,Cooch Behar,23.1868,88.111
+981,West Bengal,Howrah,Howrah,22.5958,88.2636
+982,West Bengal,Darjeeling,Darjeeling,27.041,88.2663
+983,West Bengal,Kolkata,Kolkata,22.5726,88.3639
+984,Andhra Pradesh,Hyderabad,Hyderabad,17.385,78.4867
+985,Andhra Pradesh,Karimnagar,Karimnagar,16.0249,79.812
+986,Andhra Pradesh,Mahbubnagar,Mahbubnagar,15.4489,78.988
+987,Andhra Pradesh,Rangareddy,Rangareddy,16.0649,79.324
+988,Andhra Pradesh,Nalgonda,Nalgonda,16.1529,80.484
+989,Andhra Pradesh,Nizamabad,Nizamabad,16.2009,80.524
+990,Andhra Pradesh,Warangal,Warangal,17.9689,79.5941
+991,Andhra Pradesh,Adilabad,Adilabad,16.2969,79.716
+992,Andhra Pradesh,Khammam,Khammam,16.6329,79.5
+993,Andhra Pradesh,Medak,Medak,15.3929,79.308
+994,Assam,Kokrajhar,Kokrajhar,26.6166,92.7296
+995,Gujarat,Porbandar,Porbandar,22.5467,70.7284
+996,Gujarat,Kachchh,Kachchh,21.7227,71.2484
+997,Haryana,Bhiwani,Bhiwani,29.8028,75.7016
+998,Himachal Pradesh,Shimla,Shimla,31.1048,77.1734
+999,Madhya Pradesh,Chhatarpur,Chhatarpur,23.7414,79.1609
+1000,Madhya Pradesh,Shajapur,Shajapur,22.3574,78.9849
+1001,Maharashtra,Gondia,Gondia,19.5115,76.4899
+1002,Maharashtra,Yavatmal,Yavatmal,19.8715,75.2579
+1003,Nominated,Jaipur,Jaipur,26.9124,75.7873
+1004,Nominated,Ernakulam,Ernakulam,20.5937,78.9629
+1005,Nominated,Bilaspur,Bilaspur,22.0797,82.1409
+1006,Odisha,Sambalpur,Sambalpur,21.4717,85.4745
+1007,Punjab,Rupnagar,Rupnagar,31.8431,75.7732
+1008,Punjab,Fatehgarh Sahib,Fatehgarh Sahib,31.7871,75.1652
+1009,Rajasthan,Sawaimadhopur,Sawaimadhopur,26.2958,73.7699
+1010,Tamil Nadu,Nagapattinam,Nagapattinam,10.7431,78.2969
+1011,Uttar Pradesh,Banda,Banda,26.5427,80.9382
+1012,Uttar Pradesh,Etawah,Etawah,26.7987,81.7302
+1013,Uttar Pradesh,Shrawasti,Shrawasti,26.7747,80.3542
+1014,Uttar Pradesh,Mahamayanagar,Mahamayanagar,27.3827,80.3462
+1015,Uttar Pradesh,Hamirpur,Hamirpur,26.1027,80.9862

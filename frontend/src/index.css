@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-gov-navy: #1B3A5C;
+  --color-gov-navy-dark: #0E2338;
+  --color-gov-navy-light: #2C5A8A;
+  --color-gov-amber: #D97706;
+  --color-gov-red: #DC2626;
+  --color-gov-green: #16A34A;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Custom UI Utility Components */
+.gov-card {
+  @apply bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow transition-shadow;
+}
+
+.gov-badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.gov-badge-low {
+  @apply bg-emerald-50 text-emerald-700 border border-emerald-200;
+}
+
+.gov-badge-medium {
+  @apply bg-amber-50 text-amber-700 border border-amber-200;
+}
+
+.gov-badge-high {
+  @apply bg-orange-50 text-orange-700 border border-orange-200;
+}
+
+.gov-badge-critical {
+  @apply bg-red-50 text-red-700 border border-red-200;
+}

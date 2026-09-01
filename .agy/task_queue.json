@@ -49,7 +49,7 @@
     "agent": "Data Eng",
     "priority": "P0",
     "depends_on": ["T03"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Raw data files",
     "outputs": "data/processed/projects_clean.csv, docs/data_quality_report.md",
     "definition_of_done": "Clean CSV generated idempotently; DQ checks passed/documented; <5% critical nulls."
@@ -60,7 +60,7 @@
     "agent": "Data Eng",
     "priority": "P1",
     "depends_on": ["T03"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "District lists, community centroids",
     "outputs": "data/reference/centroids.csv",
     "definition_of_done": ">=90% districts matched with centroids; otherwise map feature demoted."
@@ -71,7 +71,7 @@
     "agent": "DB Eng",
     "priority": "P0",
     "depends_on": ["T04"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "Clean CSV, frozen DB contract",
     "outputs": "SQLite DB (mplads.db), scripts/build_db.py, docs/contracts/db_contract.md",
     "definition_of_done": "Row counts match clean CSV; FK integrity queries pass; contract doc committed and frozen."
@@ -82,7 +82,7 @@
     "agent": "Backend",
     "priority": "P0",
     "depends_on": ["T01", "T02"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Master Guide §B.7",
     "outputs": "backend/app/main.py, /health route, CORS middleware, global exception handler",
     "definition_of_done": "FastAPI app runs, Swagger docs load at /docs, 404/422 structured error responses verified."
@@ -159,7 +159,7 @@
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T01", "T02"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Part A §16 design specification",
     "outputs": "frontend shell, Vite setup, Tailwind/CSS tokens, React Router, apiClient, loading/error boundary states",
     "definition_of_done": "All route placeholders render; mock-driven client verified; government palette applied."
@@ -170,7 +170,7 @@
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T14"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "Mocks -> live API (/api/stats/overview, /api/analytics/*)",
     "outputs": "Overview/Home page, Dashboard page with KPIs and Recharts visualizations",
     "definition_of_done": "4 KPI metric cards + charts render live data seamlessly."
@@ -181,7 +181,7 @@
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T14"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "Mocks -> live API (/api/projects)",
     "outputs": "Project Explorer page with filters, search, sort, and pagination",
     "definition_of_done": "Search/filter/sort/pagination live and reactive with zero console errors."
