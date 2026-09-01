@@ -36,3 +36,9 @@
   4. Use district centroids for spatial context without claiming individual project GPS pins.
   5. Frame anomaly signals as review indicators derived from reported financial and administrative compliance data.
 
+## DEC-005: Architect Contract Freeze (DB & API Contracts)
+- **Date**: 2026-09-01
+- **Author**: Architect Agent
+- **Decision**: The database contract (`docs/contracts/db_contract.md`) and API contract (`docs/contracts/api_contract.md`) are formally **FROZEN** and authoritative for downstream tasks T06, T08, T09, T10–T13, and T15–T18. All schemas conform strictly to the validated 1,675 allocation records with zero synthetic/unsupported fields.
+
+
