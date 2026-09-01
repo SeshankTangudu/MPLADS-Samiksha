@@ -1,6 +1,6 @@
 /**
- * MPLADS Samiksha API Client (T14 Foundation).
- * Provides centralized HTTP communication with fallback resilience.
+ * MPLADS Samiksha API Client (Frozen Contract).
+ * Provides centralized HTTP communication with structured error mapping.
  */
 
 import axios from 'axios';
@@ -28,6 +28,23 @@ apiClient.interceptors.response.use(
     return Promise.reject(errorResponse);
   }
 );
+
+export const AnalyticsAPI = {
+  getOverviewStats: () => apiClient.get('/stats/overview'),
+  getByCategory: () => apiClient.get('/analytics/by-category'),
+  getByDistrict: () => apiClient.get('/analytics/by-district'),
+  getLocations: () => apiClient.get('/locations'),
+};
+
+export const ProjectsAPI = {
+  getProjects: (params) => apiClient.get('/projects', { params }),
+  getProjectById: (id) => apiClient.get(`/projects/${id}`),
+  getAnomalies: (params) => apiClient.get('/anomalies', { params }),
+};
+
+export const MethodologyAPI = {
+  getMethodology: () => apiClient.get('/methodology'),
+};
 
 export const SystemAPI = {
   getHealth: () => apiClient.get('/health'),

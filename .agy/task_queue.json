@@ -93,7 +93,7 @@
     "agent": "Backend",
     "priority": "P0",
     "depends_on": ["T06", "T07"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "DB contract §B.6, API contract §B.7",
     "outputs": "backend/app/models.py, backend/app/schemas.py, docs/contracts/api_contract.md",
     "definition_of_done": "Round-trip DB <-> model <-> schema tests pass; contracts declared frozen."
@@ -104,7 +104,7 @@
     "agent": "Backend",
     "priority": "P0",
     "depends_on": ["T08"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "Frozen API contract",
     "outputs": "GET /api/stats/overview, GET /api/projects, GET /api/projects/{id} routes",
     "definition_of_done": "Pytest contract tests pass; pagination, sorting, filtering verified."
@@ -115,7 +115,7 @@
     "agent": "AI/ML",
     "priority": "P0",
     "depends_on": ["T06"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "SQLite DB with clean projects",
     "outputs": "ml/cohort_stats.py, stats tables / JSON",
     "definition_of_done": "Cohort medians and P90 values computed; spot-checked by hand against 5 cohorts."
@@ -126,7 +126,7 @@
     "agent": "AI/ML",
     "priority": "P0",
     "depends_on": ["T10"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "Cohort stats + project records",
     "outputs": "ml/risk_engine.py with deterministic anomaly scoring rules",
     "definition_of_done": "Unit tests pass on edge cases and hand-verified fixture records; pure deterministic logic."
@@ -170,7 +170,7 @@
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T14"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Mocks -> live API (/api/stats/overview, /api/analytics/*)",
     "outputs": "Overview/Home page, Dashboard page with KPIs and Recharts visualizations",
     "definition_of_done": "4 KPI metric cards + charts render live data seamlessly."
