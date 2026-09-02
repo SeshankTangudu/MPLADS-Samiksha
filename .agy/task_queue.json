@@ -148,7 +148,7 @@
     "agent": "Backend",
     "priority": "P0",
     "depends_on": ["T12"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Frozen API contract, populated risk tables",
     "outputs": "GET /api/anomalies, /api/analytics/*, /api/locations, /api/methodology, /api/reports/risk-summary.csv",
     "definition_of_done": "Contract tests pass; CSV export validates in spreadsheet software."
@@ -192,7 +192,7 @@
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T12", "T14"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Live API (/api/anomalies)",
     "outputs": "Anomaly table with risk badges, filter chips, reason tags, export button",
     "definition_of_done": "Anomaly table renders all flagged projects; filters update dynamically."
@@ -203,32 +203,32 @@
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T12", "T14"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Live API (/api/projects/{id})",
     "outputs": "Project detail page with score gauge, reason cards, peer comparable table, timeline",
     "definition_of_done": "Detail page displays correctly for any valid project ID; zero mock/fabricated data."
   },
   {
     "id": "T19",
-    "name": "Map page",
+    "name": "District GIS Map",
     "agent": "Frontend",
-    "priority": "P1",
-    "depends_on": ["T05", "T13"],
-    "status": "LOCKED",
-    "inputs": "/api/locations, Leaflet + OSM",
-    "outputs": "Geographic Intelligence Map page",
-    "definition_of_done": "District centroids and markers render color-coded by risk; fallback view handled."
+    "priority": "P0",
+    "depends_on": ["T13", "T14"],
+    "status": "READY",
+    "inputs": "Live API (/api/locations, centroids)",
+    "outputs": "Leaflet map with district risk circles, color-coded legend, zoom/pan",
+    "definition_of_done": "Map renders without console errors; centroids plot in India."
   },
   {
     "id": "T20",
-    "name": "Integration pass",
-    "agent": "Integration",
+    "name": "Sector Analytics Page",
+    "agent": "Frontend",
     "priority": "P0",
-    "depends_on": ["T09", "T13", "T15", "T16", "T17", "T18"],
-    "status": "LOCKED",
-    "inputs": "Live backend + live frontend",
-    "outputs": "End-to-end verified application without mock fallbacks",
-    "definition_of_done": "Zero console errors; full user journey clicks functional; contract conformance verified."
+    "depends_on": ["T13", "T14"],
+    "status": "READY",
+    "inputs": "Live API (/api/analytics/*)",
+    "outputs": "Sector Analytics page with category comparison charts, top/bottom districts",
+    "definition_of_done": "All charts render live data; responsive on all viewport sizes."
   },
   {
     "id": "T21",

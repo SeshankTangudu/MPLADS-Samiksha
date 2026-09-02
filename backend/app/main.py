@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from backend.app.routers import stats, projects
+from backend.app.routers import stats, projects, anomalies, analytics, methodology, reports
 
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",")
 
@@ -106,4 +106,9 @@ async def root() -> Dict[str, Any]:
 # Mount contract-bound feature routers under /api
 app.include_router(stats.router, prefix="/api")
 app.include_router(projects.router, prefix="/api")
+app.include_router(anomalies.router, prefix="/api")
+app.include_router(analytics.router, prefix="/api")
+app.include_router(methodology.router, prefix="/api")
+app.include_router(reports.router, prefix="/api")
+
 
