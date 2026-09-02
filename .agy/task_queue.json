@@ -258,7 +258,7 @@
     "agent": "DevOps",
     "priority": "P1",
     "depends_on": ["T22"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Verified build artifacts",
     "outputs": "docs/deployment_runbook.md, Vercel frontend config, localhost runbook",
     "definition_of_done": "Localhost production runbook verified; Vercel deployment instructions validated."
@@ -269,7 +269,7 @@
     "agent": "Docs",
     "priority": "P0",
     "depends_on": ["T22"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Scoring engine formulas and thresholds",
     "outputs": "docs/methodology.md, README.md, presentation notes / trace examples",
     "definition_of_done": "All weights, formulas, cohorts, and baseline thresholds fully published."
@@ -280,7 +280,7 @@
     "agent": "UI/UX",
     "priority": "P0",
     "depends_on": ["T22"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Integrated frontend",
     "outputs": "Polished CSS/styling, responsive viewports, typography, government design tokens",
     "definition_of_done": "No blank or broken states across viewport sizes; disclaimers consistently visible."
@@ -291,7 +291,7 @@
     "agent": "Lead",
     "priority": "P0",
     "depends_on": ["T22", "T23", "T24", "T25"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Fully polished application & script (§B.23)",
     "outputs": "Demo runbook, walkthrough script, backup plan",
     "definition_of_done": "3 clean run-throughs executed; judge checklist verified; backup localhost ready."
