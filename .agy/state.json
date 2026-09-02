@@ -2,10 +2,10 @@
   "project_name": "MPLADS Samiksha",
   "version": "2.0",
   "initialized_at": "2026-09-01T20:54:00+05:30",
-  "last_updated": "2026-09-01T23:18:00+05:30",
+  "last_updated": "2026-09-02T06:07:00+05:30",
   "current_phase": "Phase 2 - Core Application & Anomaly Engine",
-  "current_task": null,
-  "last_checkpoint": "T09_T11_T16",
+  "current_task": "T12",
+  "last_checkpoint": "T12",
   "contracts_frozen": true,
   "thresholds_frozen": true,
   "integration_status": "PARTIAL_LIVE",
@@ -16,6 +16,8 @@
     "total_projects_loaded": 1675,
     "total_mps_loaded": 1547,
     "total_districts_loaded": 1015,
+    "total_risk_scores_populated": 1675,
+    "total_risk_flags_populated": 1067,
     "integrity_check": "PASSED"
   },
   "cohort_baselines": {
@@ -24,11 +26,11 @@
     "file": "ml/cohort_baselines.json"
   },
   "tasks": {
-    "completed": ["T00", "T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09", "T10", "T11", "T14", "T15", "T16"],
+    "completed": ["T00", "T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09", "T10", "T11", "T12", "T14", "T15", "T16"],
     "running": [],
-    "ready": ["T12", "T17", "T18"],
+    "ready": ["T13", "T17", "T18"],
     "locked": [
-      "T13", "T19", "T20", "T21", "T22", "T23", "T24", "T25", "T26"
+      "T19", "T20", "T21", "T22", "T23", "T24", "T25", "T26"
     ],
     "blocked": [],
     "failed": []

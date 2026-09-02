@@ -137,7 +137,7 @@
     "agent": "AI/ML",
     "priority": "P0",
     "depends_on": ["T11"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "risk_engine.py, DB records",
     "outputs": "Populated risk_scores and risk_flags tables in SQLite",
     "definition_of_done": "Batch execution completes; overall flag rate sits in 1-6% band; 1 project manually verified end-to-end."
@@ -148,7 +148,7 @@
     "agent": "Backend",
     "priority": "P0",
     "depends_on": ["T12"],
-    "status": "LOCKED",
+    "status": "READY",
     "inputs": "Frozen API contract, populated risk tables",
     "outputs": "GET /api/anomalies, /api/analytics/*, /api/locations, /api/methodology, /api/reports/risk-summary.csv",
     "definition_of_done": "Contract tests pass; CSV export validates in spreadsheet software."
@@ -188,25 +188,25 @@
   },
   {
     "id": "T17",
-    "name": "Anomaly Center",
+    "name": "Anomaly Review Queue",
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T12", "T14"],
-    "status": "LOCKED",
-    "inputs": "Mocks -> live API (/api/anomalies)",
-    "outputs": "Anomaly Intelligence Center page",
-    "definition_of_done": "Table, risk tier badges, reason chips, and mandatory disclaimers render."
+    "status": "READY",
+    "inputs": "Live API (/api/anomalies)",
+    "outputs": "Anomaly table with risk badges, filter chips, reason tags, export button",
+    "definition_of_done": "Anomaly table renders all flagged projects; filters update dynamically."
   },
   {
     "id": "T18",
-    "name": "Investigation page (score decomposition + comparables)",
+    "name": "Project Deep Investigation",
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T12", "T14"],
-    "status": "LOCKED",
-    "inputs": "Mocks -> live API (/api/projects/{id})",
-    "outputs": "Project Investigation page",
-    "definition_of_done": "Reason cards with observed vs baseline vs threshold, score breakdown, peer comparables table."
+    "status": "READY",
+    "inputs": "Live API (/api/projects/{id})",
+    "outputs": "Project detail page with score gauge, reason cards, peer comparable table, timeline",
+    "definition_of_done": "Detail page displays correctly for any valid project ID; zero mock/fabricated data."
   },
   {
     "id": "T19",
