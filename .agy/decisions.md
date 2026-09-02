@@ -41,4 +41,9 @@
 - **Author**: Architect Agent
 - **Decision**: The database contract (`docs/contracts/db_contract.md`) and API contract (`docs/contracts/api_contract.md`) are formally **FROZEN** and authoritative for downstream tasks T06, T08, T09, T10–T13, and T15–T18. All schemas conform strictly to the validated 1,675 allocation records with zero synthetic/unsupported fields.
 
-
+## DEC-006: Frontend Feature Pages (T19, T20, T21) & Full-Stack E2E Integration (T22) Acceptance
+- **Date**: 2026-09-01
+- **Author**: Architect & Lead Frontend Agent
+- **Decision**: Complete implementation of District GIS Map (T19), Sector Analytics (T20), Methodology & Transparency (T21), and E2E Integration Pass (T22).
+- **Terms**: Strict adherence to Model A linear additive formulation, district centroid reference mapping, financial utilization proxies, and zero-accusatory Responsible AI guardrails.
+- **Status**: ACCEPTED & FROZEN.

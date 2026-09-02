@@ -5,9 +5,10 @@ import { ShieldAlert, BarChart3, Search, AlertTriangle, MapPin, BookOpen, Layers
 const NAV_ITEMS = [
   { path: '/', label: 'Overview', icon: Layers },
   { path: '/dashboard', label: 'Dashboard', icon: BarChart3 },
-  { path: '/projects', label: 'Project Explorer', icon: Search },
-  { path: '/anomalies', label: 'Anomaly Center', icon: AlertTriangle },
-  { path: '/map', label: 'Geographic Intelligence', icon: MapPin },
+  { path: '/projects', label: 'Explorer', icon: Search },
+  { path: '/anomalies', label: 'Anomalies', icon: AlertTriangle },
+  { path: '/map', label: 'GIS Map', icon: MapPin },
+  { path: '/analytics', label: 'Analytics', icon: BarChart3 },
   { path: '/methodology', label: 'Methodology', icon: BookOpen },
 ];
 

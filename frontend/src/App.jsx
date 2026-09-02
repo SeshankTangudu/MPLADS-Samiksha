@@ -12,6 +12,7 @@ import ExplorerPage from './pages/ExplorerPage';
 import InvestigationPage from './pages/InvestigationPage';
 import AnomalyPage from './pages/AnomalyPage';
 import MapPage from './pages/MapPage';
+import AnalyticsPage from './pages/AnalyticsPage';
 import MethodologyPage from './pages/MethodologyPage';
 
 export function App() {
@@ -29,6 +30,7 @@ export function App() {
               <Route path="/projects/:id" element={<InvestigationPage />} />
               <Route path="/anomalies" element={<AnomalyPage />} />
               <Route path="/map" element={<MapPage />} />
+              <Route path="/analytics" element={<AnalyticsPage />} />
               <Route path="/methodology" element={<MethodologyPage />} />
             </Routes>
           </main>
