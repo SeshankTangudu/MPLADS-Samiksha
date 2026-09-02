@@ -214,7 +214,7 @@
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T13", "T14"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Live API (/api/locations, centroids)",
     "outputs": "Leaflet map with district risk circles, color-coded legend, zoom/pan",
     "definition_of_done": "Map renders without console errors; centroids plot in India."
@@ -225,24 +225,35 @@
     "agent": "Frontend",
     "priority": "P0",
     "depends_on": ["T13", "T14"],
-    "status": "READY",
+    "status": "PASSED",
     "inputs": "Live API (/api/analytics/*)",
     "outputs": "Sector Analytics page with category comparison charts, top/bottom districts",
     "definition_of_done": "All charts render live data; responsive on all viewport sizes."
   },
   {
     "id": "T21",
-    "name": "Full test suite + E2E",
-    "agent": "QA",
+    "name": "Methodology & Transparency Page",
+    "agent": "Frontend",
     "priority": "P0",
-    "depends_on": ["T20"],
-    "status": "LOCKED",
-    "inputs": "Integrated system",
-    "outputs": "pytest test suite, frontend component/E2E test runs, QA report",
-    "definition_of_done": "All P0 unit, integration, and contract tests pass green."
+    "depends_on": ["T13", "T14"],
+    "status": "READY",
+    "inputs": "Live API (/api/methodology)",
+    "outputs": "Methodology page displaying formulas, weights, tier definitions, and disclosures",
+    "definition_of_done": "Page renders formulas and definitions matching frozen API response."
   },
   {
     "id": "T22",
+    "name": "Full Stack Integration Pass",
+    "agent": "Integration",
+    "priority": "P0",
+    "depends_on": ["T09", "T13", "T15", "T16", "T17", "T18", "T19", "T20", "T21"],
+    "status": "READY",
+    "inputs": "Live backend + live frontend",
+    "outputs": "End-to-end verified application without mock fallbacks",
+    "definition_of_done": "Zero console errors; full user journey clicks functional; contract conformance verified."
+  },
+  {
+    "id": "T23",
     "name": "Security review",
     "agent": "Security",
     "priority": "P0",
