@@ -205,6 +205,7 @@ export const InvestigationPage = () => {
     ml_cross_check, 
     risk_trajectory, 
     duplicate_candidates = [], 
+    investment_durability,
     disclaimer 
   } = data;
 
@@ -1002,6 +1003,98 @@ export const InvestigationPage = () => {
           </p>
         </div>
       </div>
+
+      {/* Phase B: Investment–Durability Review Signal Card */}
+      {investment_durability && (
+        <div className="gov-card p-6 space-y-4 border-l-4 border-l-indigo-600 bg-gradient-to-r from-slate-50 to-white shadow-sm">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-3 border-b border-slate-200 gap-2">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-indigo-600" />
+                {t('durability.title', 'Investment–Durability Review Signal')}
+              </h3>
+              <p className="text-xs text-slate-500">
+                {t('durability.sub', 'Comparative screening heuristic evaluating public investment against citizen condition observations')}
+              </p>
+            </div>
+            <span className={`text-xs font-bold px-3 py-1 rounded border uppercase tracking-wider ${
+              investment_durability.signal_status === 'HIGH_INVESTMENT_EARLY_CONDITION_CONCERN' ? 'bg-amber-100 text-amber-900 border-amber-300' :
+              investment_durability.signal_status === 'HIGH_INVESTMENT_REPEATED_CONCERNS' ? 'bg-red-100 text-red-900 border-red-300' :
+              investment_durability.signal_status === 'INVESTMENT_CONDITION_MONITORED' ? 'bg-blue-100 text-blue-900 border-blue-300' :
+              investment_durability.signal_status === 'INVESTMENT_CONDITION_NORMAL' ? 'bg-emerald-100 text-emerald-900 border-emerald-300' :
+              'bg-slate-100 text-slate-700 border-slate-300'
+            }`}>
+              {t('durability.review_signal', 'Review Signal:')} {investment_durability.signal_badge}
+            </span>
+          </div>
+
+          {/* 4-Metric Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div className="p-3 bg-white rounded-lg border border-slate-200">
+              <span className="text-[11px] text-slate-500 block font-medium">{t('durability.investment_level', 'Investment Level:')}</span>
+              <span className="text-base font-bold text-slate-900 mt-0.5 block">
+                ₹{(investment_durability.sanctioned_cost_crore || investment_durability.expenditure_crore || 0).toFixed(2)} Cr
+              </span>
+              <span className="text-[10px] text-slate-400">{investment_durability.category}</span>
+            </div>
+
+            <div className="p-3 bg-white rounded-lg border border-slate-200">
+              <span className="text-[11px] text-slate-500 block font-medium">{t('durability.category_benchmark', 'Category Cohort Benchmark:')}</span>
+              <span className="text-xs font-bold text-slate-800 mt-0.5 block">
+                {investment_durability.investment_level}
+              </span>
+              <span className="text-[10px] text-slate-400">
+                P50: ₹{investment_durability.category_median_cost_crore?.toFixed(2)} Cr | P90: ₹{investment_durability.category_p90_cost_crore?.toFixed(2)} Cr
+              </span>
+            </div>
+
+            <div className="p-3 bg-white rounded-lg border border-slate-200">
+              <span className="text-[11px] text-slate-500 block font-medium">{t('durability.condition_observations', 'Condition Observations:')}</span>
+              <span className={`text-base font-bold mt-0.5 block ${investment_durability.condition_reports_count > 0 ? 'text-amber-700' : 'text-slate-800'}`}>
+                {investment_durability.condition_reports_count > 0 
+                  ? `${investment_durability.condition_reports_count} report(s)` 
+                  : t('durability.no_reports', '0 condition reports')}
+              </span>
+              <span className="text-[10px] text-slate-400 truncate block" title={investment_durability.relevant_categories?.join(', ')}>
+                {investment_durability.relevant_categories?.length > 0 ? investment_durability.relevant_categories.join(', ') : 'No flags'}
+              </span>
+            </div>
+
+            <div className="p-3 bg-white rounded-lg border border-slate-200">
+              <span className="text-[11px] text-slate-500 block font-medium">{t('durability.elapsed_period', 'Elapsed Milestone Period:')}</span>
+              <span className="text-xs font-bold text-slate-800 mt-0.5 block">
+                {investment_durability.elapsed_time_description}
+              </span>
+              <span className="text-[10px] text-slate-400">
+                {t('durability.screening_window_note', 'Comparative screening heuristic window (≤ 36 months)')}
+              </span>
+            </div>
+          </div>
+
+          {/* Signal Review Rationale */}
+          <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-2 text-xs">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-slate-900 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                {t('durability.reason_title', 'Signal Review Rationale:')}
+              </span>
+              {investment_durability.has_repeated_reports && (
+                <span className="text-[10px] font-bold bg-amber-50 text-amber-900 px-2 py-0.5 rounded border border-amber-200">
+                  {t('durability.repeated_reports_note', 'Multiple reports associated with this allocation')}
+                </span>
+              )}
+            </div>
+            <p className="text-slate-700 leading-relaxed font-medium">
+              {investment_durability.signal_reason}
+            </p>
+          </div>
+
+          {/* Safe AI Disclaimer */}
+          <p className="text-[11px] text-slate-500 italic pt-1 border-t border-slate-100">
+            *{t('durability.disclaimer', 'Analytical review signal only. Citizen reports are observations requiring verification and do not establish physical deterioration or wrongdoing.')}
+          </p>
+        </div>
+      )}
 
       {/* Evidence Completeness Matrix (Phase 1.4) */}
       <div className="gov-card p-6 space-y-4">

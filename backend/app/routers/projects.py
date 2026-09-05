@@ -21,9 +21,11 @@ from backend.app.schemas import (
     CandidateDuplicateSchema,
     MLCrossCheckSchema,
     RiskTrajectorySchema,
+    InvestmentDurabilityResponseSchema,
     PaginationEnvelope
 )
 from ml.risk_engine import evaluate_allocation, load_baselines
+from backend.app.services.durability_service import evaluate_investment_durability
 
 router = APIRouter(prefix="/projects", tags=["Projects"])
 
@@ -454,6 +456,10 @@ def get_project_by_id(id: str, db: Session = Depends(get_db)):
             )
         )
 
+    # Phase B: Investment–Durability Anomaly Review Signal
+    inv_durability_data = evaluate_investment_durability(project, db)
+    inv_durability = InvestmentDurabilityResponseSchema(**inv_durability_data)
+
     return ProjectDetailResponseSchema(
         allocation=alloc_detail,
         risk_assessment=risk_assessment,
@@ -462,5 +468,6 @@ def get_project_by_id(id: str, db: Session = Depends(get_db)):
         ml_cross_check=ml_cross,
         risk_trajectory=risk_traj,
         duplicate_candidates=dup_candidates,
+        investment_durability=inv_durability,
         disclaimer="Risk indicators are analytical signals intended to support review. They do not constitute proof of wrongdoing."
     )

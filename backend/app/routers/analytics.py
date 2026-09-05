@@ -31,9 +31,11 @@ from backend.app.schemas import (
     ConstituencyAnalyticsSchema,
     ConstituencyTermBreakdownSchema,
     ConstituencyPriorityAllocationSchema,
-    ConstituencyPeerBenchmarkSchema
+    ConstituencyPeerBenchmarkSchema,
+    InvestmentDurabilityResponseSchema,
 )
 from ml.risk_engine import load_baselines
+from backend.app.services.durability_service import evaluate_investment_durability
 
 # Configurable Workload Prioritization Weights (distinct from Model A scoring weights)
 REVIEW_EFFORT_TIER_WEIGHTS = {
@@ -987,4 +989,20 @@ def get_constituency_analytics(constituency_name: str, db: Session = Depends(get
             "They do not constitute proof of wrongdoing. Prototype role simulation."
         )
     )
+
+
+@router.get("/analytics/investment-durability/{source_record_id}", response_model=InvestmentDurabilityResponseSchema)
+def get_investment_durability(source_record_id: str, db: Session = Depends(get_db)):
+    """Computes explainable Investment–Durability comparative review signal for a parliamentary allocation."""
+    project = db.query(Project).filter(Project.source_record_id == source_record_id.strip()).first()
+    if not project and source_record_id.isdigit():
+        project = db.query(Project).filter(Project.id == int(source_record_id)).first()
+
+    if not project:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Constituency allocation record '{source_record_id}' not found."
+        )
+
+    return evaluate_investment_durability(project, db)
 

@@ -196,6 +196,31 @@ class RiskTrajectorySchema(BaseModel):
     disclaimer: str = "Historical empirical trajectory based on observed Lok Sabha parliamentary terms. Not a predictive future forecast."
 
 
+class InvestmentDurabilityResponseSchema(BaseModel):
+    """Investment–Durability Comparative Screening Heuristic Schema (Phase B)."""
+    source_record_id: str
+    category: str
+    sanctioned_cost_crore: float
+    expenditure_crore: float
+    category_median_cost_crore: float
+    category_p90_cost_crore: float
+    investment_level: str
+    is_high_investment: bool
+    total_reports_count: int
+    condition_reports_count: int
+    relevant_categories: List[str]
+    has_repeated_reports: bool
+    elapsed_months: Optional[float] = None
+    elapsed_time_description: str
+    signal_status: str
+    signal_badge: str
+    signal_reason: str
+    disclaimer: str = (
+        "This analytical signal compares public investment level against available citizen condition "
+        "observations. It does not measure structural durability, material lifespan, or establish wrongdoing."
+    )
+
+
 class ProjectDetailResponseSchema(BaseModel):
     """Complete deep investigation response payload."""
     allocation: AllocationDetailSchema
@@ -205,6 +230,7 @@ class ProjectDetailResponseSchema(BaseModel):
     ml_cross_check: Optional[MLCrossCheckSchema] = None
     risk_trajectory: Optional[RiskTrajectorySchema] = None
     duplicate_candidates: Optional[List[CandidateDuplicateSchema]] = None
+    investment_durability: Optional[InvestmentDurabilityResponseSchema] = None
     disclaimer: str = "Risk indicators are analytical signals intended to support review. They do not constitute proof of wrongdoing."
 
 

@@ -676,5 +676,31 @@ export const hi = {
     "dimensions_size": "आयाम और आकार:",
     "filename": "फ़ाइल नाम:",
     "photo_evidence": "प्रस्तुत फ़ोटो साक्ष्य"
+  },
+  "durability": {
+    "title": "निवेश-टिकाऊपन समीक्षा संकेत",
+    "sub": "नागरिक स्थिति अवलोकनों के विरुद्ध सार्वजनिक निवेश का मूल्यांकन करने वाला तुलनात्मक स्क्रीनिंग संकेत",
+    "investment_level": "निवेश स्तर:",
+    "category_benchmark": "श्रेणी समूह मानक:",
+    "condition_observations": "स्थिति अवलोकन:",
+    "elapsed_period": "बीती मील का पत्थर अवधि:",
+    "review_signal": "समीक्षा संकेत:",
+    "reason_title": "संकेत समीक्षा आधार:",
+    "disclaimer": "केवल विश्लेषणात्मक समीक्षा संकेत। नागरिक रिपोर्टें सत्यापन योग्य अवलोकन हैं और भौतिक गिरावट या अनियमितता स्थापित नहीं करती हैं।",
+    "signal_high_early": "उच्च निवेश + प्रारंभिक स्थिति चिंता",
+    "signal_high_repeated": "उच्च निवेश + बार-बार चिंताएं",
+    "signal_normal": "निवेश एवं स्थिति सामान्य",
+    "signal_monitored": "मानक स्थिति निगरानी",
+    "signal_insufficient": "अपर्याप्त डेटा",
+    "reports_count": "नागरिक स्थिति अवलोकन",
+    "no_reports": "0 स्थिति रिपोर्ट",
+    "repeated_reports_note": "इस आवंटन से जुड़े कई नागरिक रिपोर्ट",
+    "cohort_median": "समूह माध्यिका",
+    "cohort_p90": "शीर्ष दशमलव P90",
+    "screening_window_note": "तुलनात्मक स्क्रीनिंग विंडो (≤ 36 महीने)",
+    "timeline_unavailable": "मील का पत्थर समयरेखा अनुपलब्ध",
+    "category_label": "नागरिक क्षेत्र:",
+    "sanctioned_amount": "स्वीकृत बजट:",
+    "expenditure_amount": "दर्ज व्यय:"
   }
 };

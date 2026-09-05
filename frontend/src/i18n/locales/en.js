@@ -676,5 +676,31 @@ export const en = {
     "dimensions_size": "Dimensions & Size:",
     "filename": "Filename:",
     "photo_evidence": "Submitted Photograph Evidence"
+  },
+  "durability": {
+    "title": "Investment–Durability Review Signal",
+    "sub": "Comparative screening heuristic evaluating public investment against citizen condition observations",
+    "investment_level": "Investment Level:",
+    "category_benchmark": "Category Cohort Benchmark:",
+    "condition_observations": "Condition Observations:",
+    "elapsed_period": "Elapsed Milestone Period:",
+    "review_signal": "Review Signal:",
+    "reason_title": "Signal Review Rationale:",
+    "disclaimer": "Analytical review signal only. Citizen reports are observations requiring verification and do not establish physical deterioration or wrongdoing.",
+    "signal_high_early": "High Investment + Early Condition Concern",
+    "signal_high_repeated": "High Investment + Repeated Concerns",
+    "signal_normal": "Investment & Condition Normal",
+    "signal_monitored": "Standard Condition Monitoring",
+    "signal_insufficient": "Data Insufficient",
+    "reports_count": "Citizen Condition Observation(s)",
+    "no_reports": "0 condition reports",
+    "repeated_reports_note": "Multiple reports associated with this allocation",
+    "cohort_median": "Cohort Median",
+    "cohort_p90": "Upper Decile P90",
+    "screening_window_note": "Comparative screening heuristic window (≤ 36 months)",
+    "timeline_unavailable": "Milestone timeline unavailable",
+    "category_label": "Civic Sector:",
+    "sanctioned_amount": "Sanctioned Budget:",
+    "expenditure_amount": "Reported Expenditure:"
   }
 };

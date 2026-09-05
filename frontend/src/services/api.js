@@ -43,11 +43,13 @@ export const AnalyticsAPI = {
   getIsolationForest: () => apiClient.get('/analytics/isolation-forest'),
   getIsolationForestResults: () => apiClient.get('/analytics/isolation-forest'),
   getConstituencyAnalytics: (name) => apiClient.get(`/analytics/constituency/${encodeURIComponent(name)}`),
+  getInvestmentDurability: (sourceRecordId) => apiClient.get(`/analytics/investment-durability/${encodeURIComponent(sourceRecordId)}`),
 };
 
 export const ProjectsAPI = {
   getProjects: (params) => apiClient.get('/projects', { params }),
   getProjectById: (id) => apiClient.get(`/projects/${id}`),
+  getInvestmentDurability: (sourceRecordId) => apiClient.get(`/analytics/investment-durability/${encodeURIComponent(sourceRecordId)}`),
   getAnomalies: (params) => apiClient.get('/anomalies', { params }),
   getLocations: () => apiClient.get('/locations'),
   getConstituencies: () => apiClient.get('/projects/constituencies'),
