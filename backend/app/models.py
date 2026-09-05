@@ -191,6 +191,9 @@ class ComplaintEvidence(Base):
     location_review_status = Column(String(64), nullable=False, default="LOCATION_DATA_UNAVAILABLE")
     distance_from_district_centroid_km = Column(Float, nullable=True)
     exif_vs_browser_gps_delta_km = Column(Float, nullable=True)
+    timestamp_review_status = Column(String(64), nullable=False, default="TIMESTAMP_UNAVAILABLE")
+    location_review_details = Column(Text, nullable=True)
+    timestamp_review_details = Column(Text, nullable=True)
 
     # Relationships
     complaint = relationship("Complaint", back_populates="evidence")

@@ -702,8 +702,11 @@ class EvidenceResponseSchema(BaseModel):
     camera_model: Optional[str] = None
     metadata_status: str = "METADATA_UNAVAILABLE"
     location_review_status: str = "LOCATION_DATA_UNAVAILABLE"
+    location_review_details: Optional[str] = None
     distance_from_district_centroid_km: Optional[float] = None
     exif_vs_browser_gps_delta_km: Optional[float] = None
+    timestamp_review_status: str = "TIMESTAMP_UNAVAILABLE"
+    timestamp_review_details: Optional[str] = None
     has_photo: bool = True
     has_gps: bool = False
 
@@ -715,6 +718,8 @@ class EvidencePublicSafeSchema(BaseModel):
     has_photo: bool = False
     has_gps: bool = False
     uploaded_at: Optional[str] = None
+    location_review_status: Optional[str] = None
+    timestamp_review_status: Optional[str] = None
 
 
 class AllocationReportSummarySchema(BaseModel):

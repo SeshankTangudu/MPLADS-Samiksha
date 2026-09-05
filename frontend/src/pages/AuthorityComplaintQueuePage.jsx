@@ -627,112 +627,186 @@ export const AuthorityComplaintQueuePage = () => {
                   </p>
                 </div>
 
-                {/* EVIDENCE & LOCATION FORENSICS CARD */}
+                {/* EVIDENCE & LOCATION / TIMESTAMP FORENSICS CARD (PHASE A) */}
                 {selectedReport.evidence && (selectedReport.evidence.has_photo || selectedReport.evidence.has_gps) && (
-                  <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-3 text-xs">
-                    <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-                      <span className="font-bold text-slate-800 flex items-center gap-1.5">
-                        <Camera className="w-4 h-4 text-gov-navy" />
-                        Citizen Evidence &amp; Location Consistency
-                      </span>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase ${
-                        selectedReport.evidence.location_review_status === 'LOCATION_CONTEXT_AVAILABLE'
-                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                          : selectedReport.evidence.location_review_status === 'LOCATION_REQUIRES_REVIEW'
-                          ? 'bg-amber-50 text-amber-800 border-amber-300'
-                          : 'bg-slate-100 text-slate-600 border-slate-200'
-                      }`}>
-                        {selectedReport.evidence.location_review_status === 'LOCATION_CONTEXT_AVAILABLE' ? '✓ Consistent Location' :
-                         selectedReport.evidence.location_review_status === 'LOCATION_REQUIRES_REVIEW' ? '⚠ Review Recommended' : 'Context Unavailable'}
-                      </span>
+                  <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-4 text-xs">
+                    {/* Location Consistency Section */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+                        <span className="font-bold text-slate-800 flex items-center gap-1.5">
+                          <Camera className="w-4 h-4 text-gov-navy" />
+                          {t('evidence.title')}
+                        </span>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase ${
+                          selectedReport.evidence.location_review_status === 'LOCATION_CONSISTENT_CONTEXT' || selectedReport.evidence.location_review_status === 'LOCATION_CONTEXT_AVAILABLE'
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                            : selectedReport.evidence.location_review_status === 'LOCATION_REQUIRES_REVIEW'
+                            ? 'bg-amber-50 text-amber-800 border-amber-300'
+                            : 'bg-slate-100 text-slate-600 border-slate-200'
+                        }`}>
+                          {selectedReport.evidence.location_review_status === 'LOCATION_CONSISTENT_CONTEXT' || selectedReport.evidence.location_review_status === 'LOCATION_CONTEXT_AVAILABLE'
+                            ? `✓ ${t('evidence.location_consistent')}`
+                            : selectedReport.evidence.location_review_status === 'LOCATION_REQUIRES_REVIEW'
+                            ? `⚠ ${t('evidence.location_requires_review')}`
+                            : t('evidence.location_unavailable')}
+                        </span>
+                      </div>
+
+                      {/* Photo Preview & EXIF Metadata */}
+                      {selectedReport.evidence.has_photo && (
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                            {t('evidence.photo_evidence')}
+                          </span>
+                          <div className="relative rounded-lg overflow-hidden border border-slate-300 bg-slate-900/5 aspect-video flex items-center justify-center">
+                            <img 
+                              src={ComplaintsAPI.getEvidenceFileUrl(selectedReport.complaint_id)} 
+                              alt="Citizen Evidence"
+                              className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform"
+                              onClick={() => window.open(ComplaintsAPI.getEvidenceFileUrl(selectedReport.complaint_id), '_blank')}
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 text-[11px] p-2.5 bg-white rounded border border-slate-200">
+                            <div>
+                              <span className="text-slate-500 block text-[10px]">{t('evidence.filename')}</span>
+                              <span className="font-semibold text-slate-800 truncate block">{selectedReport.evidence.original_filename}</span>
+                            </div>
+                            <div>
+                              <span className="text-slate-500 block text-[10px]">{t('evidence.dimensions_size')}</span>
+                              <span className="font-semibold text-slate-800">
+                                {selectedReport.evidence.image_width ? `${selectedReport.evidence.image_width} × ${selectedReport.evidence.image_height} px` : t('common.not_available')} · {(selectedReport.evidence.file_size_bytes / 1024).toFixed(0)} KB
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-slate-500 block text-[10px]">{t('evidence.camera_device')}</span>
+                              <span className="font-semibold text-slate-800">
+                                {selectedReport.evidence.camera_make ? `${selectedReport.evidence.camera_make} ${selectedReport.evidence.camera_model || ''}` : t('common.not_available')}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-slate-500 block text-[10px]">{t('evidence.captured_at')}</span>
+                              <span className="font-semibold text-slate-800">
+                                {selectedReport.evidence.captured_at ? new Date(selectedReport.evidence.captured_at).toLocaleDateString() : t('common.not_available')}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Geographic Analysis Details */}
+                      <div className="space-y-1.5 pt-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                          {t('evidence.location_rationale')}
+                        </span>
+                        <div className="p-3 bg-white rounded border border-slate-200 space-y-2 text-[11px]">
+                          {selectedReport.evidence.latitude !== null && selectedReport.evidence.latitude !== undefined && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-slate-500">{t('evidence.browser_gps')}</span>
+                              <span className="font-mono font-semibold text-slate-800">
+                                {selectedReport.evidence.latitude.toFixed(5)}°, {selectedReport.evidence.longitude.toFixed(5)}°
+                                {selectedReport.evidence.location_accuracy_meters && (
+                                  <span className="text-[10px] text-slate-400 ml-1">(±{selectedReport.evidence.location_accuracy_meters.toFixed(0)}m)</span>
+                                )}
+                              </span>
+                            </div>
+                          )}
+
+                          {selectedReport.evidence.exif_latitude !== null && selectedReport.evidence.exif_latitude !== undefined && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-slate-500">{t('evidence.exif_gps')}</span>
+                              <span className="font-mono font-semibold text-slate-800">
+                                {selectedReport.evidence.exif_latitude.toFixed(5)}°, {selectedReport.evidence.exif_longitude.toFixed(5)}°
+                              </span>
+                            </div>
+                          )}
+
+                          {selectedReport.evidence.exif_vs_browser_gps_delta_km !== null && selectedReport.evidence.exif_vs_browser_gps_delta_km !== undefined && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-slate-500">{t('evidence.exif_delta')}</span>
+                              <span className={`font-mono font-bold ${
+                                selectedReport.evidence.exif_vs_browser_gps_delta_km > 25 ? 'text-amber-700' : 'text-slate-900'
+                              }`}>
+                                {selectedReport.evidence.exif_vs_browser_gps_delta_km.toFixed(2)} km
+                              </span>
+                            </div>
+                          )}
+
+                          {selectedReport.evidence.distance_from_district_centroid_km !== null && selectedReport.evidence.distance_from_district_centroid_km !== undefined && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-slate-500">{t('evidence.distance_to_centroid')}</span>
+                              <span className={`font-mono font-bold ${
+                                selectedReport.evidence.distance_from_district_centroid_km > 100 ? 'text-amber-700' : 'text-slate-900'
+                              }`}>
+                                {selectedReport.evidence.distance_from_district_centroid_km.toFixed(1)} km
+                              </span>
+                            </div>
+                          )}
+
+                          {selectedReport.evidence.location_review_details && (
+                            <div className="p-2 bg-slate-50 rounded text-[11px] text-slate-700 font-medium">
+                              {selectedReport.evidence.location_review_details}
+                            </div>
+                          )}
+
+                          <div className="p-2 bg-blue-50/60 rounded text-[10px] text-slate-600 space-y-0.5">
+                            <p className="font-semibold text-slate-700">{t('evidence.district_centroid')}</p>
+                            <p>{t('evidence.district_centroid_note')}</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Photo Preview & EXIF Metadata */}
-                    {selectedReport.evidence.has_photo && (
-                      <div className="space-y-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                          Submitted Photograph Evidence
+                    {/* Timestamp Consistency Section */}
+                    <div className="space-y-2 pt-2 border-t border-slate-200">
+                      <div className="flex items-center justify-between pb-1">
+                        <span className="font-bold text-slate-800 flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-gov-navy" />
+                          {t('evidence.timestamp_title')}
                         </span>
-                        <div className="relative rounded-lg overflow-hidden border border-slate-300 bg-slate-900/5 aspect-video flex items-center justify-center">
-                          <img 
-                            src={ComplaintsAPI.getEvidenceFileUrl(selectedReport.complaint_id)} 
-                            alt="Citizen Evidence"
-                            className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform"
-                            onClick={() => window.open(ComplaintsAPI.getEvidenceFileUrl(selectedReport.complaint_id), '_blank')}
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 text-[11px] p-2.5 bg-white rounded border border-slate-200">
-                          <div>
-                            <span className="text-slate-500 block text-[10px]">Filename:</span>
-                            <span className="font-semibold text-slate-800 truncate block">{selectedReport.evidence.original_filename}</span>
-                          </div>
-                          <div>
-                            <span className="text-slate-500 block text-[10px]">Dimensions &amp; Size:</span>
-                            <span className="font-semibold text-slate-800">
-                              {selectedReport.evidence.image_width ? `${selectedReport.evidence.image_width} × ${selectedReport.evidence.image_height} px` : 'Unknown'} · {(selectedReport.evidence.file_size_bytes / 1024).toFixed(0)} KB
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-slate-500 block text-[10px]">Camera / Device:</span>
-                            <span className="font-semibold text-slate-800">
-                              {selectedReport.evidence.camera_make ? `${selectedReport.evidence.camera_make} ${selectedReport.evidence.camera_model}` : 'Not Available in EXIF'}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-slate-500 block text-[10px]">EXIF Timestamp:</span>
-                            <span className="font-semibold text-slate-800">
-                              {selectedReport.evidence.captured_at ? new Date(selectedReport.evidence.captured_at).toLocaleString() : 'Not Stamped'}
-                            </span>
-                          </div>
-                        </div>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase ${
+                          selectedReport.evidence.timestamp_review_status === 'TIMESTAMP_CONSISTENT'
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                            : selectedReport.evidence.timestamp_review_status === 'TIMESTAMP_PREDATES_SANCTION'
+                            ? 'bg-amber-50 text-amber-800 border-amber-300'
+                            : selectedReport.evidence.timestamp_review_status === 'TIMESTAMP_FUTURE_INCONSISTENT'
+                            ? 'bg-red-50 text-red-800 border-red-300'
+                            : 'bg-slate-100 text-slate-600 border-slate-200'
+                        }`}>
+                          {selectedReport.evidence.timestamp_review_status === 'TIMESTAMP_CONSISTENT'
+                            ? `✓ ${t('evidence.timestamp_consistent')}`
+                            : selectedReport.evidence.timestamp_review_status === 'TIMESTAMP_PREDATES_SANCTION'
+                            ? `⚠ ${t('evidence.timestamp_predates_sanction')}`
+                            : selectedReport.evidence.timestamp_review_status === 'TIMESTAMP_FUTURE_INCONSISTENT'
+                            ? `✗ ${t('evidence.timestamp_future_inconsistent')}`
+                            : t('evidence.timestamp_unavailable')}
+                        </span>
                       </div>
-                    )}
 
-                    {/* Location Consistency Evaluation */}
-                    <div className="space-y-1.5 pt-1">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                        Geographic Analysis (Haversine Distance)
-                      </span>
                       <div className="p-3 bg-white rounded border border-slate-200 space-y-2 text-[11px]">
-                        {selectedReport.evidence.latitude !== null && (
-                          <div className="flex justify-between items-center">
-                            <span className="text-slate-500">Citizen Observation GPS:</span>
-                            <span className="font-mono font-semibold text-slate-800">
-                              {selectedReport.evidence.latitude.toFixed(5)}°, {selectedReport.evidence.longitude.toFixed(5)}°
-                              {selectedReport.evidence.location_accuracy_meters && (
-                                <span className="text-[10px] text-slate-400 ml-1">(±{selectedReport.evidence.location_accuracy_meters.toFixed(0)}m)</span>
-                              )}
+                        <div className="grid grid-cols-2 gap-2 text-[11px]">
+                          <div>
+                            <span className="text-slate-500 block text-[10px]">{t('evidence.submitted_at')}</span>
+                            <span className="font-semibold text-slate-800">{new Date(selectedReport.submitted_at).toLocaleDateString()}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-[10px]">{t('evidence.captured_at')}</span>
+                            <span className="font-semibold text-slate-800">
+                              {selectedReport.evidence.captured_at ? new Date(selectedReport.evidence.captured_at).toLocaleDateString() : t('common.not_available')}
                             </span>
                           </div>
-                        )}
-
-                        {selectedReport.evidence.distance_from_district_centroid_km !== null && (
-                          <div className="flex justify-between items-center">
-                            <span className="text-slate-500">Distance from District Admin Centroid:</span>
-                            <span className={`font-mono font-bold ${
-                              selectedReport.evidence.distance_from_district_centroid_km > 100 ? 'text-amber-700' : 'text-slate-900'
-                            }`}>
-                              {selectedReport.evidence.distance_from_district_centroid_km.toFixed(1)} km
-                            </span>
-                          </div>
-                        )}
-
-                        {selectedReport.evidence.exif_vs_browser_gps_delta_km !== null && (
-                          <div className="flex justify-between items-center">
-                            <span className="text-slate-500">EXIF GPS vs Browser GPS Delta:</span>
-                            <span className="font-mono font-semibold text-slate-800">
-                              {selectedReport.evidence.exif_vs_browser_gps_delta_km.toFixed(1)} km
-                            </span>
-                          </div>
-                        )}
-
-                        <div className="p-2 bg-slate-50 rounded text-[10px] text-slate-600 space-y-0.5">
-                          <p className="font-semibold text-slate-700">Governance Review Note:</p>
-                          <p>
-                            District administrative centroid serves strictly as an approximate reference point, not project GPS. Observations with distance &gt;100 km are flagged for verification review.
-                          </p>
                         </div>
+
+                        {selectedReport.evidence.timestamp_review_details && (
+                          <div className="p-2 bg-slate-50 rounded text-[11px] text-slate-700 font-medium">
+                            {selectedReport.evidence.timestamp_review_details}
+                          </div>
+                        )}
                       </div>
+                    </div>
+
+                    {/* Disclaimer Banner */}
+                    <div className="p-2.5 bg-slate-100/80 rounded border border-slate-200 text-[10px] text-slate-600 leading-relaxed">
+                      {t('evidence.disclaimer')}
                     </div>
                   </div>
                 )}

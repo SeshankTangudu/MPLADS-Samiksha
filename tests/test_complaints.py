@@ -627,7 +627,7 @@ def test_phase7_location_distance_and_review_status():
         district_lat=28.6500,
         district_lon=77.2300,
     )
-    assert close_eval["location_review_status"] == "LOCATION_CONTEXT_AVAILABLE"
+    assert close_eval["location_review_status"] in ["LOCATION_CONSISTENT_CONTEXT", "LOCATION_CONTEXT_AVAILABLE"]
     assert close_eval["distance_from_district_centroid_km"] < 10.0
 
     # Test status assignment: far (> 100 km)

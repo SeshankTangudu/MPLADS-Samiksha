@@ -17,6 +17,31 @@ engine = create_engine(DATABASE_URL, connect_args=connect_args, echo=False)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
+def ensure_db_schema():
+    """Safely adds missing evidence columns to existing SQLite database if needed."""
+    try:
+        from backend.app.models import Base
+        Base.metadata.create_all(bind=engine)
+        with engine.connect() as conn:
+            from sqlalchemy import text
+            res = conn.execute(text("PRAGMA table_info(complaint_evidence);")).fetchall()
+            existing_cols = {row[1] for row in res}
+            if existing_cols:
+                if "timestamp_review_status" not in existing_cols:
+                    conn.execute(text("ALTER TABLE complaint_evidence ADD COLUMN timestamp_review_status VARCHAR(64) DEFAULT 'TIMESTAMP_UNAVAILABLE';"))
+                if "location_review_details" not in existing_cols:
+                    conn.execute(text("ALTER TABLE complaint_evidence ADD COLUMN location_review_details TEXT;"))
+                if "timestamp_review_details" not in existing_cols:
+                    conn.execute(text("ALTER TABLE complaint_evidence ADD COLUMN timestamp_review_details TEXT;"))
+                conn.commit()
+    except Exception:
+        pass
+
+
+# Run safe schema check on module load
+ensure_db_schema()
+
+
 def get_db() -> Generator[Session, None, None]:
     """FastAPI dependency for database session lifecycle."""
     db = SessionLocal()

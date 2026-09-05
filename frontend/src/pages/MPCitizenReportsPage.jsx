@@ -573,63 +573,81 @@ export const MPCitizenReportsPage = () => {
                     </div>
                   )}
 
-                  {/* Location & Metadata Details */}
-                  <div className="space-y-2 text-xs">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                      Geographic &amp; Metadata Review
-                    </span>
+                    {/* Location & Metadata Details */}
+                    <div className="space-y-2 text-xs">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                        {t('evidence.title')}
+                      </span>
 
-                    {/* Location Status Badge */}
-                    <div className="p-2.5 rounded bg-white border border-slate-200 space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-slate-500 font-semibold">Location Consistency:</span>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                          selectedReport.evidence.location_review_status === 'LOCATION_CONTEXT_AVAILABLE'
-                            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                            : selectedReport.evidence.location_review_status === 'LOCATION_REQUIRES_REVIEW'
-                            ? 'bg-amber-50 text-amber-800 border border-amber-200'
-                            : 'bg-slate-100 text-slate-600'
-                        }`}>
-                          {selectedReport.evidence.location_review_status === 'LOCATION_CONTEXT_AVAILABLE' ? 'Consistent with District' :
-                           selectedReport.evidence.location_review_status === 'LOCATION_REQUIRES_REVIEW' ? 'Review Recommended' : 'Context Unavailable'}
-                        </span>
+                      {/* Location Status Badge */}
+                      <div className="p-2.5 rounded bg-white border border-slate-200 space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] text-slate-500 font-semibold">{t('evidence.location_status')}</span>
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                            selectedReport.evidence.location_review_status === 'LOCATION_CONSISTENT_CONTEXT' || selectedReport.evidence.location_review_status === 'LOCATION_CONTEXT_AVAILABLE'
+                              ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                              : selectedReport.evidence.location_review_status === 'LOCATION_REQUIRES_REVIEW'
+                              ? 'bg-amber-50 text-amber-800 border-amber-300'
+                              : 'bg-slate-100 text-slate-600 border-slate-200'
+                          }`}>
+                            {selectedReport.evidence.location_review_status === 'LOCATION_CONSISTENT_CONTEXT' || selectedReport.evidence.location_review_status === 'LOCATION_CONTEXT_AVAILABLE'
+                              ? `✓ ${t('evidence.location_consistent')}`
+                              : selectedReport.evidence.location_review_status === 'LOCATION_REQUIRES_REVIEW'
+                              ? `⚠ ${t('evidence.location_requires_review')}`
+                              : t('evidence.location_unavailable')}
+                          </span>
+                        </div>
+                        {selectedReport.evidence.distance_from_district_centroid_km !== null && (
+                          <p className="text-[11px] text-slate-600">
+                            {t('evidence.distance_to_centroid')} <strong>{selectedReport.evidence.distance_from_district_centroid_km.toFixed(1)} km</strong> ({t('evidence.district_centroid_note')})
+                          </p>
+                        )}
+                        {selectedReport.evidence.location_review_details && (
+                          <p className="text-[10px] text-slate-500 pt-0.5">
+                            {selectedReport.evidence.location_review_details}
+                          </p>
+                        )}
                       </div>
-                      {selectedReport.evidence.distance_from_district_centroid_km !== null && (
-                        <p className="text-[11px] text-slate-600">
-                          Approx. <strong>{selectedReport.evidence.distance_from_district_centroid_km.toFixed(1)} km</strong> from District Administrative Centroid.
-                        </p>
-                      )}
-                    </div>
 
-                    {/* Metadata Card */}
-                    <div className="p-2.5 rounded bg-white border border-slate-200 space-y-1 text-[11px]">
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Metadata Status:</span>
-                        <span className="font-semibold text-slate-700">{selectedReport.evidence.metadata_status}</span>
+                      {/* Metadata & Timestamp Card */}
+                      <div className="p-2.5 rounded bg-white border border-slate-200 space-y-1 text-[11px]">
+                        {selectedReport.evidence.camera_make && (
+                          <div className="flex justify-between">
+                            <span className="text-slate-500">{t('evidence.camera_device')}</span>
+                            <span className="font-semibold text-slate-700">{selectedReport.evidence.camera_make} {selectedReport.evidence.camera_model || ''}</span>
+                          </div>
+                        )}
+                        {selectedReport.evidence.captured_at && (
+                          <div className="flex justify-between">
+                            <span className="text-slate-500">{t('evidence.captured_at')}</span>
+                            <span className="font-semibold text-slate-700">{new Date(selectedReport.evidence.captured_at).toLocaleDateString()}</span>
+                          </div>
+                        )}
+                        {selectedReport.evidence.timestamp_review_status && selectedReport.evidence.timestamp_review_status !== 'TIMESTAMP_UNAVAILABLE' && (
+                          <div className="flex justify-between items-center pt-1 border-t border-slate-100">
+                            <span className="text-slate-500">{t('evidence.timestamp_title')}:</span>
+                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                              selectedReport.evidence.timestamp_review_status === 'TIMESTAMP_CONSISTENT' ? 'bg-emerald-50 text-emerald-800' :
+                              selectedReport.evidence.timestamp_review_status === 'TIMESTAMP_PREDATES_SANCTION' ? 'bg-amber-50 text-amber-800' :
+                              'bg-red-50 text-red-800'
+                            }`}>
+                              {selectedReport.evidence.timestamp_review_status === 'TIMESTAMP_CONSISTENT' ? `✓ ${t('evidence.timestamp_consistent')}` :
+                               selectedReport.evidence.timestamp_review_status === 'TIMESTAMP_PREDATES_SANCTION' ? `⚠ ${t('evidence.timestamp_predates_sanction')}` :
+                               selectedReport.evidence.timestamp_review_status}
+                            </span>
+                          </div>
+                        )}
+                        {selectedReport.nearby_reports_count > 0 && (
+                          <div className="flex justify-between pt-1 border-t border-slate-100 text-blue-700 font-bold">
+                            <span>Nearby Reports (&lt;25km):</span>
+                            <span>{selectedReport.nearby_reports_count} reports</span>
+                          </div>
+                        )}
                       </div>
-                      {selectedReport.evidence.camera_make && (
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Device:</span>
-                          <span className="font-semibold text-slate-700">{selectedReport.evidence.camera_make} {selectedReport.evidence.camera_model}</span>
-                        </div>
-                      )}
-                      {selectedReport.evidence.captured_at && (
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Captured:</span>
-                          <span className="font-semibold text-slate-700">{new Date(selectedReport.evidence.captured_at).toLocaleString()}</span>
-                        </div>
-                      )}
-                      {selectedReport.nearby_reports_count > 0 && (
-                        <div className="flex justify-between pt-1 border-t border-slate-100 text-blue-700 font-bold">
-                          <span>Nearby Reports (&lt;25km):</span>
-                          <span>{selectedReport.nearby_reports_count} reports</span>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {/* ALLOCATION & READ-ONLY ANALYTICAL CONTEXT */}
             {selectedReport.linked_allocation_id && (

@@ -31,6 +31,7 @@ from backend.app.schemas import (
 from backend.app.services.evidence_service import (
     extract_image_metadata,
     evaluate_location_consistency,
+    evaluate_timestamp_consistency,
     save_evidence_file,
     calculate_nearby_reports,
     get_allocation_report_summary,
@@ -118,7 +119,9 @@ def _build_complaint_response(complaint: Complaint, db: Session) -> ComplaintRes
         evidence_public_safe = EvidencePublicSafeSchema(
             has_photo=has_photo_file,
             has_gps=has_gps_coords,
-            uploaded_at=ev.uploaded_at
+            uploaded_at=ev.uploaded_at,
+            location_review_status=ev.location_review_status,
+            timestamp_review_status=getattr(ev, "timestamp_review_status", "TIMESTAMP_UNAVAILABLE"),
         )
         evidence_schema = EvidenceResponseSchema(
             id=ev.id,
@@ -141,8 +144,11 @@ def _build_complaint_response(complaint: Complaint, db: Session) -> ComplaintRes
             camera_model=ev.camera_model,
             metadata_status=ev.metadata_status,
             location_review_status=ev.location_review_status,
+            location_review_details=getattr(ev, "location_review_details", None),
             distance_from_district_centroid_km=ev.distance_from_district_centroid_km,
             exif_vs_browser_gps_delta_km=ev.exif_vs_browser_gps_delta_km,
+            timestamp_review_status=getattr(ev, "timestamp_review_status", "TIMESTAMP_UNAVAILABLE"),
+            timestamp_review_details=getattr(ev, "timestamp_review_details", None),
             has_photo=has_photo_file,
             has_gps=has_gps_coords,
         )
@@ -356,6 +362,13 @@ async def submit_complaint(
             exif_lon=meta["exif_longitude"],
         )
 
+        time_eval = evaluate_timestamp_consistency(
+            captured_at=meta["captured_at"],
+            submitted_at=now_iso,
+            sanction_date=proj.sanction_date if linked_id and proj else None,
+            completion_date=proj.completion_date if linked_id and proj else None,
+        )
+
         evidence = ComplaintEvidence(
             complaint_id=complaint_id,
             file_path=saved_path,
@@ -377,8 +390,11 @@ async def submit_complaint(
             camera_model=meta["camera_model"],
             metadata_status=meta["metadata_status"],
             location_review_status=loc_eval["location_review_status"],
+            location_review_details=loc_eval["location_review_details"],
             distance_from_district_centroid_km=loc_eval["distance_from_district_centroid_km"],
             exif_vs_browser_gps_delta_km=loc_eval["exif_vs_browser_gps_delta_km"],
+            timestamp_review_status=time_eval["timestamp_review_status"],
+            timestamp_review_details=time_eval["timestamp_review_details"],
         )
         db.add(evidence)
     elif parsed_lat is not None and parsed_lon is not None:
@@ -410,8 +426,11 @@ async def submit_complaint(
             camera_model=None,
             metadata_status="METADATA_UNAVAILABLE",
             location_review_status=loc_eval["location_review_status"],
+            location_review_details=loc_eval["location_review_details"],
             distance_from_district_centroid_km=loc_eval["distance_from_district_centroid_km"],
             exif_vs_browser_gps_delta_km=None,
+            timestamp_review_status="TIMESTAMP_UNAVAILABLE",
+            timestamp_review_details="No image attached; timestamp review unavailable.",
         )
         db.add(evidence)
 

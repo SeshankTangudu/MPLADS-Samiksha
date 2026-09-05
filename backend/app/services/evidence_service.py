@@ -158,6 +158,93 @@ def extract_image_metadata(file_bytes: bytes, original_filename: str) -> Dict[st
     return result
 
 
+from datetime import timedelta
+
+
+def _parse_date(date_str: Optional[str]) -> Optional[datetime]:
+    """Safely parses date strings from EXIF, ISO timestamps, or database date fields."""
+    if not date_str or not isinstance(date_str, str):
+        return None
+    s = date_str.strip()
+    if not s:
+        return None
+    formats = [
+        "%Y:%m:%d %H:%M:%S",
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%dT%H:%M:%S",
+        "%Y-%m-%dT%H:%M:%SZ",
+        "%Y-%m-%d",
+        "%d/%m/%Y",
+        "%d-%m-%Y",
+    ]
+    for fmt in formats:
+        try:
+            return datetime.strptime(s[:19], fmt[:len(s[:19])])
+        except Exception:
+            continue
+    try:
+        return datetime.fromisoformat(s.replace("Z", "+00:00")).replace(tzinfo=None)
+    except Exception:
+        pass
+    return None
+
+
+def evaluate_timestamp_consistency(
+    captured_at: Optional[str],
+    submitted_at: Optional[str],
+    sanction_date: Optional[str] = None,
+    completion_date: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Evaluates temporal consistency between image capture, complaint submission, and project milestones.
+    
+    Returns:
+    - timestamp_review_status:
+      - TIMESTAMP_CONSISTENT: Capture timestamp is on/before submission and after/near sanction date.
+      - TIMESTAMP_PREDATES_SANCTION: Capture timestamp significantly predates project sanction date (> 1 year before).
+      - TIMESTAMP_FUTURE_INCONSISTENT: Capture timestamp is in the future relative to complaint submission.
+      - TIMESTAMP_UNAVAILABLE: No EXIF capture timestamp is present in image metadata.
+    - timestamp_review_details: Human-readable review rationale.
+    """
+    if not captured_at or not str(captured_at).strip():
+        return {
+            "timestamp_review_status": "TIMESTAMP_UNAVAILABLE",
+            "timestamp_review_details": "No EXIF timestamp recorded in image metadata.",
+        }
+
+    cap_dt = _parse_date(captured_at)
+    sub_dt = _parse_date(submitted_at) if submitted_at else datetime.now(timezone.utc).replace(tzinfo=None)
+    sanc_dt = _parse_date(sanction_date) if sanction_date else None
+
+    if not cap_dt:
+        return {
+            "timestamp_review_status": "TIMESTAMP_UNAVAILABLE",
+            "timestamp_review_details": f"Unparseable EXIF capture timestamp format: '{captured_at}'.",
+        }
+
+    # Check 1: Future timestamp check (allowing 24h clock drift)
+    if sub_dt and cap_dt > (sub_dt + timedelta(days=1)):
+        return {
+            "timestamp_review_status": "TIMESTAMP_FUTURE_INCONSISTENT",
+            "timestamp_review_details": f"Discrepancy detected: EXIF capture timestamp ({cap_dt.strftime('%Y-%m-%d')}) is in the future relative to submission date ({sub_dt.strftime('%Y-%m-%d')}).",
+        }
+
+    # Check 2: Pre-dates project sanction check (> 365 days before sanction)
+    if sanc_dt and cap_dt < (sanc_dt - timedelta(days=365)):
+        days_prior = (sanc_dt - cap_dt).days
+        years_prior = round(days_prior / 365.25, 1)
+        return {
+            "timestamp_review_status": "TIMESTAMP_PREDATES_SANCTION",
+            "timestamp_review_details": f"Timeline anomaly: EXIF capture timestamp ({cap_dt.strftime('%Y-%m-%d')}) predates project sanction date ({sanc_dt.strftime('%Y-%m-%d')}) by approximately {years_prior} years.",
+        }
+
+    # Check 3: Consistent
+    sanc_context = f" (after project sanction {sanc_dt.strftime('%Y-%m-%d')})" if sanc_dt else ""
+    return {
+        "timestamp_review_status": "TIMESTAMP_CONSISTENT",
+        "timestamp_review_details": f"EXIF capture timestamp ({cap_dt.strftime('%Y-%m-%d')}) is chronologically consistent with submission timeline{sanc_context}.",
+    }
+
+
 def evaluate_location_consistency(
     browser_lat: Optional[float],
     browser_lon: Optional[float],
@@ -166,33 +253,64 @@ def evaluate_location_consistency(
     exif_lat: Optional[float] = None,
     exif_lon: Optional[float] = None,
 ) -> Dict[str, Any]:
-    """Evaluates location consistency review signals without modifying analytical scoring."""
+    """Evaluates location consistency review signals without modifying analytical scoring.
+    
+    District centroid serves strictly as an administrative reference point, not the physical worksite location.
+    """
     dist_km = None
     delta_km = None
     review_status = "LOCATION_DATA_UNAVAILABLE"
+    details = "No geographic coordinates provided in report or image metadata."
 
     has_browser_gps = browser_lat is not None and browser_lon is not None
     has_district_coords = district_lat is not None and district_lon is not None
     has_exif_gps = exif_lat is not None and exif_lon is not None
 
-    if has_browser_gps and has_district_coords:
-        dist_km = haversine_distance_km(browser_lat, browser_lon, district_lat, district_lon)
-        if dist_km <= DISTRICT_CENTROID_REVIEW_THRESHOLD_KM:
-            review_status = "LOCATION_CONTEXT_AVAILABLE"
-        else:
-            review_status = "LOCATION_REQUIRES_REVIEW"
-    elif has_browser_gps:
-        review_status = "LOCATION_CONTEXT_AVAILABLE"
+    ref_lat = browser_lat if has_browser_gps else exif_lat
+    ref_lon = browser_lon if has_browser_gps else exif_lon
+
+    if ref_lat is not None and ref_lon is not None and has_district_coords:
+        dist_km = haversine_distance_km(ref_lat, ref_lon, district_lat, district_lon)
 
     if has_browser_gps and has_exif_gps:
         delta_km = haversine_distance_km(browser_lat, browser_lon, exif_lat, exif_lon)
-        if delta_km > EXIF_VS_BROWSER_GPS_REVIEW_THRESHOLD_KM:
+
+    if has_browser_gps and has_exif_gps:
+        if delta_km <= EXIF_VS_BROWSER_GPS_REVIEW_THRESHOLD_KM:
+            if dist_km is not None and dist_km > DISTRICT_CENTROID_REVIEW_THRESHOLD_KM:
+                review_status = "LOCATION_REQUIRES_REVIEW"
+                details = f"EXIF GPS matches citizen-reported GPS within {delta_km:.2f} km, but location is {dist_km:.1f} km from district administrative centroid reference (>100 km threshold). Cross-boundary review recommended."
+            else:
+                review_status = "LOCATION_CONSISTENT_CONTEXT"
+                dist_str = f" and within regional bounds ({dist_km:.1f} km from district centroid reference)" if dist_km is not None else ""
+                details = f"EXIF GPS coordinates match citizen-reported GPS within {delta_km:.2f} km{dist_str}."
+        else:
             review_status = "LOCATION_REQUIRES_REVIEW"
+            details = f"Discrepancy detected: EXIF GPS coordinates differ by {delta_km:.1f} km from citizen-reported GPS (>25 km threshold). Field review recommended."
+
+    elif has_browser_gps:
+        if dist_km is not None and dist_km > DISTRICT_CENTROID_REVIEW_THRESHOLD_KM:
+            review_status = "LOCATION_REQUIRES_REVIEW"
+            details = f"Citizen-reported GPS ({browser_lat:.4f}°, {browser_lon:.4f}°) is {dist_km:.1f} km from district administrative centroid reference (>100 km threshold). Administrative review recommended."
+        else:
+            review_status = "LOCATION_CONSISTENT_CONTEXT"
+            dist_str = f", {dist_km:.1f} km from district centroid reference" if dist_km is not None else ""
+            details = f"Citizen GPS recorded ({browser_lat:.4f}°, {browser_lon:.4f}°){dist_str}. No EXIF GPS in photo."
+
+    elif has_exif_gps:
+        if dist_km is not None and dist_km > DISTRICT_CENTROID_REVIEW_THRESHOLD_KM:
+            review_status = "LOCATION_REQUIRES_REVIEW"
+            details = f"Image EXIF GPS ({exif_lat:.4f}°, {exif_lon:.4f}°) is {dist_km:.1f} km from district administrative centroid reference (>100 km threshold). Administrative review recommended."
+        else:
+            review_status = "LOCATION_CONSISTENT_CONTEXT"
+            dist_str = f", {dist_km:.1f} km from district centroid reference" if dist_km is not None else ""
+            details = f"Image EXIF GPS extracted ({exif_lat:.4f}°, {exif_lon:.4f}°){dist_str}."
 
     return {
         "distance_from_district_centroid_km": dist_km,
         "exif_vs_browser_gps_delta_km": delta_km,
         "location_review_status": review_status,
+        "location_review_details": details,
     }
 
 
