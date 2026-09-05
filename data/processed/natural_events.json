@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Curated provenance-backed natural and meteorological event registry for contextual complaint evaluation",
+    "primary_sources": [
+      {
+        "name": "India Meteorological Department (IMD), Ministry of Earth Sciences",
+        "url": "https://mausam.imd.gov.in",
+        "jurisdiction": "National Weather & Cyclone Reports"
+      },
+      {
+        "name": "National Disaster Management Authority (NDMA), Ministry of Home Affairs",
+        "url": "https://ndma.gov.in",
+        "jurisdiction": "Disaster Situation Reports & Hazard Records"
+      }
+    ],
+    "last_updated": "2026-09-01T00:00:00Z"
+  },
+  "events": [
+    {
+      "event_id": "IMD-2019-FANI",
+      "event_type": "Cyclone",
+      "event_name": "Extremely Severe Cyclonic Storm Fani",
+      "start_date": "2019-04-26",
+      "end_date": "2019-05-05",
+      "state": "Odisha",
+      "districts": ["Puri", "Khurda", "Khordha", "Cuttack", "Jagatsinghpur", "Kendrapara", "Ganjam", "Bhadrak", "Balasore"],
+      "source_name": "India Meteorological Department (IMD)",
+      "source_url": "https://mausam.imd.gov.in",
+      "source_reference": "IMD Report on Cyclonic Disturbances Over North Indian Ocean 2019 (Report No. RSMC/2019)",
+      "provenance_status": "OFFICIAL_GOVERNMENT_RECORD",
+      "description": "Category 5 equivalent landfall near Puri with peak sustained surface winds of 175-185 kmph, causing widespread tree felling, transmission damage, and heavy coastal precipitation."
+    },
+    {
+      "event_id": "IMD-2020-AMPHAN",
+      "event_type": "Cyclone",
+      "event_name": "Super Cyclonic Storm Amphan",
+      "start_date": "2020-05-16",
+      "end_date": "2020-05-21",
+      "state": "West Bengal",
+      "districts": ["South 24 Parganas", "North 24 Parganas", "East Medinipur", "Purba Medinipur", "Kolkata", "Howrah", "Hooghly"],
+      "source_name": "India Meteorological Department (IMD)",
+      "source_url": "https://mausam.imd.gov.in",
+      "source_reference": "IMD Cyclone Warning Division Bulletin - Super Cyclonic Storm Amphan (May 2020)",
+      "provenance_status": "OFFICIAL_GOVERNMENT_RECORD",
+      "description": "Super cyclonic storm crossing West Bengal coast over Sundarbans with recorded storm surges of 4-5 meters and gusts up to 185 kmph."
+    },
+    {
+      "event_id": "IMD-2021-TAUKTAE",
+      "event_type": "Cyclone",
+      "event_name": "Extremely Severe Cyclonic Storm Tauktae",
+      "start_date": "2021-05-14",
+      "end_date": "2021-05-19",
+      "state": "Gujarat",
+      "districts": ["Gir Somnath", "Amreli", "Bhavnagar", "Junagadh", "Porbandar", "Valsad", "Navsari", "Surat"],
+      "source_name": "India Meteorological Department (IMD)",
+      "source_url": "https://mausam.imd.gov.in",
+      "source_reference": "IMD Cyclone Warning Division Summary Report - ESCS Tauktae (May 2021)",
+      "provenance_status": "OFFICIAL_GOVERNMENT_RECORD",
+      "description": "Extremely severe cyclonic storm with landfall near Tad Maidan (Gir Somnath) with sustained winds of 160-170 kmph, resulting in significant civic infrastructure damage and coastal inundation."
+    },
+    {
+      "event_id": "IMD-2021-YAAS",
+      "event_type": "Cyclone",
+      "event_name": "Very Severe Cyclonic Storm Yaas",
+      "start_date": "2021-05-23",
+      "end_date": "2021-05-28",
+      "state": "Odisha",
+      "districts": ["Balasore", "Bhadrak", "Kendrapara", "Mayurbhanj", "Jagatsinghpur"],
+      "source_name": "India Meteorological Department (IMD)",
+      "source_url": "https://mausam.imd.gov.in",
+      "source_reference": "IMD Cyclone Yaas Summary Report (RSMC New Delhi, 2021)",
+      "provenance_status": "OFFICIAL_GOVERNMENT_RECORD",
+      "description": "Very severe cyclonic storm making landfall south of Balasore with widespread rainfall exceeding 200 mm and riverine saline ingress in low-lying coastal tracts."
+    },
+    {
+      "event_id": "IMD-2023-BIPARJOY",
+      "event_type": "Cyclone",
+      "event_name": "Extremely Severe Cyclonic Storm Biparjoy",
+      "start_date": "2023-06-06",
+      "end_date": "2023-06-19",
+      "state": "Gujarat",
+      "districts": ["Kachchh", "Kutch", "Devbhumi Dwarka", "Jamnagar", "Porbandar", "Rajkot", "Morbi", "Junagadh"],
+      "source_name": "India Meteorological Department (IMD)",
+      "source_url": "https://mausam.imd.gov.in",
+      "source_reference": "IMD Preliminary Report on ESCS Biparjoy Over Arabian Sea (June 2023)",
+      "provenance_status": "OFFICIAL_GOVERNMENT_RECORD",
+      "description": "Long-lived cyclonic system crossing Saurashtra and Kutch coast near Jakhau Port with heavy to very heavy rainfall exceeding 250 mm in 24 hours across Kutch district."
+    },
+    {
+      "event_id": "NDMA-2023-HP-MONSOON",
+      "event_type": "Flood & Landslide",
+      "event_name": "North India Severe Monsoon Rainstorm & Flash Floods",
+      "start_date": "2023-07-07",
+      "end_date": "2023-07-15",
+      "state": "Himachal Pradesh",
+      "districts": ["Mandi", "Kullu", "Shimla", "Solan", "Sirmaur", "Kangra", "Bilaspur"],
+      "source_name": "National Disaster Management Authority (NDMA)",
+      "source_url": "https://ndma.gov.in",
+      "source_reference": "NDMA Monsoon Situation Report 2023 / IMD Extreme Rainfall Bulletin July 2023",
+      "provenance_status": "OFFICIAL_GOVERNMENT_RECORD",
+      "description": "Active Western Disturbance combined with monsoon surge resulting in record 24-hour rainfall (>250 mm), catastrophic landslides, and road connectivity washouts in the Beas basin."
+    },
+    {
+      "event_id": "IMD-2023-MICHAUNG",
+      "event_type": "Cyclone",
+      "event_name": "Severe Cyclonic Storm Michaung",
+      "start_date": "2023-12-01",
+      "end_date": "2023-12-06",
+      "state": "Tamil Nadu",
+      "districts": ["Chennai", "Tiruvallur", "Kanchipuram", "Chengalpattu"],
+      "source_name": "India Meteorological Department (IMD)",
+      "source_url": "https://mausam.imd.gov.in",
+      "source_reference": "IMD Heavy Rainfall & Cyclone Michaung Special Bulletin (December 2023)",
+      "provenance_status": "OFFICIAL_GOVERNMENT_RECORD",
+      "description": "Quasi-stationary coastal movement generating extreme torrential rainfall (>400 mm in 48 hours) resulting in severe urban waterlogging and structural inundation in the Chennai metropolitan region."
+    },
+    {
+      "event_id": "IMD-2024-REMAL",
+      "event_type": "Cyclone",
+      "event_name": "Severe Cyclonic Storm Remal",
+      "start_date": "2024-05-24",
+      "end_date": "2024-05-28",
+      "state": "West Bengal",
+      "districts": ["South 24 Parganas", "North 24 Parganas", "Kolkata", "Howrah", "Hooghly", "Nadia"],
+      "source_name": "India Meteorological Department (IMD)",
+      "source_url": "https://mausam.imd.gov.in",
+      "source_reference": "IMD Special Tropical Weather Outlook for Cyclone Remal (May 2024)",
+      "provenance_status": "OFFICIAL_GOVERNMENT_RECORD",
+      "description": "Severe cyclonic storm making landfall over Sundarbans with sustained wind speeds of 110-120 kmph, heavy rainfall, and embankment breaches."
+    }
+  ]
+}

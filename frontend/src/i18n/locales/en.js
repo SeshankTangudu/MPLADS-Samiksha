@@ -702,5 +702,29 @@ export const en = {
     "category_label": "Civic Sector:",
     "sanctioned_amount": "Sanctioned Budget:",
     "expenditure_amount": "Reported Expenditure:"
+  },
+  "natural_events": {
+    "title": "Natural Event Context",
+    "sub": "Documented meteorological and environmental event context for complaint review",
+    "status_label": "Status:",
+    "status_match": "Official Event Context Found",
+    "status_possible": "Possible Event Context",
+    "status_not_found": "No Documented Events",
+    "status_unavailable": "Registry Unavailable",
+    "status_insufficient": "Data Insufficient",
+    "event_label": "Documented Hazard:",
+    "location_label": "Location Scope:",
+    "period_label": "Documented Period:",
+    "temporal_relation_label": "Temporal Relation:",
+    "overlap_matched": "Overlaps event period",
+    "aftermath_window": "Post-event window",
+    "district_context_note": "DISTRICT-LEVEL EVENT CONTEXT",
+    "event_summary": "Official Event Summary:",
+    "review_interpretation_title": "Review Interpretation (Non-Causal Context):",
+    "view_source": "View Official Source",
+    "view_registry": "IMD / NDMA Registry",
+    "source_ref_label": "Source Reference:",
+    "registry_status_title": "Official Registry Query Status:",
+    "disclaimer": "Natural-event context is used only as supporting information for human review. A temporal or geographic match does not prove that a natural event caused the reported condition, nor does absence of an event prove that a complaint is invalid. District-level event matching uses administrative geography and should not be interpreted as exact worksite exposure."
   }
 };

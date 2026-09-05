@@ -221,6 +221,36 @@ class InvestmentDurabilityResponseSchema(BaseModel):
     )
 
 
+class NaturalEventContextResponseSchema(BaseModel):
+    """Natural-Event Context Review Layer Schema (Phase C)."""
+    source_record_id: Optional[str] = None
+    complaint_id: Optional[str] = None
+    status: str
+    signal_badge: str
+    has_event_context: bool = False
+    event_id: Optional[str] = None
+    event_type: Optional[str] = None
+    event_name: Optional[str] = None
+    event_start: Optional[str] = None
+    event_end: Optional[str] = None
+    matched_district: Optional[str] = None
+    matched_state: Optional[str] = None
+    spatial_relation: str
+    temporal_relation: str
+    source_name: Optional[str] = None
+    source_url: Optional[str] = None
+    source_reference: Optional[str] = None
+    provenance_status: Optional[str] = None
+    description: Optional[str] = None
+    explanation: str
+    disclaimer: str = (
+        "Natural-event context is used only as supporting information for human review. "
+        "A temporal or geographic match does not prove that a natural event caused the reported condition, "
+        "nor does absence of an event prove that a complaint is invalid. "
+        "District-level event matching uses administrative geography and should not be interpreted as exact worksite exposure."
+    )
+
+
 class ProjectDetailResponseSchema(BaseModel):
     """Complete deep investigation response payload."""
     allocation: AllocationDetailSchema
@@ -231,6 +261,7 @@ class ProjectDetailResponseSchema(BaseModel):
     risk_trajectory: Optional[RiskTrajectorySchema] = None
     duplicate_candidates: Optional[List[CandidateDuplicateSchema]] = None
     investment_durability: Optional[InvestmentDurabilityResponseSchema] = None
+    natural_event_context: Optional[NaturalEventContextResponseSchema] = None
     disclaimer: str = "Risk indicators are analytical signals intended to support review. They do not constitute proof of wrongdoing."
 
 
@@ -799,6 +830,7 @@ class ComplaintResponseSchema(BaseModel):
     evidence_public_safe: Optional[EvidencePublicSafeSchema] = None
     nearby_reports_count: int = 0
     allocation_reports_count: int = 0
+    natural_event_context: Optional[NaturalEventContextResponseSchema] = None
 
     model_config = ConfigDict(from_attributes=True)
 

@@ -21,7 +21,9 @@ import {
   GitBranch, 
   Sparkles, 
   Database,
-  Tag
+  Tag,
+  CloudRain,
+  ExternalLink
 } from 'lucide-react';
 import { ProjectsAPI } from '../services/api';
 import LoadingState from '../components/common/LoadingState';
@@ -206,6 +208,7 @@ export const InvestigationPage = () => {
     risk_trajectory, 
     duplicate_candidates = [], 
     investment_durability,
+    natural_event_context,
     disclaimer 
   } = data;
 
@@ -1092,6 +1095,119 @@ export const InvestigationPage = () => {
           {/* Safe AI Disclaimer */}
           <p className="text-[11px] text-slate-500 italic pt-1 border-t border-slate-100">
             *{t('durability.disclaimer', 'Analytical review signal only. Citizen reports are observations requiring verification and do not establish physical deterioration or wrongdoing.')}
+          </p>
+        </div>
+      )}
+
+      {/* Phase C: Natural Event Context Card */}
+      {natural_event_context && (
+        <div className="gov-card p-6 space-y-4 border-l-4 border-l-cyan-600 bg-gradient-to-r from-slate-50 to-white shadow-sm">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-3 border-b border-slate-200 gap-2">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <CloudRain className="w-4 h-4 text-cyan-600" />
+                {t('natural_events.title', 'Natural Event Context')}
+              </h3>
+              <p className="text-xs text-slate-500">
+                {t('natural_events.sub', 'Documented meteorological and environmental event context for complaint review')}
+              </p>
+            </div>
+            <span className={`text-xs font-bold px-3 py-1 rounded border uppercase tracking-wider ${
+              natural_event_context.signal_status === 'NATURAL_EVENT_CONTEXT_MATCH' ? 'bg-amber-100 text-amber-900 border-amber-300' :
+              natural_event_context.signal_status === 'NATURAL_EVENT_CONTEXT_POSSIBLE' ? 'bg-blue-100 text-blue-900 border-blue-300' :
+              natural_event_context.signal_status === 'NATURAL_EVENT_CONTEXT_NOT_FOUND' ? 'bg-slate-100 text-slate-700 border-slate-300' :
+              'bg-slate-100 text-slate-700 border-slate-300'
+            }`}>
+              {t('natural_events.status_label', 'Status:')} {
+                natural_event_context.signal_status === 'NATURAL_EVENT_CONTEXT_MATCH' ? t('natural_events.status_match', 'Official Event Context Found') :
+                natural_event_context.signal_status === 'NATURAL_EVENT_CONTEXT_POSSIBLE' ? t('natural_events.status_possible', 'Possible Event Context') :
+                natural_event_context.signal_status === 'NATURAL_EVENT_CONTEXT_NOT_FOUND' ? t('natural_events.status_not_found', 'No Documented Events') :
+                natural_event_context.signal_status === 'NATURAL_EVENT_DATA_UNAVAILABLE' ? t('natural_events.status_unavailable', 'Registry Unavailable') :
+                t('natural_events.status_insufficient', 'Data Insufficient')
+              }
+            </span>
+          </div>
+
+          {/* 4-Metric Grid if event matches */}
+          {natural_event_context.has_event_match ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <div className="p-3 bg-white rounded-lg border border-slate-200">
+                <span className="text-[11px] text-slate-500 block font-medium">{t('natural_events.event_label', 'Documented Hazard:')}</span>
+                <span className="text-sm font-bold text-slate-900 mt-0.5 block">
+                  {natural_event_context.event_name ? `${natural_event_context.event_name} (${natural_event_context.event_type})` : natural_event_context.event_type}
+                </span>
+                <span className="text-[10px] text-slate-400">{natural_event_context.source_name || 'IMD / NDMA'}</span>
+              </div>
+
+              <div className="p-3 bg-white rounded-lg border border-slate-200">
+                <span className="text-[11px] text-slate-500 block font-medium">{t('natural_events.location_label', 'Location Scope:')}</span>
+                <span className="text-xs font-bold text-slate-800 mt-0.5 block">
+                  {natural_event_context.district}, {natural_event_context.state}
+                </span>
+                <span className="text-[10px] font-bold text-cyan-800 bg-cyan-50 px-1.5 py-0.5 rounded border border-cyan-200 inline-block mt-1">
+                  {t('natural_events.district_context_note', 'DISTRICT-LEVEL EVENT CONTEXT')}
+                </span>
+              </div>
+
+              <div className="p-3 bg-white rounded-lg border border-slate-200">
+                <span className="text-[11px] text-slate-500 block font-medium">{t('natural_events.period_label', 'Documented Period:')}</span>
+                <span className="text-xs font-semibold text-slate-800 mt-0.5 block">
+                  {natural_event_context.event_start} — {natural_event_context.event_end}
+                </span>
+                <span className="text-[10px] text-slate-400">
+                  {natural_event_context.temporal_relation === 'OVERLAPPING_EVENT_PERIOD' ? t('natural_events.overlap_matched', 'Overlaps event period') : t('natural_events.aftermath_window', 'Post-event window')}
+                </span>
+              </div>
+
+              <div className="p-3 bg-white rounded-lg border border-slate-200 flex flex-col justify-between">
+                <div>
+                  <span className="text-[11px] text-slate-500 block font-medium">{t('natural_events.source_ref_label', 'Source Reference:')}</span>
+                  <span className="text-xs font-semibold text-slate-800 mt-0.5 truncate block" title={natural_event_context.source_reference}>
+                    {natural_event_context.source_name}
+                  </span>
+                </div>
+                {natural_event_context.source_url && (
+                  <a
+                    href={natural_event_context.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] text-cyan-700 hover:text-cyan-900 font-bold hover:underline flex items-center gap-1 mt-1"
+                  >
+                    {t('natural_events.view_source', 'View Official Source')} <ExternalLink className="w-3 h-3" />
+                  </a>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Info className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                <span>
+                  {natural_event_context.explanation || t('natural_events.status_not_found', 'No documented extreme meteorological events for this district/period.')}
+                </span>
+              </div>
+              <span className="text-[10px] font-mono text-slate-400 bg-white px-2 py-1 rounded border border-slate-200">
+                {t('natural_events.view_registry', 'IMD / NDMA Registry')}
+              </span>
+            </div>
+          )}
+
+          {/* Review Interpretation Banner */}
+          {natural_event_context.has_event_match && natural_event_context.explanation && (
+            <div className="p-3.5 bg-cyan-50/70 rounded-lg border border-cyan-200 space-y-1 text-xs">
+              <div className="flex items-center gap-1.5 font-bold text-cyan-950">
+                <Sparkles className="w-3.5 h-3.5 text-cyan-700" />
+                {t('natural_events.review_interpretation_title', 'Review Interpretation (Non-Causal Context):')}
+              </div>
+              <p className="text-cyan-950 leading-relaxed font-medium">
+                {natural_event_context.explanation}
+              </p>
+            </div>
+          )}
+
+          {/* Safe Methodology Disclaimer */}
+          <p className="text-[11px] text-slate-500 italic pt-1 border-t border-slate-100">
+            *{t('natural_events.disclaimer', 'Natural-event context is used only as supporting information for human review. A temporal or geographic match does not prove that a natural event caused the reported condition, nor does absence of an event prove that a complaint is invalid. District-level event matching uses administrative geography and should not be interpreted as exact worksite exposure.')}
           </p>
         </div>
       )}

@@ -39,6 +39,7 @@ from backend.app.services.evidence_service import (
     MAX_FILE_SIZE_BYTES,
     UPLOAD_DIR,
 )
+from backend.app.services.natural_event_service import evaluate_natural_event_context
 
 router = APIRouter(prefix="/complaints", tags=["Complaints & Governance"])
 
@@ -155,6 +156,17 @@ def _build_complaint_response(complaint: Complaint, db: Session) -> ComplaintRes
         if has_gps_coords:
             nearby_reports_cnt = calculate_nearby_reports(db, complaint.complaint_id, ev.latitude, ev.longitude)
 
+    # Natural Event Context Evaluation
+    natural_event_ctx = None
+    if linked_project:
+        ev_captured = ev.captured_at if ev else None
+        natural_event_ctx = evaluate_natural_event_context(
+            district=linked_project.district,
+            state=linked_project.state,
+            complaint_submitted_at=complaint.submitted_at,
+            evidence_captured_at=ev_captured,
+        )
+
     return ComplaintResponseSchema(
         id=complaint.id,
         complaint_id=complaint.complaint_id,
@@ -191,6 +203,7 @@ def _build_complaint_response(complaint: Complaint, db: Session) -> ComplaintRes
         evidence_public_safe=evidence_public_safe,
         nearby_reports_count=nearby_reports_cnt,
         allocation_reports_count=allocation_reports_count,
+        natural_event_context=natural_event_ctx,
     )
 
 

@@ -22,10 +22,12 @@ from backend.app.schemas import (
     MLCrossCheckSchema,
     RiskTrajectorySchema,
     InvestmentDurabilityResponseSchema,
+    NaturalEventContextResponseSchema,
     PaginationEnvelope
 )
 from ml.risk_engine import evaluate_allocation, load_baselines
 from backend.app.services.durability_service import evaluate_investment_durability
+from backend.app.services.natural_event_service import evaluate_natural_event_context
 
 router = APIRouter(prefix="/projects", tags=["Projects"])
 
@@ -460,6 +462,16 @@ def get_project_by_id(id: str, db: Session = Depends(get_db)):
     inv_durability_data = evaluate_investment_durability(project, db)
     inv_durability = InvestmentDurabilityResponseSchema(**inv_durability_data)
 
+    # Phase C: Natural-Event-Aware Complaint Evaluation Context
+    latest_complaint = (
+        db.query(Complaint)
+        .filter(Complaint.linked_allocation_id == project.source_record_id)
+        .order_by(Complaint.id.desc())
+        .first()
+    )
+    nat_event_data = evaluate_natural_event_context(project, latest_complaint)
+    nat_event_context = NaturalEventContextResponseSchema(**nat_event_data)
+
     return ProjectDetailResponseSchema(
         allocation=alloc_detail,
         risk_assessment=risk_assessment,
@@ -469,5 +481,6 @@ def get_project_by_id(id: str, db: Session = Depends(get_db)):
         risk_trajectory=risk_traj,
         duplicate_candidates=dup_candidates,
         investment_durability=inv_durability,
+        natural_event_context=nat_event_context,
         disclaimer="Risk indicators are analytical signals intended to support review. They do not constitute proof of wrongdoing."
     )

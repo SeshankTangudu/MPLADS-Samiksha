@@ -33,9 +33,11 @@ from backend.app.schemas import (
     ConstituencyPriorityAllocationSchema,
     ConstituencyPeerBenchmarkSchema,
     InvestmentDurabilityResponseSchema,
+    NaturalEventContextResponseSchema,
 )
 from ml.risk_engine import load_baselines
 from backend.app.services.durability_service import evaluate_investment_durability
+from backend.app.services.natural_event_service import evaluate_natural_event_context
 
 # Configurable Workload Prioritization Weights (distinct from Model A scoring weights)
 REVIEW_EFFORT_TIER_WEIGHTS = {
@@ -1005,4 +1007,29 @@ def get_investment_durability(source_record_id: str, db: Session = Depends(get_d
         )
 
     return evaluate_investment_durability(project, db)
+
+
+@router.get("/analytics/natural-event/{source_record_id}", response_model=NaturalEventContextResponseSchema)
+def get_natural_event_context(source_record_id: str, db: Session = Depends(get_db)):
+    """Evaluates officially documented natural/meteorological event context for a parliamentary allocation."""
+    project = db.query(Project).filter(Project.source_record_id == source_record_id.strip()).first()
+    if not project and source_record_id.isdigit():
+        project = db.query(Project).filter(Project.id == int(source_record_id)).first()
+
+    if not project:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Constituency allocation record '{source_record_id}' not found."
+        )
+
+    # Fetch latest linked complaint if any exists to match complaint timeline
+    from backend.app.models import Complaint
+    latest_complaint = (
+        db.query(Complaint)
+        .filter(Complaint.linked_allocation_id == project.source_record_id)
+        .order_by(Complaint.id.desc())
+        .first()
+    )
+
+    return evaluate_natural_event_context(project, latest_complaint)
 
