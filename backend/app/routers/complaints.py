@@ -27,6 +27,7 @@ from backend.app.schemas import (
     MPRemarkRequestSchema,
     OfficerNoteRequestSchema,
     StatusUpdateRequestSchema,
+    ImageScreeningResponseSchema,
 )
 from backend.app.services.evidence_service import (
     extract_image_metadata,
@@ -40,6 +41,7 @@ from backend.app.services.evidence_service import (
     UPLOAD_DIR,
 )
 from backend.app.services.natural_event_service import evaluate_natural_event_context
+from backend.app.services.image_screening_service import analyze_image_screening
 
 router = APIRouter(prefix="/complaints", tags=["Complaints & Governance"])
 
@@ -124,6 +126,14 @@ def _build_complaint_response(complaint: Complaint, db: Session) -> ComplaintRes
             location_review_status=ev.location_review_status,
             timestamp_review_status=getattr(ev, "timestamp_review_status", "TIMESTAMP_UNAVAILABLE"),
         )
+        screening_res = None
+        if has_photo_file:
+            clean_basename = os.path.basename(ev.file_path)
+            file_full_path = os.path.join(UPLOAD_DIR, clean_basename)
+            if os.path.exists(file_full_path):
+                raw_res = analyze_image_screening(file_full_path, filename_context=ev.original_filename)
+                screening_res = ImageScreeningResponseSchema(**raw_res)
+
         evidence_schema = EvidenceResponseSchema(
             id=ev.id,
             complaint_id=ev.complaint_id,
@@ -152,6 +162,7 @@ def _build_complaint_response(complaint: Complaint, db: Session) -> ComplaintRes
             timestamp_review_details=getattr(ev, "timestamp_review_details", None),
             has_photo=has_photo_file,
             has_gps=has_gps_coords,
+            image_screening=screening_res,
         )
         if has_gps_coords:
             nearby_reports_cnt = calculate_nearby_reports(db, complaint.complaint_id, ev.latitude, ev.longitude)
@@ -723,4 +734,37 @@ def get_allocation_complaints_summary(
         latest_report_date=data["latest_report_date"],
         has_reports=data["has_reports"],
     )
+
+
+@router.get("/{complaint_id}/evidence/image-analysis", response_model=ImageScreeningResponseSchema)
+@router.get("/{complaint_id}/evidence/{evidence_id}/image-analysis", response_model=ImageScreeningResponseSchema)
+def get_complaint_evidence_image_analysis(
+    complaint_id: str,
+    evidence_id: Optional[int] = None,
+    db: Session = Depends(get_db)
+) -> ImageScreeningResponseSchema:
+    """Damage / Condition Image Screening Aid: Evaluates technical quality & visual characteristics."""
+    complaint = db.query(Complaint).filter(Complaint.complaint_id == complaint_id.strip()).first()
+    if not complaint or not complaint.evidence or not complaint.evidence.file_path:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No media evidence file found for complaint '{complaint_id}'."
+        )
+
+    if evidence_id is not None and complaint.evidence.id != evidence_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Evidence with ID '{evidence_id}' does not match complaint '{complaint_id}'."
+        )
+
+    clean_basename = os.path.basename(complaint.evidence.file_path)
+    file_full_path = os.path.join(UPLOAD_DIR, clean_basename)
+    if not os.path.exists(file_full_path):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evidence file does not exist on disk."
+        )
+
+    result = analyze_image_screening(file_full_path, filename_context=complaint.evidence.original_filename)
+    return ImageScreeningResponseSchema(**result)
 

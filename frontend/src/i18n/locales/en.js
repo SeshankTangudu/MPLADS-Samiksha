@@ -726,5 +726,27 @@ export const en = {
     "source_ref_label": "Source Reference:",
     "registry_status_title": "Official Registry Query Status:",
     "disclaimer": "Natural-event context is used only as supporting information for human review. A temporal or geographic match does not prove that a natural event caused the reported condition, nor does absence of an event prove that a complaint is invalid. District-level event matching uses administrative geography and should not be interpreted as exact worksite exposure."
+  },
+  "image_screening": {
+    "title": "Damage / Condition Image Screening Aid",
+    "sub": "Automated technical quality and basic visual screening aid to assist human inspection",
+    "status_label": "Screening Status:",
+    "status_review_recommended": "Review Recommended",
+    "status_quality_limited": "Quality Limited",
+    "status_no_signal": "Usable - No Signal",
+    "status_unavailable": "Analysis Unavailable",
+    "technical_quality_title": "Technical Image Quality",
+    "resolution_label": "Resolution:",
+    "brightness_label": "Luminance / Brightness:",
+    "contrast_label": "Contrast:",
+    "sharpness_label": "Sharpness:",
+    "edge_density_label": "Edge / Texture Density:",
+    "quality_notes_title": "Quality Limitations:",
+    "visual_review_title": "Visual Screening Characteristics:",
+    "review_recommendation_title": "Review Interpretation (Non-Causal Aid):",
+    "photo_preview": "Photo Preview",
+    "no_photo": "No photo evidence attached to this report",
+    "adequate_quality": "Technical image quality adequate for visual review",
+    "disclaimer": "Damage / Condition Image Screening evaluates technical and basic visual characteristics of submitted images to support human review. It is not a validated damage-detection or fraud-detection system. Automated image screening does not establish physical damage, construction quality, causation, or wrongdoing."
   }
 };

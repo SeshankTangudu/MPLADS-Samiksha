@@ -251,6 +251,28 @@ class NaturalEventContextResponseSchema(BaseModel):
     )
 
 
+class ImageScreeningResponseSchema(BaseModel):
+    """Damage / Condition Image Screening Aid Response Schema (Phase D)."""
+    status: str
+    signal_badge: str
+    image_width: Optional[int] = None
+    image_height: Optional[int] = None
+    megapixels: Optional[float] = None
+    brightness: Optional[float] = None
+    contrast: Optional[float] = None
+    sharpness: Optional[float] = None
+    edge_density: Optional[float] = None
+    quality_notes: List[str] = Field(default_factory=list)
+    visual_review_notes: List[str] = Field(default_factory=list)
+    interpretation: str
+    disclaimer: str = (
+        "Damage / Condition Image Screening evaluates technical and basic visual characteristics of submitted images "
+        "to support human review. It is not a validated damage-detection or fraud-detection system. "
+        "Image characteristics may be affected by lighting, camera quality, compression, cropping, editing, or other factors. "
+        "Automated image screening does not establish physical damage, construction quality, causation, or wrongdoing."
+    )
+
+
 class ProjectDetailResponseSchema(BaseModel):
     """Complete deep investigation response payload."""
     allocation: AllocationDetailSchema
@@ -766,6 +788,7 @@ class EvidenceResponseSchema(BaseModel):
     timestamp_review_details: Optional[str] = None
     has_photo: bool = True
     has_gps: bool = False
+    image_screening: Optional[ImageScreeningResponseSchema] = None
 
     model_config = ConfigDict(from_attributes=True)
 

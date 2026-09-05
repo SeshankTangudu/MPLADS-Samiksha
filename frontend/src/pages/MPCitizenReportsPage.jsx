@@ -23,7 +23,8 @@ import {
   Camera,
   MapPin,
   Image as ImageIcon,
-  Layers
+  Layers,
+  ScanLine
 } from 'lucide-react';
 import { ComplaintsAPI, ProjectsAPI } from '../services/api';
 import { useRole } from '../context/RoleContext';
@@ -570,6 +571,69 @@ export const MPCitizenReportsPage = () => {
                           <span>{selectedReport.evidence.image_width} × {selectedReport.evidence.image_height} px</span>
                         )}
                       </div>
+
+                      {/* DAMAGE / CONDITION IMAGE SCREENING AID (PHASE D) */}
+                      {selectedReport.evidence.image_screening && (
+                        <div className="p-3 bg-indigo-50/50 rounded-lg border border-indigo-200 space-y-2.5 mt-2">
+                          <div className="flex items-center justify-between pb-1.5 border-b border-indigo-100">
+                            <div className="flex items-center gap-1.5">
+                              <ScanLine className="w-3.5 h-3.5 text-indigo-700" />
+                              <span className="font-bold text-slate-900 text-[11px]">
+                                {t('image_screening.title', 'Damage / Condition Image Screening Aid')}
+                              </span>
+                            </div>
+                            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border uppercase ${
+                              selectedReport.evidence.image_screening.status === 'IMAGE_REVIEW_RECOMMENDED'
+                                ? 'bg-amber-100 text-amber-900 border-amber-300'
+                                : selectedReport.evidence.image_screening.status === 'IMAGE_QUALITY_LIMITED'
+                                ? 'bg-orange-100 text-orange-900 border-orange-300'
+                                : selectedReport.evidence.image_screening.status === 'NO_VISUAL_REVIEW_SIGNAL'
+                                ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                                : 'bg-slate-100 text-slate-700 border-slate-300'
+                            }`}>
+                              {selectedReport.evidence.image_screening.status === 'IMAGE_REVIEW_RECOMMENDED' ? t('image_screening.status_review_recommended', 'Review Recommended') :
+                               selectedReport.evidence.image_screening.status === 'IMAGE_QUALITY_LIMITED' ? t('image_screening.status_quality_limited', 'Quality Limited') :
+                               selectedReport.evidence.image_screening.status === 'NO_VISUAL_REVIEW_SIGNAL' ? t('image_screening.status_no_signal', 'Usable - No Signal') :
+                               t('image_screening.status_unavailable', 'Analysis Unavailable')}
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[9px]">
+                            <div className="p-1.5 bg-white rounded border border-indigo-100">
+                              <span className="text-slate-400 block">{t('image_screening.resolution_label', 'Resolution:')}</span>
+                              <span className="font-bold text-slate-800">
+                                {selectedReport.evidence.image_screening.image_width} × {selectedReport.evidence.image_screening.image_height}
+                              </span>
+                            </div>
+                            <div className="p-1.5 bg-white rounded border border-indigo-100">
+                              <span className="text-slate-400 block">{t('image_screening.brightness_label', 'Brightness:')}</span>
+                              <span className="font-bold text-slate-800">
+                                {selectedReport.evidence.image_screening.brightness} / 255
+                              </span>
+                            </div>
+                            <div className="p-1.5 bg-white rounded border border-indigo-100">
+                              <span className="text-slate-400 block">{t('image_screening.contrast_label', 'Contrast:')}</span>
+                              <span className="font-bold text-slate-800">
+                                {selectedReport.evidence.image_screening.contrast}
+                              </span>
+                            </div>
+                            <div className="p-1.5 bg-white rounded border border-indigo-100">
+                              <span className="text-slate-400 block">{t('image_screening.edge_density_label', 'Texture:')}</span>
+                              <span className="font-bold text-slate-800">
+                                {((selectedReport.evidence.image_screening.edge_density || 0) * 100).toFixed(1)}%
+                              </span>
+                            </div>
+                          </div>
+
+                          <p className="text-[9px] text-slate-600 bg-white p-2 rounded border border-indigo-100 leading-relaxed">
+                            {selectedReport.evidence.image_screening.interpretation}
+                          </p>
+
+                          <p className="text-[8px] text-slate-400 italic pt-0.5 border-t border-indigo-100">
+                            *{t('image_screening.disclaimer', selectedReport.evidence.image_screening.disclaimer)}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
 

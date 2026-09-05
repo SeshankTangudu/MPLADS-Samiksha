@@ -26,7 +26,8 @@ import {
   MapPin,
   Image as ImageIcon,
   Compass,
-  FileCheck
+  FileCheck,
+  ScanLine
 } from 'lucide-react';
 import { ComplaintsAPI, ProjectsAPI } from '../services/api';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -690,6 +691,111 @@ export const AuthorityComplaintQueuePage = () => {
                               </span>
                             </div>
                           </div>
+
+                          {/* DAMAGE / CONDITION IMAGE SCREENING AID (PHASE D) */}
+                          {selectedReport.evidence.image_screening && (
+                            <div className="p-3.5 bg-indigo-50/50 rounded-lg border border-indigo-200 space-y-3">
+                              <div className="flex items-center justify-between pb-2 border-b border-indigo-100">
+                                <div className="flex items-center gap-1.5">
+                                  <ScanLine className="w-4 h-4 text-indigo-700" />
+                                  <span className="font-bold text-slate-900 text-xs">
+                                    {t('image_screening.title', 'Damage / Condition Image Screening Aid')}
+                                  </span>
+                                </div>
+                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase ${
+                                  selectedReport.evidence.image_screening.status === 'IMAGE_REVIEW_RECOMMENDED'
+                                    ? 'bg-amber-100 text-amber-900 border-amber-300'
+                                    : selectedReport.evidence.image_screening.status === 'IMAGE_QUALITY_LIMITED'
+                                    ? 'bg-orange-100 text-orange-900 border-orange-300'
+                                    : selectedReport.evidence.image_screening.status === 'NO_VISUAL_REVIEW_SIGNAL'
+                                    ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                                    : 'bg-slate-100 text-slate-700 border-slate-300'
+                                }`}>
+                                  {selectedReport.evidence.image_screening.status === 'IMAGE_REVIEW_RECOMMENDED' ? t('image_screening.status_review_recommended', 'Review Recommended') :
+                                   selectedReport.evidence.image_screening.status === 'IMAGE_QUALITY_LIMITED' ? t('image_screening.status_quality_limited', 'Quality Limited') :
+                                   selectedReport.evidence.image_screening.status === 'NO_VISUAL_REVIEW_SIGNAL' ? t('image_screening.status_no_signal', 'Usable - No Signal') :
+                                   t('image_screening.status_unavailable', 'Analysis Unavailable')}
+                                </span>
+                              </div>
+
+                              {/* 4 Technical Quality Metrics */}
+                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px]">
+                                <div className="p-2 bg-white rounded border border-indigo-100">
+                                  <span className="text-slate-500 block">{t('image_screening.resolution_label', 'Resolution:')}</span>
+                                  <span className="font-bold text-slate-800">
+                                    {selectedReport.evidence.image_screening.image_width} × {selectedReport.evidence.image_screening.image_height}
+                                  </span>
+                                  <span className="text-[9px] text-slate-400 block">{selectedReport.evidence.image_screening.megapixels} MP</span>
+                                </div>
+
+                                <div className="p-2 bg-white rounded border border-indigo-100">
+                                  <span className="text-slate-500 block">{t('image_screening.brightness_label', 'Luminance / Brightness:')}</span>
+                                  <span className="font-bold text-slate-800">
+                                    {selectedReport.evidence.image_screening.brightness} / 255
+                                  </span>
+                                  <span className="text-[9px] text-slate-400 block">
+                                    {selectedReport.evidence.image_screening.brightness < 40 ? 'Dark' : selectedReport.evidence.image_screening.brightness > 220 ? 'Overexposed' : 'Adequate'}
+                                  </span>
+                                </div>
+
+                                <div className="p-2 bg-white rounded border border-indigo-100">
+                                  <span className="text-slate-500 block">{t('image_screening.contrast_label', 'Contrast:')}</span>
+                                  <span className="font-bold text-slate-800">
+                                    {selectedReport.evidence.image_screening.contrast}
+                                  </span>
+                                  <span className="text-[9px] text-slate-400 block">
+                                    {selectedReport.evidence.image_screening.contrast < 20 ? 'Low' : 'Adequate'}
+                                  </span>
+                                </div>
+
+                                <div className="p-2 bg-white rounded border border-indigo-100">
+                                  <span className="text-slate-500 block">{t('image_screening.edge_density_label', 'Edge / Texture Density:')}</span>
+                                  <span className="font-bold text-slate-800">
+                                    {((selectedReport.evidence.image_screening.edge_density || 0) * 100).toFixed(1)}%
+                                  </span>
+                                  <span className="text-[9px] text-slate-400 block">
+                                    Sharpness: {selectedReport.evidence.image_screening.sharpness}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Quality Limitations or Visual Notes */}
+                              {selectedReport.evidence.image_screening.quality_notes?.length > 0 && (
+                                <div className="p-2 bg-orange-50 rounded border border-orange-200 text-[10px] text-orange-900 space-y-0.5">
+                                  <span className="font-bold block">{t('image_screening.quality_notes_title', 'Quality Limitations:')}</span>
+                                  <ul className="list-disc list-inside space-y-0.5">
+                                    {selectedReport.evidence.image_screening.quality_notes.map((note, nIdx) => (
+                                      <li key={nIdx}>{note}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+
+                              {selectedReport.evidence.image_screening.visual_review_notes?.length > 0 && (
+                                <div className="p-2 bg-amber-50 rounded border border-amber-200 text-[10px] text-amber-900 space-y-0.5">
+                                  <span className="font-bold block">{t('image_screening.visual_review_title', 'Visual Screening Characteristics:')}</span>
+                                  <ul className="list-disc list-inside space-y-0.5">
+                                    {selectedReport.evidence.image_screening.visual_review_notes.map((note, nIdx) => (
+                                      <li key={nIdx}>{note}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+
+                              {/* Review Recommendation Banner */}
+                              <div className="p-2 bg-white rounded border border-indigo-200 text-[10px] text-slate-700 leading-relaxed">
+                                <span className="font-bold text-indigo-950 block mb-0.5">
+                                  {t('image_screening.review_recommendation_title', 'Review Interpretation (Non-Causal Aid):')}
+                                </span>
+                                {selectedReport.evidence.image_screening.interpretation}
+                              </div>
+
+                              {/* Methodology Disclaimer */}
+                              <p className="text-[9px] text-slate-500 italic pt-1 border-t border-indigo-100">
+                                *{t('image_screening.disclaimer', selectedReport.evidence.image_screening.disclaimer)}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       )}
 

@@ -86,6 +86,7 @@ export const ComplaintsAPI = {
   updateStatus: (id, payload) => apiClient.post(`/complaints/${encodeURIComponent(id)}/status`, payload),
   addOfficerNote: (id, payload) => apiClient.post(`/complaints/${encodeURIComponent(id)}/note`, payload),
   getEvidenceFileUrl: (id) => `${API_BASE_URL}/complaints/${encodeURIComponent(id)}/evidence/file`,
+  getImageAnalysis: (complaintId, evidenceId) => evidenceId ? apiClient.get(`/complaints/${encodeURIComponent(complaintId)}/evidence/${evidenceId}/image-analysis`) : apiClient.get(`/complaints/${encodeURIComponent(complaintId)}/evidence/image-analysis`),
   getAllocationSummary: (sourceRecordId) => apiClient.get(`/complaints/allocation/${encodeURIComponent(sourceRecordId)}/summary`),
 };
 
