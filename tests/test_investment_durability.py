@@ -2,21 +2,20 @@
 """Comprehensive Test Suite for Phase B: Investment–Durability Anomaly Detection.
 
 Validates:
-1. Normal investment + no complaints -> INVESTMENT_CONDITION_NORMAL
-2. High investment + early condition complaint -> HIGH_INVESTMENT_EARLY_CONDITION_CONCERN
-3. High investment + repeated complaints -> HIGH_INVESTMENT_REPEATED_CONCERNS
-4. Low/normal investment + condition complaint -> INVESTMENT_CONDITION_MONITORED
-5. Missing complaint data -> Handled gracefully
-6. Missing completion date -> Falls back to sanction date or defaults
-7. Missing sanction date -> Handled gracefully
-8. Missing expenditure / zero costs -> DATA_INSUFFICIENT
-9. Category with insufficient cohort data -> Defaults to fallback baselines
-10. Boundary percentile cases (Median, P90)
-11. Repeated reports handling without claiming independent confirmation
-12. Model A invariance (composite scores, tiers, flags remain untouched)
-13. Phase A invariance (GPS/EXIF verification unchanged)
-14. Deterministic repeatability
-15. API endpoint verification (GET /api/analytics/investment-durability/{id} & GET /api/projects/{id})
+1. Category-specific P90 benchmarking (not global)
+2. Normal investment + no complaints -> INVESTMENT_CONDITION_NORMAL
+3. High investment + condition complaint -> HIGH_INVESTMENT_CONDITION_CONCERN (no arbitrary 36-month cutoff)
+4. High investment + repeated complaints -> HIGH_INVESTMENT_REPEATED_CONCERNS
+5. Low/normal investment + condition complaint -> INVESTMENT_CONDITION_MONITORED
+6. Elapsed duration reported descriptively for all elapsed timeframes (e.g. 10 months, 48 months, 60 months)
+7. Missing completion date -> Falls back to sanction date or defaults safely
+8. Missing sanction date & completion date -> Handled gracefully
+9. Missing expenditure / zero costs -> DATA_INSUFFICIENT
+10. Category with unknown/fallback cohort data
+11. Multiple citizen complaints do NOT create multiple independent engineering confirmations
+12. Model A invariance (composite scores, tiers, flags remain 100% byte/value equivalent)
+13. Deterministic repeatability
+14. API endpoint verification (GET /api/analytics/investment-durability/{id} & GET /api/projects/{id})
 """
 
 import pytest
@@ -52,6 +51,21 @@ def test_category_baselines_loaded():
         assert "sanctioned_cost_p90" in stats or "expenditure_p90" in stats
 
 
+def test_category_specific_p90_thresholds():
+    """Verify that P90 thresholds are category-specific rather than a global constant."""
+    baselines = load_category_baselines()
+    p90_values = {}
+    for cat, stats in baselines.items():
+        val = stats.get("sanctioned_cost_p90", stats.get("expenditure_p90"))
+        if val is not None:
+            p90_values[cat] = val
+
+    # Verify multiple categories exist with distinct P90 values
+    assert len(p90_values) > 1
+    unique_p90s = set(p90_values.values())
+    assert len(unique_p90s) > 1, "Expected distinct P90 values across categories"
+
+
 def test_normal_investment_no_complaints(db_session):
     proj = Project(
         source_record_id="TEST_NORM_01",
@@ -68,34 +82,57 @@ def test_normal_investment_no_complaints(db_session):
     assert "disclaimer" in result
 
 
-def test_high_investment_early_condition_concern(db_session):
-    proj = Project(
-        source_record_id="TEST_HIGH_01",
+def test_high_investment_condition_concern_no_36m_cutoff(db_session):
+    """Verify that condition complaints trigger HIGH_INVESTMENT_CONDITION_CONCERN regardless of elapsed months (e.g. 12m or 48m)."""
+    # Case A: 12 months after completion
+    proj_a = Project(
+        source_record_id="TEST_HIGH_12M",
         category="Roads, Pathways and Bridges",
         sanctioned_cost=30.0,
         expenditure=28.0,
         sanction_date="2020-01-15",
         completion_date="2021-01-15"
     )
-    comp = Complaint(
-        complaint_id="CMP-TEST-001",
-        linked_allocation_id="TEST_HIGH_01",
+    comp_a = Complaint(
+        complaint_id="CMP-TEST-12M",
+        linked_allocation_id="TEST_HIGH_12M",
         category="QUALITY_CONCERN",
         description="Cracks observed in bridge pavement",
-        submitted_at="2021-06-15"
+        submitted_at="2022-01-15"  # 12 months after completion
     )
-    db_session.add(comp)
+    db_session.add(comp_a)
     db_session.flush()
 
-    try:
-        result = evaluate_investment_durability(proj, db_session)
-        assert result["signal_status"] == "HIGH_INVESTMENT_EARLY_CONDITION_CONCERN"
-        assert result["is_high_investment"] is True
-        assert result["condition_reports_count"] == 1
-        assert result["elapsed_months"] is not None
-        assert result["elapsed_months"] <= 36.0
-    finally:
-        db_session.rollback()
+    res_a = evaluate_investment_durability(proj_a, db_session)
+    assert res_a["signal_status"] == "HIGH_INVESTMENT_CONDITION_CONCERN"
+    assert res_a["is_high_investment"] is True
+    assert res_a["condition_reports_count"] == 1
+    assert "1.0 years (12 months) after completion" in res_a["elapsed_time_description"]
+
+    # Case B: 48 months after completion (strictly no 36-month exclusion)
+    proj_b = Project(
+        source_record_id="TEST_HIGH_48M",
+        category="Roads, Pathways and Bridges",
+        sanctioned_cost=30.0,
+        expenditure=28.0,
+        sanction_date="2018-01-15",
+        completion_date="2019-01-15"
+    )
+    comp_b = Complaint(
+        complaint_id="CMP-TEST-48M",
+        linked_allocation_id="TEST_HIGH_48M",
+        category="QUALITY_CONCERN",
+        description="Severe pavement deterioration reported",
+        submitted_at="2023-01-15"  # 48 months after completion
+    )
+    db_session.add(comp_b)
+    db_session.flush()
+
+    res_b = evaluate_investment_durability(proj_b, db_session)
+    assert res_b["signal_status"] == "HIGH_INVESTMENT_CONDITION_CONCERN"
+    assert res_b["is_high_investment"] is True
+    assert res_b["condition_reports_count"] == 1
+    assert "4.0 years (48 months) after completion" in res_b["elapsed_time_description"]
 
 
 def test_high_investment_repeated_concerns(db_session):
@@ -129,6 +166,8 @@ def test_high_investment_repeated_concerns(db_session):
         assert result["signal_status"] == "HIGH_INVESTMENT_REPEATED_CONCERNS"
         assert result["has_repeated_reports"] is True
         assert result["condition_reports_count"] == 2
+        # Verify non-accusatory wording: reports are not claimed to be independent engineering proof
+        assert "independent confirmation" not in result["signal_reason"].lower()
     finally:
         db_session.rollback()
 
@@ -196,7 +235,7 @@ def test_missing_completion_date_falls_back_to_sanction(db_session):
 
     try:
         result = evaluate_investment_durability(proj, db_session)
-        assert result["signal_status"] == "HIGH_INVESTMENT_EARLY_CONDITION_CONCERN"
+        assert result["signal_status"] == "HIGH_INVESTMENT_CONDITION_CONCERN"
         assert "after sanction" in result["elapsed_time_description"]
     finally:
         db_session.rollback()
@@ -223,8 +262,8 @@ def test_missing_dates_handled_gracefully(db_session):
 
     try:
         result = evaluate_investment_durability(proj, db_session)
-        assert result["signal_status"] == "INVESTMENT_CONDITION_MONITORED"
-        assert result["elapsed_time_description"] == "Timeline not available"
+        assert result["signal_status"] == "HIGH_INVESTMENT_CONDITION_CONCERN"
+        assert result["elapsed_time_description"] == "Milestone timeline unavailable"
     finally:
         db_session.rollback()
 

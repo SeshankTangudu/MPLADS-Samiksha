@@ -88,7 +88,7 @@ def evaluate_investment_durability(
     expenditure = float(project.expenditure or 0.0)
     primary_cost = sanctioned if sanctioned > 0 else expenditure
 
-    # 1. Category Cohort Benchmark
+    # 1. Category Cohort Benchmark (Category-Specific P90 & Median)
     category_baselines = load_category_baselines()
     cat_data = category_baselines.get(category, {})
 
@@ -99,11 +99,11 @@ def evaluate_investment_durability(
         inv_level = "Data Insufficient"
         is_high_inv = False
     elif primary_cost >= p90_cost:
-        inv_level = f"Top Decile (≥ P90: ₹{p90_cost:.2f} Cr)"
+        inv_level = f"Top Decile (≥ Category P90: ₹{p90_cost:.2f} Cr)"
         is_high_inv = True
     elif primary_cost >= median_cost:
         inv_level = f"Upper Cohort (≥ Median: ₹{median_cost:.2f} Cr)"
-        is_high_inv = True
+        is_high_inv = False
     else:
         inv_level = f"Cohort Normal (< Median: ₹{median_cost:.2f} Cr)"
         is_high_inv = False
@@ -122,17 +122,16 @@ def evaluate_investment_durability(
     relevant_cats = sorted(list({c.category for c in complaints}))
     has_repeated = total_reports >= 2
 
-    # 3. Elapsed Time Context
+    # 3. Elapsed Time Context (Descriptive Elapsed Duration, No Arbitrary Cutoffs)
     completion_dt = _parse_date(project.completion_date)
     sanction_dt = _parse_date(project.sanction_date)
     milestone_dt = completion_dt if completion_dt else sanction_dt
     milestone_label = "completion" if completion_dt else "sanction"
 
     elapsed_months = None
-    elapsed_str = "Timeline not available"
+    elapsed_str = "Milestone timeline unavailable"
 
     if milestone_dt:
-        # Determine reference date (first condition report date, or latest report, or current date)
         if condition_complaints and condition_complaints[0].submitted_at:
             ref_dt = _parse_date(condition_complaints[0].submitted_at) or datetime.now(timezone.utc).replace(tzinfo=None)
         elif complaints and complaints[0].submitted_at:
@@ -151,13 +150,13 @@ def evaluate_investment_durability(
         else:
             elapsed_str = f"Reported prior to recorded {milestone_label} date"
 
-    # 4. Signal Determination
+    # 4. Signal Determination (Category P90 + Empirical Condition Reports)
     if primary_cost <= 0:
         signal_status = "DATA_INSUFFICIENT"
         signal_badge = "Data Insufficient"
         signal_reason = "Sanctioned and expenditure figures are unavailable for financial benchmarking."
 
-    elif total_reports == 0:
+    elif condition_count == 0 and total_reports == 0:
         signal_status = "INVESTMENT_CONDITION_NORMAL"
         signal_badge = "No Condition Concerns"
         signal_reason = f"Allocation investment (₹{primary_cost:.2f} Cr, {inv_level}) has zero recorded citizen condition concerns."
@@ -167,15 +166,15 @@ def evaluate_investment_durability(
         signal_badge = "High Investment + Repeated Concerns"
         signal_reason = (
             f"Substantial financial investment (₹{primary_cost:.2f} Cr, {inv_level}) combined with {condition_count} "
-            f"condition-related citizen reports ({', '.join(relevant_cats)}). Priority review recommended."
+            f"condition-related citizen reports ({', '.join(relevant_cats)}). Priority administrative review recommended."
         )
 
-    elif is_high_inv and condition_count >= 1 and (elapsed_months is not None and elapsed_months <= 36.0):
-        signal_status = "HIGH_INVESTMENT_EARLY_CONDITION_CONCERN"
-        signal_badge = "High Investment + Early Concern"
+    elif is_high_inv and condition_count >= 1:
+        signal_status = "HIGH_INVESTMENT_CONDITION_CONCERN"
+        signal_badge = "High Investment + Condition Concern"
         signal_reason = (
             f"High-investment allocation (₹{primary_cost:.2f} Cr, {inv_level}) received condition observation "
-            f"within {elapsed_str}. Human field inspection recommended."
+            f"({', '.join(relevant_cats)}) recorded {elapsed_str}. Priority administrative review recommended."
         )
 
     elif condition_count >= 1:
@@ -183,7 +182,7 @@ def evaluate_investment_durability(
         signal_badge = "Condition Observation Recorded"
         signal_reason = (
             f"Condition observation ({', '.join(relevant_cats)}) recorded for allocation with standard cohort investment "
-            f"(₹{primary_cost:.2f} Cr). Active administrative monitoring."
+            f"(₹{primary_cost:.2f} Cr, recorded {elapsed_str}). Active administrative monitoring."
         )
 
     else:

@@ -1018,7 +1018,7 @@ export const InvestigationPage = () => {
               </p>
             </div>
             <span className={`text-xs font-bold px-3 py-1 rounded border uppercase tracking-wider ${
-              investment_durability.signal_status === 'HIGH_INVESTMENT_EARLY_CONDITION_CONCERN' ? 'bg-amber-100 text-amber-900 border-amber-300' :
+              investment_durability.signal_status === 'HIGH_INVESTMENT_CONDITION_CONCERN' ? 'bg-amber-100 text-amber-900 border-amber-300' :
               investment_durability.signal_status === 'HIGH_INVESTMENT_REPEATED_CONCERNS' ? 'bg-red-100 text-red-900 border-red-300' :
               investment_durability.signal_status === 'INVESTMENT_CONDITION_MONITORED' ? 'bg-blue-100 text-blue-900 border-blue-300' :
               investment_durability.signal_status === 'INVESTMENT_CONDITION_NORMAL' ? 'bg-emerald-100 text-emerald-900 border-emerald-300' :
@@ -1066,7 +1066,7 @@ export const InvestigationPage = () => {
                 {investment_durability.elapsed_time_description}
               </span>
               <span className="text-[10px] text-slate-400">
-                {t('durability.screening_window_note', 'Comparative screening heuristic window (≤ 36 months)')}
+                {t('durability.screening_window_note', 'Descriptive duration from recorded project milestone')}
               </span>
             </div>
           </div>
