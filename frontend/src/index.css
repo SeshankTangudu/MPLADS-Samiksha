@@ -39,3 +39,52 @@ body {
 .gov-badge-critical {
   @apply bg-red-50 text-red-700 border border-red-200;
 }
+
+/* Print / Export Dossier Stylesheet (P1-5) */
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    font-size: 10.5pt !important;
+  }
+
+  nav, footer, .no-print, [role="banner"], [role="navigation"], .print-hidden {
+    display: none !important;
+  }
+
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .gov-card {
+    box-shadow: none !important;
+    border: 1px solid #CBD5E1 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 12pt !important;
+  }
+
+  table {
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+
+  .print-page-break {
+    page-break-before: always;
+  }
+}

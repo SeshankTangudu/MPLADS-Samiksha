@@ -11,12 +11,22 @@ import {
   ShieldAlert,
   Info,
   SlidersHorizontal,
-  Flame
+  Flame,
+  UserCog,
+  ArrowRight,
+  Landmark,
+  Users
 } from 'lucide-react';
 import { ProjectsAPI } from '../services/api';
 import LoadingState from '../components/common/LoadingState';
+import DuplicateCandidatesPanel from '../components/common/DuplicateCandidatesPanel';
+import IsolationForestPanel from '../components/common/IsolationForestPanel';
+import { useLanguage } from '../i18n/LanguageContext';
+import { useRole, ROLES, ROLE_LABELS } from '../context/RoleContext';
 
 export const AnomalyPage = () => {
+  const { t } = useLanguage();
+  const { viewRole, changeRole, isAuthority } = useRole();
   const [anomalies, setAnomalies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,8 +41,10 @@ export const AnomalyPage = () => {
   const [selectedRiskLevel, setSelectedRiskLevel] = useState('');
   const [selectedFlagType, setSelectedFlagType] = useState('');
   const [search, setSearch] = useState('');
+  const [activeTab, setActiveTab] = useState('anomalies'); // 'anomalies' | 'duplicate-candidates'
 
   const fetchAnomalies = useCallback(async () => {
+    if (!isAuthority) return;
     setLoading(true);
     setError(null);
     try {
@@ -56,11 +68,13 @@ export const AnomalyPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [page, limit, minScore, selectedRiskLevel, selectedFlagType, search]);
+  }, [isAuthority, page, limit, minScore, selectedRiskLevel, selectedFlagType, search]);
 
   useEffect(() => {
-    fetchAnomalies();
-  }, [fetchAnomalies]);
+    if (isAuthority) {
+      fetchAnomalies();
+    }
+  }, [isAuthority, fetchAnomalies]);
 
   const handleResetFilters = () => {
     setSearch('');
@@ -83,21 +97,69 @@ export const AnomalyPage = () => {
     }
   };
 
+  // Role Scope Protection (Prototype Boundary)
+  if (!isAuthority) {
+    return (
+      <div className="py-12 max-w-2xl mx-auto space-y-6 text-center">
+        <div className="gov-card p-8 space-y-5 border-amber-300">
+          <div className="w-12 h-12 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 mx-auto">
+            <UserCog className="w-6 h-6" />
+          </div>
+          <div className="space-y-2">
+            <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+              {t('authority.title', 'Authority / Officer Oversight Queue')}
+            </span>
+            <h2 className="text-xl font-bold text-slate-900">
+              {t('anomalies.title', 'Anomaly Review Queue is Scoped to Oversight Officers')}
+            </h2>
+            <p className="text-xs text-slate-600 leading-relaxed max-w-lg mx-auto">
+              The national prioritized anomaly review queue and audit triage workflows are designed for institutional oversight officers. You are currently viewing the platform in simulated <strong>{ROLE_LABELS[viewRole] || 'Public'}</strong> mode.
+            </p>
+          </div>
+
+          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-600 flex items-start gap-2 text-left">
+            <Info className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+            <span>
+              In this prototype simulator, you can explore public allocation records, view geographic indicators, or switch your simulated stakeholder role.
+            </span>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <Link
+              to="/projects"
+              className="gov-btn-primary bg-gov-navy text-white text-xs font-semibold py-2 px-4 flex items-center gap-1.5 w-full sm:w-auto justify-center"
+            >
+              <Search className="w-4 h-4" />
+              <span>{t('landing.btn_explore', 'Explore Constituency Allocations')}</span>
+            </Link>
+            <button
+              onClick={() => changeRole(ROLES.AUTHORITY)}
+              className="gov-btn-secondary text-xs font-semibold py-2 px-4 flex items-center gap-1.5 w-full sm:w-auto justify-center border-amber-500/40 text-amber-900 bg-amber-50 hover:bg-amber-100"
+            >
+              <UserCog className="w-4 h-4 text-amber-600" />
+              <span>{t('roles.switch_role', 'Switch to Authority View')}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 py-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-200 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <ShieldAlert className="w-6 h-6 text-amber-500" />
-            Anomaly Intelligence Center
+            <ShieldAlert className="w-6 h-6 text-amber-600" />
+            {t('anomalies.title', 'Anomaly Intelligence Center')}
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Prioritized review queue of <strong>{total}</strong> allocations with analytical risk indicators requiring administrative inspection
+            {t('anomalies.sub', 'Prioritized review queue of allocations with analytical risk indicators requiring administrative inspection')}
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <a
             href="/api/reports/risk-summary.csv"
             download="mplads_risk_summary.csv"
@@ -105,16 +167,69 @@ export const AnomalyPage = () => {
             title="Download full CSV report of all allocations ranked by risk score"
           >
             <Download className="w-4 h-4 text-gov-navy" />
-            Export Risk CSV
+            {t('common.export_csv', 'Export Risk CSV')}
           </a>
         </div>
       </div>
 
-      {/* Filter and Quick Tabs Card */}
+      {/* Page Tabs */}
+      <div className="flex gap-1 border-b border-slate-200">
+        <button
+          id="tab-anomalies"
+          onClick={() => setActiveTab('anomalies')}
+          className={`px-4 py-2 text-sm font-semibold rounded-t transition-colors ${
+            activeTab === 'anomalies'
+              ? 'border-b-2 border-amber-500 text-amber-700 bg-amber-50'
+              : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          {t('anomalies.tab_anomalies', 'Anomaly Review Queue')}
+        </button>
+        <button
+          id="tab-duplicate-candidates"
+          onClick={() => setActiveTab('duplicate-candidates')}
+          className={`px-4 py-2 text-sm font-semibold rounded-t transition-colors ${
+            activeTab === 'duplicate-candidates'
+              ? 'border-b-2 border-amber-500 text-amber-700 bg-amber-50'
+              : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          {t('anomalies.tab_duplicates', 'Duplicate Candidates')}
+        </button>
+        <button
+          id="tab-isolation-forest"
+          onClick={() => setActiveTab('isolation-forest')}
+          className={`px-4 py-2 text-sm font-semibold rounded-t transition-colors ${
+            activeTab === 'isolation-forest'
+              ? 'border-b-2 border-purple-500 text-purple-700 bg-purple-50'
+              : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          {t('anomalies.tab_if', 'IF Cross-Check')}
+        </button>
+      </div>
+
+      {/* {t('anomalies.tab_duplicates', 'Duplicate Candidates')} Tab */}
+      {activeTab === 'duplicate-candidates' && (
+        <div className="gov-card p-5">
+          <DuplicateCandidatesPanel />
+        </div>
+      )}
+
+      {/* Isolation Forest Tab */}
+      {activeTab === 'isolation-forest' && (
+        <div className="gov-card p-5">
+          <IsolationForestPanel />
+        </div>
+      )}
+
+      {/* {t('anomalies.tab_anomalies', 'Anomaly Review Queue')} Tab */}
+      {activeTab === 'anomalies' && (
+      <>
       <div className="gov-card p-5 space-y-4">
         {/* Quick Tiers Filter Tabs */}
         <div className="flex flex-wrap gap-2 items-center">
-          <span className="text-[11px] font-bold text-slate-500 uppercase mr-1">Risk Tier:</span>
+          <span className="text-[11px] font-bold text-slate-500 uppercase mr-1">{t('anomalies.filter_risk_tier', 'Risk Tier:')}</span>
           <button
             onClick={() => { setSelectedRiskLevel(''); setPage(1); }}
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
@@ -129,7 +244,7 @@ export const AnomalyPage = () => {
               selectedRiskLevel === 'High' ? 'bg-amber-600 text-white shadow-sm' : 'bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200'
             }`}
           >
-            High Risk (Score 50–74)
+            {t('common.high_risk', 'High Risk')} (50–74)
           </button>
           <button
             onClick={() => { setSelectedRiskLevel('Medium'); setPage(1); }}
@@ -137,7 +252,7 @@ export const AnomalyPage = () => {
               selectedRiskLevel === 'Medium' ? 'bg-yellow-600 text-white shadow-sm' : 'bg-yellow-50 text-yellow-800 hover:bg-yellow-100 border border-yellow-200'
             }`}
           >
-            Medium Risk (Score 25–49)
+            {t('common.medium_risk', 'Medium Risk')} (25–49)
           </button>
         </div>
 
@@ -160,10 +275,10 @@ export const AnomalyPage = () => {
               onChange={(e) => { setSelectedFlagType(e.target.value); setPage(1); }}
               className="gov-input text-xs w-full py-2"
             >
-              <option value="">All Signal Types</option>
-              <option value="FINANCIAL">Financial Deviation (P90)</option>
-              <option value="TIMELINE">Timeline Stagnation</option>
-              <option value="DATA_QUALITY">Data Quality / Audit Remark</option>
+              <option value="">{t('common.all', 'All Signal Types')}</option>
+              <option value="FINANCIAL">{t('methodology.financial_dim', 'Financial Deviation (P90)')}</option>
+              <option value="TIMELINE">{t('methodology.timeline_dim', 'Timeline Stagnation')}</option>
+              <option value="DATA_QUALITY">{t('methodology.dq_dim', 'Data Quality / Audit Remark')}</option>
             </select>
           </div>
 
@@ -194,7 +309,7 @@ export const AnomalyPage = () => {
           </div>
         ) : anomalies.length === 0 ? (
           <div className="p-12 text-center text-slate-500 space-y-2">
-            <p className="text-sm font-semibold">No allocations meet the selected anomaly filter criteria.</p>
+            <p className="text-sm font-semibold">{t('common.no_results', 'No allocations meet the selected anomaly filter criteria.')}</p>
             <p className="text-xs text-slate-400">All evaluated allocations within this view satisfy normal cohort baselines.</p>
             <button onClick={handleResetFilters} className="gov-btn-secondary text-xs mt-2">
               Reset Filters
@@ -206,13 +321,13 @@ export const AnomalyPage = () => {
               <thead>
                 <tr>
                   <th>Rank & ID</th>
-                  <th>Member of Parliament</th>
-                  <th>Constituency / State</th>
-                  <th>Civic Category</th>
-                  <th className="text-center">Risk Assessment</th>
-                  <th className="text-right">Reported Spent / Budget</th>
-                  <th>Financial Utilization</th>
-                  <th className="text-center">Action</th>
+                  <th>{t('common.mp_name', 'Member of Parliament')}</th>
+                  <th>{t('common.constituency', 'Constituency')} / {t('common.state', 'State')}</th>
+                  <th>{t('common.category', 'Civic Category')}</th>
+                  <th className="text-center">{t('common.tier', 'Risk Assessment')}</th>
+                  <th className="text-right">{t('common.expenditure', 'Reported Spent')} / {t('common.sanctioned', 'Budget')}</th>
+                  <th>{t('common.utilization', 'Financial Utilization')}</th>
+                  <th className="text-center">{t('common.actions', 'Action')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -311,6 +426,8 @@ export const AnomalyPage = () => {
           </div>
         )}
       </div>
+      </>
+      )}
     </div>
   );
 };

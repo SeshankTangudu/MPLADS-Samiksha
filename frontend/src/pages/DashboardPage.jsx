@@ -13,21 +13,25 @@ import {
   Legend
 } from 'recharts';
 import { BarChart3, PieChart as PieIcon, TrendingUp, AlertCircle, ShieldAlert, Layers } from 'lucide-react';
+import DataProvenanceCard from '../components/common/DataProvenanceCard';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export const DashboardPage = () => {
+  const { t } = useLanguage();
+
   // Category Breakdown Data from verified dataset & cohort baselines
   const categoryData = [
-    { name: 'Infrastructure & Public Amenities', allocations: 569, expenditure: 10450.2, sanctioned: 11840.0, utilization: 88.26 },
-    { name: 'Community Development', allocations: 557, expenditure: 4247.1, sanctioned: 6088.5, utilization: 69.76 },
-    { name: 'Rural & Urban Development', allocations: 549, expenditure: 6926.95, sanctioned: 6895.0, utilization: 100.46 }
+    { name: t('overview.cat_infra', 'Infrastructure & Public Amenities'), allocations: 569, expenditure: 10450.2, sanctioned: 11840.0, utilization: 88.26 },
+    { name: t('overview.cat_comm', 'Community Development'), allocations: 557, expenditure: 4247.1, sanctioned: 6088.5, utilization: 69.76 },
+    { name: t('overview.cat_rural', 'Rural & Urban Development'), allocations: 549, expenditure: 6926.95, sanctioned: 6895.0, utilization: 100.46 }
   ];
 
   // Risk Tier Distribution (Aligned with Frozen Contract §2.1)
   const riskDistribution = [
-    { name: 'Low (0–24)', count: 1220, color: '#16a34a' },
-    { name: 'Medium (25–49)', count: 380, color: '#eab308' },
-    { name: 'High (50–74)', count: 65, color: '#f97316' },
-    { name: 'Critical (75–100)', count: 10, color: '#dc2626' }
+    { name: `${t('common.low_risk', 'Low')} (0–24)`, count: 1220, color: '#16a34a' },
+    { name: `${t('common.medium_risk', 'Medium')} (25–49)`, count: 380, color: '#eab308' },
+    { name: `${t('common.high_risk', 'High')} (50–74)`, count: 65, color: '#f97316' },
+    { name: `${t('common.critical_risk', 'Critical')} (75–100)`, count: 10, color: '#dc2626' }
   ];
 
   // Term-wise Comparison (15th, 16th, 17th Lok Sabha)
@@ -44,17 +48,20 @@ export const DashboardPage = () => {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
             <BarChart3 className="w-6 h-6 text-gov-navy" />
-            Analytics Dashboard
+            {t('dashboard.title', 'Analytics Dashboard')}
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Macro financial distribution, risk profile breakdown, and cross-term comparisons across 1,675 allocations
+            {t('dashboard.sub', 'Macro financial distribution, risk profile breakdown, and cross-term comparisons across 1,675 allocations')}
           </p>
         </div>
         <div className="flex items-center space-x-2 text-xs bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700">
           <Layers className="w-4 h-4 text-gov-navy" />
-          <span>Data Snapshot: 15th–17th Lok Sabha</span>
+          <span>{t('dashboard.data_snapshot', 'Data Snapshot: 15th–17th Lok Sabha')}</span>
         </div>
       </div>
+
+      {/* Data Provenance & Scope Display */}
+      <DataProvenanceCard />
 
       {/* Top Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -64,12 +71,12 @@ export const DashboardPage = () => {
             <div>
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-amber-500" />
-                Portfolio Risk Tier Distribution
+                {t('dashboard.tier_dist_title', 'Portfolio Risk Tier Distribution')}
               </h3>
-              <p className="text-xs text-slate-500">Breakdown of allocations across 4 analytical risk tiers</p>
+              <p className="text-xs text-slate-500">{t('dashboard.tier_dist_sub', 'Breakdown of allocations across 4 analytical risk tiers')}</p>
             </div>
             <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
-              Total: 1,675
+              {t('common.total', 'Total')}: 1,675
             </span>
           </div>
 
@@ -80,7 +87,7 @@ export const DashboardPage = () => {
                 <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} interval={0} />
                 <YAxis tick={{ fontSize: 11, fill: '#64748b' }} />
                 <Tooltip 
-                  formatter={(value) => [`${value} Allocations`, 'Count']}
+                  formatter={(value) => [`${value} ${t('common.allocations', 'Allocations')}`, t('common.count', 'Count')]}
                   contentStyle={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '12px' }}
                 />
                 <Bar dataKey="count" radius={[4, 4, 0, 0]}>
@@ -109,9 +116,9 @@ export const DashboardPage = () => {
             <div>
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-gov-navy" />
-                Financial Expenditure vs Budget (₹ Crores)
+                {t('dashboard.category_dist_title', 'Category Fund Allocation & Utilization')}
               </h3>
-              <p className="text-xs text-slate-500">Sanctioned works budget vs reported expenditure by category</p>
+              <p className="text-xs text-slate-500">{t('dashboard.category_dist_sub', 'Comparing sanctioned works budget against reported expenditure')}</p>
             </div>
           </div>
 
@@ -122,18 +129,18 @@ export const DashboardPage = () => {
                 <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#64748b' }} interval={0} />
                 <YAxis tick={{ fontSize: 11, fill: '#64748b' }} />
                 <Tooltip 
-                  formatter={(val, name) => [`₹${val.toLocaleString()} Cr`, name === 'sanctioned' ? 'Sanctioned Budget' : 'Reported Expenditure']}
+                  formatter={(val, name) => [`₹${val.toLocaleString()} Cr`, name === 'sanctioned' ? t('dashboard.sanctioned_budget', 'Sanctioned Budget') : t('dashboard.reported_expenditure', 'Reported Expenditure')]}
                   contentStyle={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '12px' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Bar dataKey="sanctioned" name="Sanctioned Budget" fill="#1B3A5C" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="expenditure" name="Reported Expenditure" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="sanctioned" name={t('dashboard.sanctioned_budget', 'Sanctioned Budget')} fill="#1B3A5C" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="expenditure" name={t('dashboard.reported_expenditure', 'Reported Expenditure')} fill="#3b82f6" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
           <div className="p-3 bg-blue-50/60 rounded border border-blue-100 text-xs text-slate-700 flex items-center justify-between">
-            <span>Overall Financial Utilization Rate across all sectors:</span>
+            <span>{t('dashboard.utilization_rate_label', 'Overall Financial Utilization Rate across all sectors:')}</span>
             <span className="font-bold text-gov-navy text-sm">87.11%</span>
           </div>
         </div>
@@ -143,8 +150,8 @@ export const DashboardPage = () => {
       <div className="gov-card p-6 space-y-4">
         <div className="flex justify-between items-center pb-2 border-b border-slate-100">
           <div>
-            <h3 className="text-sm font-bold text-slate-900">Parliamentary Term Longitudinal Comparison</h3>
-            <p className="text-xs text-slate-500">Aggregate allocation volume and financial deployment across 15th, 16th, and 17th Lok Sabha</p>
+            <h3 className="text-sm font-bold text-slate-900">{t('dashboard.term_comp_title', 'Parliamentary Term Expenditure Comparison')}</h3>
+            <p className="text-xs text-slate-500">{t('dashboard.term_comp_sub', 'Financial deployment across 15th, 16th, and 17th Lok Sabha sessions')}</p>
           </div>
         </div>
 
@@ -152,12 +159,12 @@ export const DashboardPage = () => {
           <table className="gov-table">
             <thead>
               <tr>
-                <th>Lok Sabha Term</th>
-                <th>Time Period</th>
-                <th className="text-right">Allocation Records</th>
-                <th className="text-right">Sanctioned Works (₹ Cr)</th>
-                <th className="text-right">Reported Expenditure (₹ Cr)</th>
-                <th className="text-right">Financial Utilization</th>
+                <th>{t('dashboard.th_term', 'Lok Sabha Term')}</th>
+                <th>{t('dashboard.th_period', 'Time Period')}</th>
+                <th className="text-right">{t('dashboard.th_records', 'Allocation Records')}</th>
+                <th className="text-right">{t('dashboard.th_sanctioned', 'Sanctioned Works (₹ Cr)')}</th>
+                <th className="text-right">{t('dashboard.th_expenditure', 'Reported Expenditure (₹ Cr)')}</th>
+                <th className="text-right">{t('dashboard.th_utilization', 'Financial Utilization')}</th>
               </tr>
             </thead>
             <tbody>

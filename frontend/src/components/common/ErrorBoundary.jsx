@@ -1,5 +1,28 @@
 import React from 'react';
 import { AlertOctagon, RefreshCw } from 'lucide-react';
+import { en } from '../../i18n/locales/en';
+import { hi } from '../../i18n/locales/hi';
+import { bn } from '../../i18n/locales/bn';
+import { te } from '../../i18n/locales/te';
+import { mr } from '../../i18n/locales/mr';
+import { ta } from '../../i18n/locales/ta';
+
+const dicts = { en, hi, bn, te, mr, ta };
+
+function getErrorText(key, fallback) {
+  try {
+    const lang = localStorage.getItem('mplads_lang') || 'en';
+    const dict = dicts[lang] || dicts.en;
+    const parts = key.split('.');
+    let val = dict;
+    for (const p of parts) {
+      val = val ? val[p] : undefined;
+    }
+    return (typeof val === 'string' && val.trim() !== '') ? val : fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
 
 export class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -28,16 +51,18 @@ export class ErrorBoundary extends React.Component {
             <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-4">
               <AlertOctagon className="w-6 h-6" />
             </div>
-            <h2 className="text-lg font-bold text-slate-900 mb-1">System Error</h2>
+            <h2 className="text-lg font-bold text-slate-900 mb-1">
+              {getErrorText('error.title', 'System Error')}
+            </h2>
             <p className="text-xs text-slate-600 mb-4">
-              {this.state.error?.message || "An unexpected error occurred while rendering this interface."}
+              {this.state.error?.message || getErrorText('error.desc', 'An unexpected error occurred while rendering this interface.')}
             </p>
             <button
               onClick={this.handleRetry}
               className="inline-flex items-center space-x-2 px-4 py-2 bg-gov-navy text-white text-xs font-semibold rounded-md hover:bg-gov-navyLight transition-colors"
             >
               <RefreshCw className="w-3.5 h-3.5" />
-              <span>Reload Application</span>
+              <span>{getErrorText('error.reload', 'Reload Application')}</span>
             </button>
           </div>
         </div>

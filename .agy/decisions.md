@@ -47,3 +47,10 @@
 - **Decision**: Complete implementation of District GIS Map (T19), Sector Analytics (T20), Methodology & Transparency (T21), and E2E Integration Pass (T22).
 - **Terms**: Strict adherence to Model A linear additive formulation, district centroid reference mapping, financial utilization proxies, and zero-accusatory Responsible AI guardrails.
 - **Status**: ACCEPTED & FROZEN.
+
+## DEC-007: Resolution of Frontend API Client Integration Defects (/map & /methodology)
+- **Date**: 2026-09-02
+- **Author**: Lead Integration Agent
+- **Decision**: Corrected API client method binding and import mismatches on `/map` (bound to `AnalyticsAPI.getLocations` / `/api/locations`) and `/methodology` (bound to `MethodologyAPI.getMethodology` / `/api/methodology`). Added backward-safe aliasing in `api.js`.
+- **Impact**: Zero change to backend API contracts, database schemas, risk scoring methodology, or data payloads. All 66 backend pytest tests passing; frontend production build and browser validation confirmed functional.
+- **Status**: VERIFIED & READY FOR USER RE-TEST.

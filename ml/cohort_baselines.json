@@ -3,7 +3,7 @@
     "version": "2.0.0",
     "total_records": 1675,
     "min_cohort_size": 10,
-    "generated_at": "2026-09-02T00:54:21.315320+00:00",
+    "generated_at": "2026-09-05T08:15:08.058228+00:00",
     "description": "Empirical non-parametric baselines for MPLADS allocation risk engine"
   },
   "global": {

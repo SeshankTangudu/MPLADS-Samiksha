@@ -1,6 +1,19 @@
 {
   "active_blockers": [],
-  "resolved_blockers": [],
+  "resolved_blockers": [
+    {
+      "id": "BLK-001",
+      "description": "MapPage.jsx called ProjectsAPI.getLocations instead of AnalyticsAPI.getLocations",
+      "resolved_at": "2026-09-02T17:40:00+05:30",
+      "resolution": "Updated MapPage.jsx import/call to AnalyticsAPI.getLocations and added backwards-safe method in api.js"
+    },
+    {
+      "id": "BLK-002",
+      "description": "MethodologyPage.jsx called SystemAPI.getMethodology instead of MethodologyAPI.getMethodology",
+      "resolved_at": "2026-09-02T17:40:00+05:30",
+      "resolution": "Updated MethodologyPage.jsx import/call to MethodologyAPI.getMethodology and added backwards-safe method in api.js"
+    }
+  ],
   "capability_notes": [
     {
       "capability": "DEPLOY",

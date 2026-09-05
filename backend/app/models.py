@@ -140,6 +140,65 @@ class AnalyticsCache(Base):
     updated_at = Column(String(32), nullable=False)
 
 
+class Complaint(Base):
+    """Citizen report / observation entity for parliamentary allocation review (Phase 4)."""
+    __tablename__ = "complaints"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    complaint_id = Column(String(32), unique=True, nullable=False, index=True)
+    linked_allocation_id = Column(String(32), nullable=True, index=True)
+    category = Column(String(64), nullable=False)
+    description = Column(Text, nullable=False)
+    status = Column(String(32), nullable=False, default="SUBMITTED", index=True)
+    submitted_at = Column(String(32), nullable=False)
+    acknowledged_at = Column(String(32), nullable=True)
+    mp_remark = Column(Text, nullable=True)
+    mp_remark_at = Column(String(32), nullable=True)
+    verification_requested = Column(Integer, nullable=False, default=0)
+    verification_requested_at = Column(String(32), nullable=True)
+    officer_note = Column(Text, nullable=True)
+    officer_note_at = Column(String(32), nullable=True)
+    resolved_at = Column(String(32), nullable=True)
+
+    # Relationships
+    evidence = relationship("ComplaintEvidence", back_populates="complaint", uselist=False, cascade="all, delete-orphan")
+
+
+class ComplaintEvidence(Base):
+    """Geo-tagged and validated media evidence attachment for citizen reports (Phase 7)."""
+    __tablename__ = "complaint_evidence"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    complaint_id = Column(String(32), ForeignKey("complaints.complaint_id", ondelete="CASCADE"), nullable=False, index=True)
+    file_path = Column(String(256), nullable=False)
+    original_filename = Column(String(256), nullable=False)
+    mime_type = Column(String(64), nullable=False)
+    file_size_bytes = Column(Integer, nullable=False)
+    image_width = Column(Integer, nullable=True)
+    image_height = Column(Integer, nullable=True)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
+    location_accuracy_meters = Column(Float, nullable=True)
+    captured_at = Column(String(32), nullable=True)
+    uploaded_at = Column(String(32), nullable=False)
+    exif_available = Column(Integer, nullable=False, default=0)
+    gps_from_exif = Column(Integer, nullable=False, default=0)
+    exif_latitude = Column(Float, nullable=True)
+    exif_longitude = Column(Float, nullable=True)
+    camera_make = Column(String(64), nullable=True)
+    camera_model = Column(String(64), nullable=True)
+    metadata_status = Column(String(64), nullable=False, default="METADATA_UNAVAILABLE")
+    location_review_status = Column(String(64), nullable=False, default="LOCATION_DATA_UNAVAILABLE")
+    distance_from_district_centroid_km = Column(Float, nullable=True)
+    exif_vs_browser_gps_delta_km = Column(Float, nullable=True)
+
+    # Relationships
+    complaint = relationship("Complaint", back_populates="evidence")
+
+
 # Compound & Additional Indexes per Frozen Contract §3
 Index("idx_projects_category_status", Project.category, Project.status)
 Index("idx_risk_scores_total_score", RiskScore.total_score.desc())
+Index("idx_complaints_status_category", Complaint.status, Complaint.category)
+Index("idx_evidence_complaint_id", ComplaintEvidence.complaint_id)
+

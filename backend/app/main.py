@@ -13,7 +13,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from backend.app.routers import stats, projects, anomalies, analytics, methodology, reports
+from backend.app.routers import (
+    stats,
+    projects,
+    anomalies,
+    analytics,
+    methodology,
+    reports,
+    self_test,
+    duplicate_candidates,
+    isolation_forest,
+    complaints,
+)
 
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",")
 
@@ -30,7 +41,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[origin.strip() for origin in ALLOWED_ORIGINS if origin.strip()],
     allow_credentials=True,
-    allow_methods=["GET", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -59,6 +70,8 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
         }
     )
 
+from fastapi.encoders import jsonable_encoder
+
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     return JSONResponse(
@@ -66,7 +79,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         content={
             "detail": "Invalid request parameters or payload structure.",
             "code": "VALIDATION_ERROR",
-            "errors": exc.errors(),
+            "errors": jsonable_encoder(exc.errors()),
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
     )
@@ -110,5 +123,9 @@ app.include_router(anomalies.router, prefix="/api")
 app.include_router(analytics.router, prefix="/api")
 app.include_router(methodology.router, prefix="/api")
 app.include_router(reports.router, prefix="/api")
+app.include_router(self_test.router, prefix="/api")
+app.include_router(duplicate_candidates.router, prefix="/api")
+app.include_router(isolation_forest.router, prefix="/api")
+app.include_router(complaints.router, prefix="/api")
 
 

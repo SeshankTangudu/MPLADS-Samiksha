@@ -13,10 +13,12 @@ import {
   TrendingUp,
   Clock
 } from 'lucide-react';
-import { SystemAPI } from '../services/api';
+import { MethodologyAPI, AnalyticsAPI } from '../services/api';
 import LoadingState from '../components/common/LoadingState';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export const MethodologyPage = () => {
+  const { t } = useLanguage();
   const [methodology, setMethodology] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +28,7 @@ export const MethodologyPage = () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await SystemAPI.getMethodology();
+        const data = await MethodologyAPI.getMethodology();
         setMethodology(data);
       } catch (err) {
         console.error('Failed to load methodology disclosure:', err);
@@ -42,7 +44,7 @@ export const MethodologyPage = () => {
   if (loading) {
     return (
       <div className="py-12">
-        <LoadingState message="Loading analytical methodology framework and transparency parameters..." />
+        <LoadingState message="{t('loading.default', 'Loading analytical methodology framework and transparency parameters...')}" />
       </div>
     );
   }
@@ -63,10 +65,10 @@ export const MethodologyPage = () => {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
             <BookOpen className="w-6 h-6 text-gov-navy" />
-            Methodology & Transparency Framework
+            {t('methodology.title', 'Methodology & Transparency Framework')}
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Explainable formulation, statistical cohort baselines, data boundaries, and Responsible AI guidelines (v{methodology.version})
+            {t('methodology.sub', 'Explainable formulation, statistical cohort baselines, data boundaries, and Responsible AI guidelines')} (v{methodology.version})
           </p>
         </div>
         <span className="text-xs font-mono font-bold text-gov-navy bg-blue-50 px-3 py-1.5 rounded-md border border-blue-200">
@@ -78,7 +80,7 @@ export const MethodologyPage = () => {
       <div className="p-4 bg-amber-50 rounded-lg border-l-4 border-l-amber-500 border border-amber-200 text-amber-950 space-y-2 shadow-sm">
         <div className="flex items-center gap-2 font-bold text-sm text-amber-900">
           <ShieldAlert className="w-5 h-5 text-amber-600 flex-shrink-0" />
-          Responsible AI & Analytical Review Signal Disclosure
+          {t('methodology.disclaimer_title', 'Ethical & Responsible AI Safeguards')}
         </div>
         <p className="text-xs leading-relaxed text-amber-900">
           <strong>Mandatory Principle: </strong>{methodology.disclaimer}
@@ -92,7 +94,7 @@ export const MethodologyPage = () => {
       <div className="gov-card p-6 space-y-4">
         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 pb-2 border-b border-slate-100">
           <Landmark className="w-4 h-4 text-gov-navy" />
-          Data Boundaries & Unit of Observation
+          {t('methodology.unit_of_obs', '1. Unit of Observation')}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -111,7 +113,7 @@ export const MethodologyPage = () => {
           </div>
 
           <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1.5">
-            <span className="font-bold text-slate-900 block">3. Financial Utilization Proxy</span>
+            <span className="font-bold text-slate-900 block">3. {t('common.utilization', 'Financial Utilization')} Proxy</span>
             <p className="text-slate-600 leading-relaxed">
               Utilization is calculated strictly as <code className="text-gov-navy font-semibold">(Reported Expenditure / Sanctioned Cost) × 100</code>. It serves as a financial disbursement proxy and <strong>MUST NOT</strong> be construed as physical civil construction progress.
             </p>
@@ -132,9 +134,9 @@ export const MethodologyPage = () => {
           <div>
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <Scale className="w-4 h-4 text-gov-navy" />
-              Composite Mathematical Formulation
+              {t('methodology.model_overview_title', 'Model A Framework Overview')}
             </h3>
-            <p className="text-xs text-slate-500">Pure linear additive formulation with transparent explainability</p>
+            <p className="text-xs text-slate-500">{t('methodology.model_overview_desc', 'Model A is a transparent, explainable 100-point composite scoring engine evaluating allocations across five core analytical dimensions.')}</p>
           </div>
           <div className="font-mono text-xs font-bold text-gov-navy bg-slate-100 px-3 py-1 rounded">
             {methodology.composite_formula}
@@ -174,33 +176,33 @@ export const MethodologyPage = () => {
       <div className="gov-card p-6 space-y-4">
         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 pb-2 border-b border-slate-100">
           <Layers className="w-4 h-4 text-gov-navy" />
-          Standard Risk Tiers & Activation Bands
+          {t('overview.features_title', 'Standard Risk Tiers & Activation Bands')}
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 rounded-lg bg-emerald-50/70 border border-emerald-200 space-y-1">
-            <span className="gov-badge-low font-bold text-xs">Low Risk (0.0 – 24.9)</span>
+            <span className="gov-badge-low font-bold text-xs">{t('methodology.low_risk_band', 'Low Risk (0.0 – 24.9)')}</span>
             <p className="text-[11px] text-emerald-950 mt-1">
               Normal statistical cohort parameters. Expenditure within median peer baseline. Zero administrative compliance flags.
             </p>
           </div>
 
           <div className="p-4 rounded-lg bg-yellow-50/70 border border-yellow-200 space-y-1">
-            <span className="gov-badge-medium font-bold text-xs">Medium Risk (25.0 – 49.9)</span>
+            <span className="gov-badge-medium font-bold text-xs">{t('methodology.medium_risk_band', 'Medium Risk (25.0 – 49.9)')}</span>
             <p className="text-[11px] text-yellow-950 mt-1">
               Moderate single-dimension deviation, multi-year active retention without disbursement, or audit certificate documentation notations.
             </p>
           </div>
 
           <div className="p-4 rounded-lg bg-amber-50/70 border border-amber-200 space-y-1">
-            <span className="gov-badge-high font-bold text-xs">High Risk (50.0 – 74.9)</span>
+            <span className="gov-badge-high font-bold text-xs">{t('methodology.high_risk_band', 'High Risk (50.0 – 74.9)')}</span>
             <p className="text-[11px] text-amber-950 mt-1">
               Compounding multi-signal outlier or significant financial deviation exceeding localized (Category, State) P90 cohort thresholds with ratio ≥ 1.30.
             </p>
           </div>
 
           <div className="p-4 rounded-lg bg-red-50/70 border border-red-200 space-y-1">
-            <span className="gov-badge-critical font-bold text-xs">Critical Risk (75.0 – 100.0)</span>
+            <span className="gov-badge-critical font-bold text-xs">{t('methodology.critical_risk_band', 'Critical Risk (75.0 – 100.0)')}</span>
             <p className="text-[11px] text-red-950 mt-1">
               Severe multi-dimensional compounding anomaly across all criteria (Financial + Timeline + Compliance + Spatial).
             </p>
@@ -212,7 +214,7 @@ export const MethodologyPage = () => {
       <div className="gov-card p-6 space-y-4">
         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 pb-2 border-b border-slate-100">
           <TrendingUp className="w-4 h-4 text-gov-navy" />
-          Statistical Cohort Hierarchy & Fallback Rules
+          {t('methodology.cohort_title', 'Empirical Baseline Cohorts')}
         </h3>
 
         <div className="space-y-3 text-xs leading-relaxed text-slate-700">
@@ -243,6 +245,391 @@ export const MethodologyPage = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Phase 2.1: Interactive Cohort Statistical Explorer */}
+      <CohortExplorerSection />
+    </div>
+  );
+};
+
+const CohortExplorerSection = () => {
+  const { t } = useLanguage();
+  const [cohortData, setCohortData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedCat, setSelectedCat] = useState('');
+  const [selectedState, setSelectedState] = useState('');
+  const [testExp, setTestExp] = useState('');
+
+  useEffect(() => {
+    const fetchCohorts = async () => {
+      try {
+        const res = await AnalyticsAPI.getCohorts();
+        setCohortData(res);
+        if (res?.categories?.length > 0) {
+          setSelectedCat(res.categories[0]);
+        }
+        if (res?.states?.length > 0) {
+          setSelectedState(res.states[0]);
+        }
+      } catch (err) {
+        console.error('Failed to load cohort explorer data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCohorts();
+  }, []);
+
+  if (loading || !cohortData) {
+    return (
+      <div className="gov-card p-6 text-center text-slate-500 text-xs">
+        Loading interactive cohort quantile distributions...
+      </div>
+    );
+  }
+
+  // Find matching cohort
+  const currentCohort = cohortData.cohorts.find(
+    (c) => c.category === selectedCat && c.state === selectedState
+  ) || cohortData.cohorts.find(
+    (c) => c.category === selectedCat && c.state === 'National Baseline'
+  ) || cohortData.cohorts[0];
+
+  const parsedTestExp = parseFloat(testExp);
+  const hasTestValue = !isNaN(parsedTestExp) && parsedTestExp >= 0;
+  const isOverP90 = hasTestValue && currentCohort && parsedTestExp > currentCohort.expenditure_p90;
+  const ratioToP50 = hasTestValue && currentCohort && currentCohort.expenditure_median > 0
+    ? (parsedTestExp / currentCohort.expenditure_median).toFixed(2)
+    : '0.00';
+  const isFinancialFlagTriggered = isOverP90 && parseFloat(ratioToP50) >= 1.30;
+
+  // Calculate visual position along 0 -> max scale (max = max(35.0, P90 * 1.4))
+  const maxScale = currentCohort ? Math.max(35.0, currentCohort.expenditure_p90 * 1.35) : 35.0;
+  const p50Pos = currentCohort ? Math.min(100, Math.max(0, (currentCohort.expenditure_median / maxScale) * 100)) : 50;
+  const p90Pos = currentCohort ? Math.min(100, Math.max(0, (currentCohort.expenditure_p90 / maxScale) * 100)) : 80;
+  const testValPos = hasTestValue ? Math.min(100, Math.max(0, (parsedTestExp / maxScale) * 100)) : null;
+
+  const isFallbackUsed = currentCohort?.is_fallback || selectedState === 'National Baseline' || (currentCohort?.count || 0) < 10;
+
+  return (
+    <div className="gov-card p-6 space-y-6 border-gov-navy/20 shadow-md">
+      {/* Header & Meta */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-200 gap-3">
+        <div>
+          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+            <Layers className="w-5 h-5 text-gov-navy" />
+            {t('methodology.simulator_title', 'Interactive Model A Risk Calculator')}
+          </h3>
+          <p className="text-xs text-slate-500">
+            {t('methodology.simulator_desc', 'Test input parameters against empirical cohort baselines to see how individual component risk scores decompose.')}
+          </p>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded border ${
+            isFallbackUsed
+              ? 'bg-amber-50 text-amber-900 border-amber-300'
+              : 'bg-emerald-50 text-emerald-900 border-emerald-300'
+          }`}>
+            {isFallbackUsed ? '🟡 Fallback Cohort (Category-National)' : '🟢 Primary Cohort (N ≥ 10)'}
+          </span>
+          <span className="text-xs font-mono font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded border border-slate-200">
+            N = {currentCohort?.count || 0} Records
+          </span>
+        </div>
+      </div>
+
+      {/* Selectors */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-bold text-slate-700 mb-1.5">{t('common.category', 'Category')}</label>
+          <select
+            value={selectedCat}
+            onChange={(e) => setSelectedCat(e.target.value)}
+            className="w-full text-xs bg-white border border-slate-300 rounded-md px-3 py-2 text-slate-800 focus:outline-none focus:ring-1 focus:ring-gov-navy"
+          >
+            {cohortData.categories.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs font-bold text-slate-700 mb-1.5">{t('common.state', 'State')}</label>
+          <select
+            value={selectedState}
+            onChange={(e) => setSelectedState(e.target.value)}
+            className="w-full text-xs bg-white border border-slate-300 rounded-md px-3 py-2 text-slate-800 focus:outline-none focus:ring-1 focus:ring-gov-navy"
+          >
+            {cohortData.states.map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* 4 Quantile Dimension Metric Cards */}
+      {currentCohort && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Expenditure Quantiles */}
+          <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">{t('common.expenditure', 'Reported Expenditure')}</span>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Median (P50):</span>
+                <span className="font-bold text-slate-900">₹{currentCohort.expenditure_median.toFixed(2)} Cr</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Upper (P90):</span>
+                <span className="font-bold text-gov-navy">₹{currentCohort.expenditure_p90.toFixed(2)} Cr</span>
+              </div>
+            </div>
+            <p className="text-[10px] text-slate-400">Values &gt; P90 &amp; &ge; 1.30x trigger Financial flag</p>
+          </div>
+
+          {/* Sanctioned Cost Quantiles */}
+          <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">{t('common.sanctioned', 'Sanctioned Works Cost')}</span>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Median (P50):</span>
+                <span className="font-bold text-slate-900">₹{currentCohort.sanctioned_cost_median.toFixed(2)} Cr</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Upper (P90):</span>
+                <span className="font-bold text-slate-900">₹{currentCohort.sanctioned_cost_p90.toFixed(2)} Cr</span>
+              </div>
+            </div>
+            <p className="text-[10px] text-slate-400">Approved budgetary baseline</p>
+          </div>
+
+          {/* Utilization Proxy Quantiles */}
+          <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">{t('common.utilization', 'Financial Utilization')}</span>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Lower (P10):</span>
+                <span className="font-bold text-slate-900">{currentCohort.utilization_p10.toFixed(1)}%</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Median (P50):</span>
+                <span className="font-bold text-slate-900">{currentCohort.utilization_median.toFixed(1)}%</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Upper (P90):</span>
+                <span className="font-bold text-slate-900">{currentCohort.utilization_p90.toFixed(1)}%</span>
+              </div>
+            </div>
+            <p className="text-[10px] text-slate-400">(Exp / Sanction) × 100 proxy</p>
+          </div>
+
+          {/* Unspent Balance Quantiles */}
+          <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">{t('map.unspent_balance', 'Unspent Balance')}</span>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Median (P50):</span>
+                <span className="font-bold text-slate-900">₹{currentCohort.unspent_median.toFixed(2)} Cr</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Upper (P90):</span>
+                <span className="font-bold text-slate-900">₹{currentCohort.unspent_p90.toFixed(2)} Cr</span>
+              </div>
+            </div>
+            <p className="text-[10px] text-slate-400">Retention threshold: &gt; P90 &amp; &ge; ₹5 Cr</p>
+          </div>
+        </div>
+      )}
+
+      {/* Visual Quantile Scale Track */}
+      {currentCohort && (
+        <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-3">
+          <div className="flex justify-between items-center text-xs">
+            <span className="font-bold text-slate-800 flex items-center gap-1.5">
+              <TrendingUp className="w-4 h-4 text-gov-navy" />
+              Empirical Expenditure Quantile Spectrum (₹0 to ₹{maxScale.toFixed(1)} Cr)
+            </span>
+            <span className="text-[11px] text-slate-500">
+              P50: <strong>₹{currentCohort.expenditure_median.toFixed(2)} Cr</strong> | P90: <strong>₹{currentCohort.expenditure_p90.toFixed(2)} Cr</strong>
+            </span>
+          </div>
+
+          <div className="relative pt-4 pb-2">
+            {/* Range Bar */}
+            <div className="h-4 w-full rounded-full flex overflow-hidden bg-slate-200 border border-slate-300">
+              <div
+                style={{ width: `${p50Pos}%` }}
+                className="bg-emerald-500/80"
+                title={`Typical Range: 0 to P50 (₹${currentCohort.expenditure_median.toFixed(2)} Cr)`}
+              />
+              <div
+                style={{ width: `${Math.max(0, p90Pos - p50Pos)}%` }}
+                className="bg-blue-500/80"
+                title={`Elevated Range: P50 to P90 (₹${currentCohort.expenditure_p90.toFixed(2)} Cr)`}
+              />
+              <div
+                style={{ width: `${Math.max(0, 100 - p90Pos)}%` }}
+                className="bg-amber-500/80"
+                title={`Statistical Outlier Zone: > P90 (₹${currentCohort.expenditure_p90.toFixed(2)} Cr)`}
+              />
+            </div>
+
+            {/* P50 Marker Line */}
+            <div
+              style={{ left: `${p50Pos}%` }}
+              className="absolute top-0 bottom-0 w-0.5 bg-slate-800 z-10"
+            >
+              <span className="absolute -top-4 -translate-x-1/2 text-[10px] font-bold text-slate-700 whitespace-nowrap">
+                P50 (Median)
+              </span>
+            </div>
+
+            {/* P90 Marker Line */}
+            <div
+              style={{ left: `${p90Pos}%` }}
+              className="absolute top-0 bottom-0 w-0.5 bg-gov-navy z-10"
+            >
+              <span className="absolute -top-4 -translate-x-1/2 text-[10px] font-bold text-gov-navy whitespace-nowrap">
+                P90 (Threshold)
+              </span>
+            </div>
+
+            {/* Tested Value Pin */}
+            {testValPos !== null && (
+              <div
+                style={{ left: `${testValPos}%` }}
+                className="absolute top-2 -translate-x-1/2 z-20 flex flex-col items-center"
+              >
+                <div className={`w-3.5 h-3.5 rounded-full border-2 border-white shadow-md ${
+                  isFinancialFlagTriggered ? 'bg-red-600' : isOverP90 ? 'bg-amber-500' : 'bg-emerald-600'
+                }`} />
+                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded shadow mt-1 whitespace-nowrap ${
+                  isFinancialFlagTriggered ? 'bg-red-900 text-white' : isOverP90 ? 'bg-amber-900 text-white' : 'bg-emerald-900 text-white'
+                }`}>
+                  Observed: ₹{parsedTestExp.toFixed(2)} Cr
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-between text-[10px] text-slate-500 pt-3">
+            <span>₹0.00 Cr (Minimum)</span>
+            <span className="text-emerald-700 font-semibold">Typical Zone (&le; P50)</span>
+            <span className="text-blue-700 font-semibold">Elevated Zone (P50–P90)</span>
+            <span className="text-amber-700 font-semibold">Outlier Review Zone (&gt; P90)</span>
+            <span>₹{maxScale.toFixed(1)} Cr (Scale Max)</span>
+          </div>
+        </div>
+      )}
+
+      {/* Interactive Value Position Evaluator & Presets */}
+      <div className="p-4 bg-blue-50/60 rounded-lg border border-blue-200 space-y-3">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <h4 className="text-xs font-bold text-gov-navy flex items-center gap-1.5">
+            <Scale className="w-4 h-4 text-gov-navy" />
+            Evaluate an Allocation's Reported Expenditure Against this Cohort
+          </h4>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[11px] text-slate-500">Quick Test Presets:</span>
+            <button
+              onClick={() => setTestExp((currentCohort?.expenditure_median || 18.0).toFixed(2))}
+              className="text-[11px] bg-white text-slate-700 hover:text-gov-navy px-2 py-0.5 rounded border border-slate-300 font-medium hover:bg-slate-50"
+            >
+              Median (P50)
+            </button>
+            <button
+              onClick={() => setTestExp(((currentCohort?.expenditure_p90 || 22.5) * 0.95).toFixed(2))}
+              className="text-[11px] bg-white text-slate-700 hover:text-gov-navy px-2 py-0.5 rounded border border-slate-300 font-medium hover:bg-slate-50"
+            >
+              Elevated
+            </button>
+            <button
+              onClick={() => setTestExp(((currentCohort?.expenditure_p90 || 22.5) * 1.35).toFixed(2))}
+              className="text-[11px] bg-white text-red-700 hover:text-red-900 px-2 py-0.5 rounded border border-red-300 font-medium hover:bg-red-50"
+            >
+              High Outlier
+            </button>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <div className="relative w-full sm:w-64">
+            <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-xs text-slate-500">₹</span>
+            <input
+              type="number"
+              step="0.1"
+              placeholder="e.g. 24.5"
+              value={testExp}
+              onChange={(e) => setTestExp(e.target.value)}
+              className="w-full text-xs pl-7 pr-12 py-2 bg-white border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gov-navy text-slate-800 font-mono"
+            />
+            <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-[11px] text-slate-400">Cr</span>
+          </div>
+
+          {hasTestValue && currentCohort && (
+            <div className="text-xs flex items-center gap-2 flex-wrap">
+              <span className={`px-2.5 py-1 rounded font-bold ${
+                isFinancialFlagTriggered
+                  ? 'bg-red-100 text-red-800 border border-red-200'
+                  : isOverP90
+                  ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                  : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+              }`}>
+                {isFinancialFlagTriggered
+                  ? '⚠️ Triggers Financial Anomaly Flag (> P90 & ≥ 1.30x)'
+                  : isOverP90
+                  ? 'ℹ️ Exceeds P90 Threshold (< 1.30x Ratio)'
+                  : '✓ Within Normal Cohort Range'}
+              </span>
+              <span className="text-slate-600">
+                (Ratio to Median P50: <strong>{ratioToP50}x</strong>; P90 Threshold: ₹{currentCohort.expenditure_p90.toFixed(2)} Cr)
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Structured Observed Value vs Cohort Benchmark Table */}
+        {hasTestValue && currentCohort && (
+          <div className="overflow-x-auto pt-2">
+            <table className="w-full text-xs border border-slate-200 rounded bg-white">
+              <thead>
+                <tr className="bg-slate-100 text-slate-700">
+                  <th className="p-2 text-left font-bold">Comparison Field</th>
+                  <th className="p-2 text-left font-bold">Observed Value</th>
+                  <th className="p-2 text-left font-bold">Cohort Median (P50)</th>
+                  <th className="p-2 text-left font-bold">Cohort Upper (P90)</th>
+                  <th className="p-2 text-left font-bold">Median Ratio</th>
+                  <th className="p-2 text-left font-bold">Model A Financial Signal</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                <tr>
+                  <td className="p-2 font-semibold text-slate-800">Reported Expenditure</td>
+                  <td className="p-2 font-mono font-bold text-slate-900">₹{parsedTestExp.toFixed(2)} Cr</td>
+                  <td className="p-2 font-mono text-slate-600">₹{currentCohort.expenditure_median.toFixed(2)} Cr</td>
+                  <td className="p-2 font-mono text-gov-navy font-semibold">₹{currentCohort.expenditure_p90.toFixed(2)} Cr</td>
+                  <td className="p-2 font-mono font-bold text-slate-800">{ratioToP50}x</td>
+                  <td className="p-2">
+                    <span className={`gov-badge ${isFinancialFlagTriggered ? 'gov-badge-high' : 'gov-badge-low'}`}>
+                      {isFinancialFlagTriggered ? 'High Expenditure Outlier Flag' : 'No Financial Flag'}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Institutional Explanatory Box */}
+      <div className="p-3.5 bg-slate-100 rounded-lg border border-slate-200 text-xs text-slate-600 space-y-1">
+        <p className="font-semibold text-slate-800 flex items-center gap-1.5">
+          <Info className="w-4 h-4 text-gov-navy" />
+          Benchmark Methodology &amp; Analytical Purpose
+        </p>
+        <p className="leading-relaxed">
+          The cohort benchmark describes the empirical expenditure distribution of comparable allocations across peer categories and states. It is used to identify statistically unusual values for administrative review and does not by itself establish wrongdoing.
+        </p>
       </div>
     </div>
   );

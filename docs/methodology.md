@@ -19,23 +19,40 @@ A high risk score or statistical deviation does **NOT** indicate fraud, corrupti
 
 ## 2. Composite Score Mathematical Formulation
 
-The composite risk score is computed on a theoretical scale of **0.0 to 100.0** points using the linear additive equation:
+The risk score follows a theoretical linear additive formulation designed for a 100-point scale, but the active production implementation operates under a lower ceiling due to intentionally inactive components.
 
+### 2.1 Theoretical Model A Framework
 $$\text{Composite Score} = \min\left(100.0, \text{round}\left(S_{\text{FIN}} + S_{\text{TIM}} + S_{\text{DQ}} + S_{\text{GEO}} + S_{\text{DUP}}, 1\right)\right)$$
 
-```
-┌─────────────────────────┬──────────────┬────────────────────────────────────────────────────────┐
-│ Dimension               │ Max Points   │ Mathematical Basis / Formula                           │
-├─────────────────────────┼──────────────┼────────────────────────────────────────────────────────┤
-│ Financial ($S_{\text{FIN}}$) │ 35 points    │ ((expenditure - P50) / (P90 - P50)) * 35               │
-│ Timeline ($S_{\text{TIM}}$)  │ 25 points    │ 25 (active zero exp), 18 (16th LS), 22 (15th LS)       │
-│ Data Quality ($S_{\text{DQ}}$)│ 20 points   │ min(20, sum(5 * dq_flags))                             │
-│ Geographic ($S_{\text{GEO}}$)│ 10 points    │ 10.0 * district_spatial_density_factor                 │
-│ Duplicate ($S_{\text{DUP}}$) │ 10 points    │ 10.0 if duplicate_detected else 0.0                    │
-├─────────────────────────┼──────────────┼────────────────────────────────────────────────────────┤
-│ Total Theoretical Scale │ 100.0 points │ Active empirical ceiling: 90.0 on clean unique dataset │
-└─────────────────────────┴──────────────┴────────────────────────────────────────────────────────┘
-```
+- Financial ($S_{\text{FIN}}$): 35 points
+- Timeline ($S_{\text{TIM}}$): 25 points
+- Data Quality ($S_{\text{DQ}}$): 20 points
+- Geographic ($S_{\text{GEO}}$): 10 points
+- Duplicate ($S_{\text{DUP}}$): 10 points
+- **Theoretical Maximum**: 100.0 points
+
+### 2.2 Current Production Implementation
+- **Financial**: Active, max 35 points
+- **Timeline**: Active, max 25 points
+- **Data Quality**: Active, max 20 points
+- **Geographic**: Intentionally inactive, contributes 0 points
+- **Duplicate**: Intentionally inactive, contributes 0 points
+- **Current Implemented Ceiling**: 72.0 points (max combined verifiable components)
+
+### 2.3 Current Production Observation
+- **Evaluated Set**: 1,675 authentic allocations
+- **Observed Maximum**: 63.0 points
+- **Critical Records**: 0
+
+### 2.4 Implementation Limitations & Risk Tiers
+**Critical-Tier Limitation**:
+The Critical tier is defined as 75.0–100.0 points in the theoretical framework. Under the current production implementation, the Critical tier is **mathematically unreachable** because the inactive components contribute 0 points. This is strictly a limitation of the current active scoring implementation, and does NOT serve as evidence that the dataset contains no severe cases.
+
+**Geographic Limitation**:
+The originally specified categorical district-concentration formula was reviewed but remains intentionally inactive. Its baseline behavior would assign approximately 5 points to an average district allocation, artificially inflating ordinary risk scores and violating the clean-baseline principle.
+
+**Duplicate Limitation**:
+Verified duplicate evidence is completely absent from the authentic, deduplicated production dataset. While unverified duplicate candidate intelligence may exist separately, these unverified candidates must NOT be converted into a 10-point production risk score.
 
 ---
 
