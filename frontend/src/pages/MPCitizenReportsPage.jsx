@@ -524,7 +524,7 @@ export const MPCitizenReportsPage = () => {
               <div className="flex justify-between items-center text-xs">
                 <span className="font-bold text-slate-700 flex items-center gap-1.5">
                   <FileText className="w-3.5 h-3.5 text-gov-navy" />
-                  Citizen Observation
+                  Citizen Observation ({t('image_screening.reporter_opinion_label', "reporter's opinion")})
                 </span>
                 <span className="text-slate-500">
                   Submitted: {new Date(selectedReport.submitted_at).toLocaleString()}

@@ -162,7 +162,7 @@ export const DataProvenanceModal = ({ isOpen, onClose }) => {
               </li>
               <li className="flex items-center gap-1.5 bg-white p-2 rounded border border-slate-200">
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                <span>{t('provenance.lim_duplicate', 'Verified duplicate-work ground truth')}</span>
+                <span>{t('provenance.lim_duplicate', 'Ground-truth duplicate annotations')}</span>
               </li>
             </ul>
           </div>

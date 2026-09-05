@@ -617,7 +617,7 @@ export const AuthorityComplaintQueuePage = () => {
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-slate-800 flex items-center gap-1.5">
                       <FileText className="w-3.5 h-3.5 text-gov-navy" />
-                      Citizen Observation
+                      Citizen Observation ({t('image_screening.reporter_opinion_label', "reporter's opinion")})
                     </span>
                     <span className="text-slate-500">
                       {new Date(selectedReport.submitted_at).toLocaleString()}
@@ -1142,7 +1142,7 @@ export const AuthorityComplaintQueuePage = () => {
                       ⭐ Multiple Review Signals
                     </div>
                     <p className="text-xs text-indigo-950 leading-relaxed font-medium">
-                      A citizen observation and an analytical signal point to the same allocation, triggering structured human review.
+                      A citizen observation and an analytical signal point to the same allocation, triggering structured human review. This does not establish wrongdoing and requires human verification.
                     </p>
                   </div>
                 )}

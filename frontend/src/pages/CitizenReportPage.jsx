@@ -294,13 +294,13 @@ export const CitizenReportPage = () => {
             {allocationData && (
               <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                {t('report.allocation_verified', 'Verified Record')}
+                {t('report.allocation_verified', 'Published Record')}
               </span>
             )}
           </label>
           {allocationLoading && (
             <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-500 animate-pulse">
-              {t('report.loading_allocation', 'Verifying allocation reference...')}
+              {t('report.loading_allocation', 'Loading allocation reference...')}
             </div>
           )}
           {allocationError && (
@@ -393,7 +393,7 @@ export const CitizenReportPage = () => {
         )}
 
         <div className="pt-2 flex items-center justify-between">
-          <p className="text-[11px] text-slate-500">{t('report.submission_notice', 'Reports are subject to administrative review.')}</p>
+          <p className="text-[11px] text-slate-500 font-medium">{t('report.submission_notice', 'A report is an allegation, not a finding.')}</p>
           <button type="submit" disabled={!isFormValid || submitting} className={`px-6 py-2.5 rounded-lg text-xs font-bold shadow-md ${isFormValid && !submitting ? 'bg-gov-navy text-white' : 'bg-slate-200 text-slate-400'}`}>
             {submitting ? t('report.submitting', 'Submitting...') : t('report.btn_submit', 'Submit Report')}
           </button>

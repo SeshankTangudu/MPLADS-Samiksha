@@ -215,13 +215,13 @@ export const InvestigationPage = () => {
   const getRiskTierBadge = (level, score) => {
     switch (level?.toLowerCase()) {
       case 'critical':
-        return <span className="gov-badge-critical text-sm px-3 py-1 font-bold">Critical ({score})</span>;
+        return <span className="gov-badge-critical text-sm px-3 py-1 font-bold">{isCitizen ? `Critical Review Indicator (${score})` : `Critical (${score})`}</span>;
       case 'high':
-        return <span className="gov-badge-high text-sm px-3 py-1 font-bold">High Risk ({score})</span>;
+        return <span className="gov-badge-high text-sm px-3 py-1 font-bold" title="High Review Indicator — prioritized for further review based on analytical signals">{isCitizen ? `High Review Indicator (${score})` : `High Risk (${score})`}</span>;
       case 'medium':
-        return <span className="gov-badge-medium text-sm px-3 py-1 font-semibold">Medium Risk ({score})</span>;
+        return <span className="gov-badge-medium text-sm px-3 py-1 font-semibold">{isCitizen ? `Medium Review Indicator (${score})` : `Medium Risk (${score})`}</span>;
       default:
-        return <span className="gov-badge-low text-sm px-3 py-1 font-semibold">Low Risk ({score})</span>;
+        return <span className="gov-badge-low text-sm px-3 py-1 font-semibold">{isCitizen ? `Low Review Indicator (${score})` : `Low Risk (${score})`}</span>;
     }
   };
 
@@ -1666,11 +1666,11 @@ export const InvestigationPage = () => {
         </div>
       </div>
 
-      {/* Phase 3.3: Verified Data Provenance Display */}
+      {/* Phase 3.3: Published Data Provenance Display */}
       <div className="gov-card p-6 space-y-3 bg-slate-50 border-slate-200">
         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 pb-2 border-b border-slate-200">
           <Database className="w-4 h-4 text-gov-navy" />
-          Verified Source Data Provenance (Phase 3.3)
+          Published Source Data Provenance (Phase 3.3)
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">

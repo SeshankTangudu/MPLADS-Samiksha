@@ -220,7 +220,7 @@ const DuplicateCandidatesPanel = () => {
         </div>
         {(data?.total_candidate_pairs ?? 0) === 0 && (
           <p className="text-sm text-slate-500 italic">
-            {t('duplicates.no_candidates', 'No verified duplicate evidence identified. Candidate matching requires human verification.')}
+            {t('duplicates.no_candidates', 'No duplicate candidates identified. Candidate matching requires human verification.')}
           </p>
         )}
       </div>

@@ -286,7 +286,7 @@ def evaluate_location_consistency(
                 details = f"EXIF GPS coordinates match citizen-reported GPS within {delta_km:.2f} km{dist_str}."
         else:
             review_status = "LOCATION_REQUIRES_REVIEW"
-            details = f"Discrepancy detected: EXIF GPS coordinates differ by {delta_km:.1f} km from citizen-reported GPS (>25 km threshold). Field review recommended."
+            details = f"Location review hint: EXIF GPS coordinates differ by {delta_km:.1f} km from citizen-reported GPS (>25 km threshold; GPS metadata is user-controlled and may be inaccurate). Field review recommended."
 
     elif has_browser_gps:
         if dist_km is not None and dist_km > DISTRICT_CENTROID_REVIEW_THRESHOLD_KM:
