@@ -12,7 +12,17 @@ This guide details the exact step-by-step procedure to set up, build, and run th
 
 ---
 
-## 🚀 Quick Setup (Windows PowerShell / Command Prompt)
+## ☁️ GitHub Codespaces (1-Click Instant Setup)
+
+When you open this repository in a **GitHub Codespace**, all initialization steps are automated via `.devcontainer/devcontainer.json`. The container automatically installs Python dependencies, reconstructs the database, executes Model A scoring, and installs frontend dependencies.
+Simply run:
+* **Terminal 1:** `uvicorn backend.app.main:app --reload --port 8000`
+* **Terminal 2:** `cd frontend && npm run dev`
+
+---
+
+## 🚀 Local Quick Setup (Windows PowerShell / Command Prompt)
+
 
 ### Step 1: Clone the Repository
 ```powershell
