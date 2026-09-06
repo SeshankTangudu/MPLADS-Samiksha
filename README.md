@@ -3,7 +3,7 @@
 > **An Explainable Decision Support & Statistical Anomaly Review Layer for the Member of Parliament Local Area Development Scheme (MPLADS)**  
 > Built for the Smart India Hackathon (SIH) 2024 / Parliamentary Open Data Governance.
 
-[![Test Suite](https://img.shields.io/badge/pytest-66%2F66%20passed-brightgreen.svg)]()
+[![Test Suite](https://img.shields.io/badge/pytest-201%2F201%20passed-brightgreen.svg)]()
 [![Frontend Build](https://img.shields.io/badge/vite-production%20ready-blue.svg)]()
 [![Database](https://img.shields.io/badge/sqlite-1%2C675%20verified%20records-success.svg)]()
 [![Responsible AI](https://img.shields.io/badge/responsible%20AI-non--accusatory-orange.svg)]()
@@ -44,16 +44,14 @@ $$\text{Composite Score} = \min(100.0, S_{\text{FIN}} + S_{\text{TIM}} + S_{\tex
 | **Financial Deviation ($S_{\text{FIN}}$)** | **35 pts** | Cost anomaly triggered when $\text{exp} > \text{Cohort P90}$ AND $\text{exp} / \text{Cohort P50} \ge 1.30$. |
 | **Timeline Stagnation ($S_{\text{TIM}}$)** | **25 pts** | Multi-year active retention without expenditure (25 pts active zero exp, 18 pts 16th LS, 22 pts 15th LS). |
 | **Data Quality & Compliance ($S_{\text{DQ}}$)** | **20 pts** | Official audit certificate notes, pending MPRs, zero sanctioned budget, or negative accounting balance. |
-| **Geographic Concentration ($S_{\text{GEO}}$)** | **10 pts** | District allocation density factor across verified administrative centroids. |
-| **Duplicate Allocation ($S_{\text{DUP}}$)** | **10 pts** | Duplicate allocation detection (evaluates to 0 on verified clean unique dataset). |
+| **Geographic Concentration ($S_{\text{GEO}}$)** | **10 pts** | District allocation density factor across verified administrative centroids (inactive baseline). |
+| **Duplicate Allocation ($S_{\text{DUP}}$)** | **10 pts** | Duplicate allocation detection (decoupled review candidate intelligence). |
 
 ### Standard Risk Tiers & Empirical Distribution (N=1,675)
 - 🟢 **Low Risk (0.0 – 24.9)**: 1,166 allocations (**69.61%**) — Normal statistical cohort parameters.
 - 🟡 **Medium Risk (25.0 – 49.9)**: 413 allocations (**24.66%**) — Moderate single-dimension deviation or documentation item.
 - 🟠 **High Risk (50.0 – 74.9)**: 96 allocations (**5.73%**) — Compounding multi-signal outlier or significant financial deviation.
-- 🔴 **Critical Risk (75.0 – 100.0)**: 0 allocations (**0.00%**) — Severe multi-dimensional compounding anomaly.
-
-*(High Risk rate of 5.73% sits strictly within the 1%–6% anomaly band specified in the Master Execution Guide).*
+- 🔴 **Critical Risk (75.0 – 100.0)**: 0 allocations (**0.00%**) — Severe multi-dimensional compounding anomaly (Active mathematical ceiling: 72.0).
 
 ---
 
@@ -67,24 +65,25 @@ $$\text{Composite Score} = \min(100.0, S_{\text{FIN}} + S_{\text{TIM}} + S_{\tex
 
 ## 🚀 Quickstart & Local Setup
 
+> **Full step-by-step setup guide for fresh teammate clones is available in [SETUP.md](SETUP.md).**
+
 ### 1. Clone & Activate Python Environment
 ```bash
-git clone https://github.com/example/mplads-samiksha.git
-cd mplads-samiksha
+git clone https://github.com/SeshankTangudu/MPLADS-Samiksha.git
+cd MPLADS-Samiksha
 
 python -m venv .venv
-# On Windows:
+# On Windows PowerShell:
 .\.venv\Scripts\Activate.ps1
-# On Linux/macOS:
+# On macOS/Linux:
 source .venv/bin/activate
 
-pip install -r backend/requirements.txt
+pip install -r requirements.txt
 ```
 
 ### 2. Build Database & Execute Batch Scoring
 ```bash
 python scripts/build_db.py
-python ml/cohort_stats.py
 python ml/batch_scoring.py
 ```
 
@@ -104,12 +103,13 @@ Open **`http://localhost:5173`** in your browser. Interactive OpenAPI documentat
 
 ## 🧪 Automated Verification & Testing
 
-The repository contains 66 comprehensive automated test cases:
+The repository contains 201 comprehensive automated test cases:
 ```bash
-pytest -v tests/
+pytest tests/
 ```
 ```text
-============================= 66 passed in 6.87s ==============================
+============================ 201 passed in 33.39s =============================
+```
 ```
 
 ---
