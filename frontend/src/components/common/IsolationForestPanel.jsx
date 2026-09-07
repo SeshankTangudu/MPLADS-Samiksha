@@ -161,7 +161,7 @@ const IsolationForestPanel = () => {
     );
   }
 
-  if (!data?.available) {
+  if (!data?.summary) {
     return (
       <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 text-sm text-slate-600 space-y-1">
         <p className="font-semibold text-slate-700">{t('if.artifact_not_found', 'Isolation Forest artifact not found')}</p>
