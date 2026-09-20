@@ -16,7 +16,9 @@ import {
   Layers,
   Terminal,
   ShieldAlert,
-  HardDrive
+  HardDrive,
+  UserCog,
+  Users
 } from 'lucide-react';
 import { AdminAPI } from '../../services/api';
 import LoadingState from '../../components/common/LoadingState';
@@ -80,6 +82,13 @@ export const AdminDashboardPage = () => {
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
             <span>{refreshing ? 'Refreshing...' : 'Refresh Health'}</span>
           </button>
+          <Link
+            to="/admin/users"
+            className="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-colors"
+          >
+            <UserCog className="w-4 h-4" />
+            <span>Users & Access</span>
+          </Link>
           <Link
             to="/admin/datasets/import"
             className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-colors"
@@ -196,6 +205,33 @@ export const AdminDashboardPage = () => {
             </Link>
           </div>
         </div>
+      </div>
+
+      {/* Identity & Access Management Governance Card */}
+      <div className="p-5 bg-gradient-to-r from-indigo-900 to-slate-900 text-white rounded-xl shadow-md border border-indigo-700/50 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300 flex-shrink-0">
+            <UserCog className="w-6 h-6" />
+          </div>
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-bold text-white">Identity & User Access Management</h2>
+              <span className="text-[10px] bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 px-2 py-0.5 rounded font-semibold uppercase tracking-wider">
+                RBAC Active
+              </span>
+            </div>
+            <p className="text-xs text-indigo-200/80 max-w-xl">
+              Provision District Authorities, MPs, and Citizens. Manage account statuses (Active, Suspended, Disabled), cryptographic password resets, and server-side jurisdiction scopes.
+            </p>
+          </div>
+        </div>
+        <Link
+          to="/admin/users"
+          className="px-4 py-2.5 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold flex items-center gap-2 shadow transition-all whitespace-nowrap"
+        >
+          <span>Open User Directory</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
 
       {/* Main 2-Column Content: Ingestions & Technical Event Logs */}

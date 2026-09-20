@@ -519,6 +519,15 @@ def correct_project_record(
             detail=f"Constituency allocation record '{id}' not found."
         )
 
+    # Jurisdiction Boundary Isolation: Enforce District Authority boundary if assigned
+    if current_user.district and current_user.district.strip().lower() not in ["all", "nodal", ""]:
+        proj_district = (project.district or "").strip().lower()
+        if proj_district and current_user.district.strip().lower() != proj_district:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Jurisdiction Isolation: Authority for district '{current_user.district}' is not authorized to correct records in district '{project.district}'."
+            )
+
     # 1. Determine next version number
     current_ver = (
         db.query(func.max(ProjectVersion.version_number))

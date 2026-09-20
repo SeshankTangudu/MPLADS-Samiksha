@@ -64,6 +64,7 @@ export const Navbar = () => {
       case ROLES.SYSTEM_ADMIN:
         return [
           { path: '/admin', key: 'nav.admin_dashboard', fallback: 'Ops Console', icon: Server },
+          { path: '/admin/users', key: 'nav.admin_users', fallback: 'Users & Access', icon: UserCog },
           { path: '/admin/datasets/import', key: 'nav.admin_import', fallback: 'Dataset Ingestion', icon: UploadCloud },
           { path: '/admin/datasets/history', key: 'nav.admin_history', fallback: 'Ingestion Logs', icon: Clock },
           { path: '/admin/data-sources', key: 'nav.admin_sources', fallback: 'Data Sources', icon: Layers },

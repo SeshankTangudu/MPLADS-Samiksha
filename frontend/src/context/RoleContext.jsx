@@ -72,6 +72,23 @@ export const RoleProvider = ({ children }) => {
     fetchConstituencies();
   }, []);
 
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('mplads_current_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const [authToken, setAuthToken] = useState(() => {
+    try {
+      return localStorage.getItem('mplads_auth_token') || null;
+    } catch (e) {
+      return null;
+    }
+  });
+
   const changeRole = (newRole) => {
     if (Object.values(ROLES).includes(newRole)) {
       setViewRole(newRole);
@@ -80,6 +97,46 @@ export const RoleProvider = ({ children }) => {
       } catch (e) {
         console.warn('Failed to persist view role:', e);
       }
+    }
+  };
+
+  const loginUser = (authData) => {
+    if (authData && authData.token && authData.user) {
+      setAuthToken(authData.token);
+      setCurrentUser(authData.user);
+      setViewRole(authData.user.role);
+      if (authData.user.constituency) {
+        setSelectedConstituency(authData.user.constituency);
+      }
+      try {
+        localStorage.setItem('mplads_auth_token', authData.token);
+        localStorage.setItem('mplads_current_user', JSON.stringify(authData.user));
+        localStorage.setItem('mplads_view_role', authData.user.role);
+        localStorage.setItem('mplads_user_id', authData.user.username);
+        if (authData.user.district) {
+          localStorage.setItem('mplads_user_district', authData.user.district);
+        }
+        if (authData.user.constituency) {
+          localStorage.setItem('mplads_mp_constituency', authData.user.constituency);
+        }
+      } catch (e) {
+        console.warn('Failed to persist auth data:', e);
+      }
+    }
+  };
+
+  const logoutUser = () => {
+    setAuthToken(null);
+    setCurrentUser(null);
+    setViewRole(ROLES.CITIZEN);
+    try {
+      localStorage.removeItem('mplads_auth_token');
+      localStorage.removeItem('mplads_current_user');
+      localStorage.removeItem('mplads_user_id');
+      localStorage.removeItem('mplads_user_district');
+      localStorage.setItem('mplads_view_role', ROLES.CITIZEN);
+    } catch (e) {
+      console.warn('Failed to clear auth storage:', e);
     }
   };
 
@@ -99,6 +156,10 @@ export const RoleProvider = ({ children }) => {
       value={{
         viewRole,
         changeRole,
+        currentUser,
+        authToken,
+        loginUser,
+        logoutUser,
         selectedConstituency,
         changeConstituency,
         constituencyList,

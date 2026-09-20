@@ -20,11 +20,22 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 def ensure_db_schema():
     """Safely creates all database tables and populates default platform metadata if needed."""
     try:
-        from backend.app.models import Base, DataSource, User, SystemConfig, Project
+        from backend.app.models import (
+            Base,
+            DataSource,
+            User,
+            SystemConfig,
+            Project,
+            MPProfile,
+            AuthorityProfile,
+            CitizenProfile,
+        )
         Base.metadata.create_all(bind=engine)
 
         with engine.connect() as conn:
             from sqlalchemy import text
+
+            # 1. Check complaint_evidence table columns
             res = conn.execute(text("PRAGMA table_info(complaint_evidence);")).fetchall()
             existing_cols = {row[1] for row in res}
             if existing_cols:
@@ -36,7 +47,25 @@ def ensure_db_schema():
                     conn.execute(text("ALTER TABLE complaint_evidence ADD COLUMN timestamp_review_details TEXT;"))
                 conn.commit()
 
-        # Seed initial data sources and configuration if not yet populated
+            # 2. Check users table columns
+            u_res = conn.execute(text("PRAGMA table_info(users);")).fetchall()
+            existing_user_cols = {row[1] for row in u_res}
+            if existing_user_cols:
+                if "display_id" not in existing_user_cols:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN display_id VARCHAR(32);"))
+                if "password_hash" not in existing_user_cols:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN password_hash VARCHAR(256) DEFAULT '';"))
+                if "status" not in existing_user_cols:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN status VARCHAR(32) DEFAULT 'ACTIVE';"))
+                if "district" not in existing_user_cols:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN district VARCHAR(64);"))
+                if "updated_at" not in existing_user_cols:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN updated_at VARCHAR(32) DEFAULT '2026-09-01T00:00:00Z';"))
+                if "last_login" not in existing_user_cols:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN last_login VARCHAR(32);"))
+                conn.commit()
+
+        # Seed initial data sources, configuration, and users if needed
         db = SessionLocal()
         try:
             now_iso = "2026-09-01T00:00:00Z"
@@ -97,21 +126,77 @@ def ensure_db_schema():
                 for c in configs:
                     db.add(c)
 
-            # 3. Demo Users
-            if db.query(User).count() == 0:
-                from backend.app.auth import DEMO_USERS
-                for u in DEMO_USERS.values():
+            # 3. Demo Users & Scoped Profiles
+            from backend.app.auth import DEMO_USERS
+            for u in DEMO_USERS.values():
+                user_obj = db.query(User).filter(User.username == u["username"]).first()
+                if not user_obj:
+                    user_obj = User(
+                        id=u["id"],
+                        display_id=u.get("display_id"),
+                        username=u["username"],
+                        full_name=u["full_name"],
+                        role=u["role"],
+                        status=u.get("status", "ACTIVE"),
+                        password_hash=u.get("password_hash", ""),
+                        constituency=u.get("constituency"),
+                        district=u.get("district"),
+                        state=u.get("state"),
+                        email=u.get("email"),
+                        created_at=now_iso,
+                        updated_at=now_iso,
+                        is_active=1,
+                    )
+                    db.add(user_obj)
+                    db.flush()
+                else:
+                    # Update fields if empty
+                    if not getattr(user_obj, "display_id", None):
+                        user_obj.display_id = u.get("display_id")
+                    if not getattr(user_obj, "password_hash", None):
+                        user_obj.password_hash = u.get("password_hash", "")
+                    if not getattr(user_obj, "status", None):
+                        user_obj.status = u.get("status", "ACTIVE")
+                    if not getattr(user_obj, "district", None):
+                        user_obj.district = u.get("district")
+                    if not getattr(user_obj, "updated_at", None):
+                        user_obj.updated_at = now_iso
+
+                # Link specific profile if missing
+                if user_obj.role == "authority" and not db.query(AuthorityProfile).filter(AuthorityProfile.user_id == user_obj.id).first():
                     db.add(
-                        User(
-                            id=u["id"],
-                            username=u["username"],
-                            full_name=u["full_name"],
-                            role=u["role"],
-                            constituency=u.get("constituency"),
-                            state=u.get("state"),
-                            email=u.get("email"),
+                        AuthorityProfile(
+                            user_id=user_obj.id,
+                            authority_type="District Authority",
+                            office_name="District Collector & District Magistrate Office, Varanasi",
+                            state="Uttar Pradesh",
+                            district="Varanasi",
+                            jurisdiction="Varanasi District Administration",
                             created_at=now_iso,
-                            is_active=1,
+                            updated_at=now_iso,
+                        )
+                    )
+                elif user_obj.role == "mp" and not db.query(MPProfile).filter(MPProfile.user_id == user_obj.id).first():
+                    db.add(
+                        MPProfile(
+                            user_id=user_obj.id,
+                            constituency_id="PC-VARANASI-77",
+                            constituency_name="Varanasi",
+                            state="Uttar Pradesh",
+                            lok_sabha_term=18,
+                            created_at=now_iso,
+                            updated_at=now_iso,
+                        )
+                    )
+                elif user_obj.role == "citizen" and not db.query(CitizenProfile).filter(CitizenProfile.user_id == user_obj.id).first():
+                    db.add(
+                        CitizenProfile(
+                            user_id=user_obj.id,
+                            phone="+91 98765 43210",
+                            district="Varanasi",
+                            state="Uttar Pradesh",
+                            created_at=now_iso,
+                            updated_at=now_iso,
                         )
                     )
 

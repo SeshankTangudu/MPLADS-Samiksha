@@ -921,14 +921,24 @@ class UserRoleEnum(str, Enum):
     SYSTEM_ADMIN = "system_admin"
 
 
+class UserStatusEnum(str, Enum):
+    ACTIVE = "ACTIVE"
+    SUSPENDED = "SUSPENDED"
+    DISABLED = "DISABLED"
+
+
 class UserContextSchema(BaseModel):
     id: int
     username: str
     full_name: str
     role: str
+    display_id: Optional[str] = None
+    status: str = "ACTIVE"
     constituency: Optional[str] = None
+    district: Optional[str] = None
     state: Optional[str] = None
     email: Optional[str] = None
+    last_login: Optional[str] = None
     is_active: int = 1
 
     model_config = ConfigDict(from_attributes=True)
@@ -939,6 +949,183 @@ class UserAuthResponseSchema(BaseModel):
     token: str
     role: str
     permissions: List[str]
+
+
+class MPProfileSchema(BaseModel):
+    id: Optional[int] = None
+    constituency_id: Optional[str] = None
+    constituency_name: str
+    state: str
+    lok_sabha_term: int = 18
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class AuthorityProfileSchema(BaseModel):
+    id: Optional[int] = None
+    authority_type: str = "District Authority"
+    office_name: str
+    state: str
+    district: str
+    jurisdiction: Optional[str] = None
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class CitizenProfileSchema(BaseModel):
+    id: Optional[int] = None
+    phone: Optional[str] = None
+    district: Optional[str] = None
+    state: Optional[str] = None
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UserDetailSchema(BaseModel):
+    id: int
+    display_id: Optional[str] = None
+    username: str
+    full_name: str
+    role: str
+    status: str
+    email: Optional[str] = None
+    constituency: Optional[str] = None
+    district: Optional[str] = None
+    state: Optional[str] = None
+    created_at: str
+    updated_at: str
+    last_login: Optional[str] = None
+    is_active: int = 1
+    mp_profile: Optional[MPProfileSchema] = None
+    authority_profile: Optional[AuthorityProfileSchema] = None
+    citizen_profile: Optional[CitizenProfileSchema] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UserListItemSchema(BaseModel):
+    id: int
+    display_id: Optional[str] = None
+    username: str
+    full_name: str
+    role: str
+    status: str
+    email: Optional[str] = None
+    constituency: Optional[str] = None
+    district: Optional[str] = None
+    state: Optional[str] = None
+    created_at: str
+    last_login: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UserListResponseSchema(BaseModel):
+    total: int
+    page: int
+    page_size: int
+    total_pages: int
+    total_users: int
+    active_count: int
+    suspended_count: int
+    disabled_count: int
+    items: List[UserListItemSchema]
+
+
+class UserCreateSchema(BaseModel):
+    username: str = Field(..., min_length=3, max_length=64)
+    full_name: str = Field(..., min_length=2, max_length=128)
+    role: str = Field(...)
+    password: str = Field(..., min_length=8, max_length=128)
+    email: Optional[str] = None
+    state: Optional[str] = None
+    district: Optional[str] = None
+    constituency: Optional[str] = None
+    authority_type: Optional[str] = "District Authority"
+    office_name: Optional[str] = None
+    jurisdiction: Optional[str] = None
+    lok_sabha_term: Optional[int] = 18
+    phone: Optional[str] = None
+    status: Optional[str] = "ACTIVE"
+
+    @field_validator("username")
+    @classmethod
+    def validate_username(cls, v: str) -> str:
+        clean = v.strip().lower()
+        if not clean.replace("_", "").isalnum():
+            raise ValueError("Username must be alphanumeric with optional underscores.")
+        return clean
+
+    @field_validator("role")
+    @classmethod
+    def validate_role(cls, v: str) -> str:
+        clean = v.strip().lower()
+        if clean not in [UserRoleEnum.CITIZEN.value, UserRoleEnum.MP.value, UserRoleEnum.AUTHORITY.value]:
+            raise ValueError(f"Role must be one of: citizen, mp, authority. '{clean}' is not permitted.")
+        return clean
+
+
+class UserStatusUpdateSchema(BaseModel):
+    status: str = Field(..., description="ACTIVE, SUSPENDED, or DISABLED")
+    reason: str = Field(..., min_length=5, max_length=500)
+
+    @field_validator("status")
+    @classmethod
+    def validate_status(cls, v: str) -> str:
+        clean = v.strip().upper()
+        if clean not in ["ACTIVE", "SUSPENDED", "DISABLED"]:
+            raise ValueError("Status must be ACTIVE, SUSPENDED, or DISABLED.")
+        return clean
+
+
+class UserResetPasswordSchema(BaseModel):
+    new_password: str = Field(..., min_length=8, max_length=128)
+    reason: str = Field(..., min_length=5, max_length=500)
+
+
+class UserScopeUpdateSchema(BaseModel):
+    state: Optional[str] = None
+    district: Optional[str] = None
+    constituency: Optional[str] = None
+    authority_type: Optional[str] = None
+    office_name: Optional[str] = None
+    lok_sabha_term: Optional[int] = None
+    reason: str = Field(..., min_length=5, max_length=500)
+
+
+class UserRoleUpdateSchema(BaseModel):
+    role: str = Field(...)
+    reason: str = Field(..., min_length=5, max_length=500)
+
+
+class LoginRequestSchema(BaseModel):
+    username: str = Field(..., min_length=3, max_length=64)
+    password: str = Field(..., min_length=1, max_length=128)
+
+
+class LoginResponseSchema(BaseModel):
+    token: str
+    user: UserDetailSchema
+    message: str
+
+
+class AccessHistoryItemSchema(BaseModel):
+    id: int
+    log_id: str
+    event_type: str
+    severity: str
+    action: str
+    detail: Optional[str] = None
+    ip_address: Optional[str] = None
+    timestamp: str
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==============================================================================

@@ -21,9 +21,22 @@ apiClient.interceptors.request.use((config) => {
   try {
     const savedRole = localStorage.getItem('mplads_view_role') || 'citizen';
     const savedConstituency = localStorage.getItem('mplads_mp_constituency') || 'Varanasi';
+    const savedToken = localStorage.getItem('mplads_auth_token');
+    const savedUserId = localStorage.getItem('mplads_user_id');
+    const savedDistrict = localStorage.getItem('mplads_user_district');
+
+    if (savedToken) {
+      config.headers['Authorization'] = `Bearer ${savedToken}`;
+    }
 
     config.headers['X-User-Role'] = savedRole;
-    if (savedRole === 'mp') {
+    if (savedDistrict) {
+      config.headers['X-User-District'] = savedDistrict;
+    }
+
+    if (savedUserId) {
+      config.headers['X-User-Id'] = savedUserId;
+    } else if (savedRole === 'mp') {
       config.headers['X-User-Id'] = 'mp_varanasi';
       config.headers['X-User-Constituency'] = savedConstituency;
     } else if (savedRole === 'authority') {
@@ -32,6 +45,10 @@ apiClient.interceptors.request.use((config) => {
       config.headers['X-User-Id'] = 'sysadmin_platform';
     } else {
       config.headers['X-User-Id'] = 'citizen_public';
+    }
+
+    if (savedConstituency && !config.headers['X-User-Constituency']) {
+      config.headers['X-User-Constituency'] = savedConstituency;
     }
   } catch (e) {
     // Fallback silently if localStorage unavailable
@@ -134,8 +151,26 @@ export const AdminAPI = {
   updateConfig: (payload) => apiClient.put('/admin/config', payload),
 };
 
+export const AuthAPI = {
+  login: (credentials) => apiClient.post('/auth/login', credentials),
+  logout: () => apiClient.post('/auth/logout'),
+  getMe: () => apiClient.get('/auth/me'),
+};
+
+export const UserManagementAPI = {
+  getUsers: (params) => apiClient.get('/admin/users', { params }),
+  getUserById: (id) => apiClient.get(`/admin/users/${id}`),
+  createUser: (payload) => apiClient.post('/admin/users', payload),
+  updateUserStatus: (id, payload) => apiClient.put(`/admin/users/${id}/status`, payload),
+  resetPassword: (id, payload) => apiClient.put(`/admin/users/${id}/reset-password`, payload),
+  updateUserScope: (id, payload) => apiClient.put(`/admin/users/${id}/scope`, payload),
+  updateUserRole: (id, payload) => apiClient.put(`/admin/users/${id}/role`, payload),
+  getUserAccessHistory: (id, params) => apiClient.get(`/admin/users/${id}/access-history`, { params }),
+};
+
 export const SelfTestAPI = {
   getFixtures: () => apiClient.get('/self-test/fixtures'),
 };
 
 export default apiClient;
+

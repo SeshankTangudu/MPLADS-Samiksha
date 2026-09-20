@@ -204,14 +204,73 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    display_id = Column(String(32), unique=True, nullable=True, index=True)
     username = Column(String(64), unique=True, nullable=False, index=True)
     full_name = Column(String(128), nullable=False)
     role = Column(String(32), nullable=False, index=True)  # citizen, mp, authority, system_admin
+    status = Column(String(32), nullable=False, default="ACTIVE")  # ACTIVE, SUSPENDED, DISABLED
+    password_hash = Column(String(256), nullable=False, default="")
     constituency = Column(String(64), nullable=True)
+    district = Column(String(64), nullable=True)
     state = Column(String(64), nullable=True)
     email = Column(String(128), nullable=True)
     created_at = Column(String(32), nullable=False)
+    updated_at = Column(String(32), nullable=False, default="2026-09-01T00:00:00Z")
+    last_login = Column(String(32), nullable=True)
     is_active = Column(Integer, nullable=False, default=1)
+
+    # Scoped profile relationships
+    mp_profile = relationship("MPProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    authority_profile = relationship("AuthorityProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    citizen_profile = relationship("CitizenProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")
+
+
+class MPProfile(Base):
+    """Member of Parliament parliamentary scope profile."""
+    __tablename__ = "mp_profiles"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False, index=True)
+    constituency_id = Column(String(64), nullable=True)
+    constituency_name = Column(String(64), nullable=False)
+    state = Column(String(64), nullable=False)
+    lok_sabha_term = Column(Integer, nullable=False, default=18)
+    created_at = Column(String(32), nullable=False)
+    updated_at = Column(String(32), nullable=False)
+
+    user = relationship("User", back_populates="mp_profile")
+
+
+class AuthorityProfile(Base):
+    """Administrative / Nodal Authority jurisdiction profile."""
+    __tablename__ = "authority_profiles"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False, index=True)
+    authority_type = Column(String(64), nullable=False, default="District Authority")
+    office_name = Column(String(128), nullable=False)
+    state = Column(String(64), nullable=False)
+    district = Column(String(64), nullable=False)
+    jurisdiction = Column(String(128), nullable=True)
+    created_at = Column(String(32), nullable=False)
+    updated_at = Column(String(32), nullable=False)
+
+    user = relationship("User", back_populates="authority_profile")
+
+
+class CitizenProfile(Base):
+    """Citizen verified profile and communication coordinates."""
+    __tablename__ = "citizen_profiles"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False, index=True)
+    phone = Column(String(32), nullable=True)
+    district = Column(String(64), nullable=True)
+    state = Column(String(64), nullable=True)
+    created_at = Column(String(32), nullable=False)
+    updated_at = Column(String(32), nullable=False)
+
+    user = relationship("User", back_populates="citizen_profile")
 
 
 class DatasetImport(Base):

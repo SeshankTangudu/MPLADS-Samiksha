@@ -670,6 +670,15 @@ def update_complaint_status(
             detail=f"Complaint with ID '{complaint_id}' was not found."
         )
 
+    # Jurisdiction Boundary Isolation for District Authority
+    if current_user.district and current_user.district.strip().lower() not in ["all", "nodal", ""] and complaint.linked_allocation_id:
+        proj = db.query(Project).filter(Project.source_record_id == complaint.linked_allocation_id).first()
+        if proj and proj.district and current_user.district.strip().lower() != proj.district.strip().lower():
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Jurisdiction Isolation: Authority for district '{current_user.district}' cannot triage complaints for project in district '{proj.district}'."
+            )
+
     current_status = complaint.status
     target_status = payload.status
 
@@ -734,6 +743,15 @@ def add_officer_note(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Complaint with ID '{complaint_id}' was not found."
         )
+
+    # Jurisdiction Boundary Isolation for District Authority
+    if current_user.district and current_user.district.strip().lower() not in ["all", "nodal", ""] and complaint.linked_allocation_id:
+        proj = db.query(Project).filter(Project.source_record_id == complaint.linked_allocation_id).first()
+        if proj and proj.district and current_user.district.strip().lower() != proj.district.strip().lower():
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Jurisdiction Isolation: Authority for district '{current_user.district}' cannot add notes to complaints for project in district '{proj.district}'."
+            )
 
     now_iso = datetime.now(timezone.utc).isoformat()
     complaint.officer_note = payload.note.strip()

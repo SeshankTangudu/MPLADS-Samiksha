@@ -32,6 +32,7 @@ import AdminSystemLogsPage from './pages/admin/AdminSystemLogsPage';
 import AdminAuditLogsPage from './pages/admin/AdminAuditLogsPage';
 import AdminSystemHealthPage from './pages/admin/AdminSystemHealthPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
+import AdminUserManagementPage from './pages/admin/AdminUserManagementPage';
 
 export function App() {
   return (
@@ -75,6 +76,8 @@ export function App() {
                   {/* System Administrator Platform Routes */}
                   <Route path="/admin" element={<AdminDashboardPage />} />
                   <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+                  <Route path="/admin/users" element={<AdminUserManagementPage />} />
+                  <Route path="/admin/access-management" element={<AdminUserManagementPage />} />
                   <Route path="/admin/datasets" element={<AdminDatasetHistoryPage />} />
                   <Route path="/admin/datasets/import" element={<AdminDatasetImportPage />} />
                   <Route path="/admin/datasets/history" element={<AdminDatasetHistoryPage />} />
