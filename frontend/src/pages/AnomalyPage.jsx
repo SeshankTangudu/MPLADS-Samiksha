@@ -132,13 +132,13 @@ export const AnomalyPage = () => {
               <Search className="w-4 h-4" />
               <span>{t('landing.btn_explore', 'Explore Constituency Allocations')}</span>
             </Link>
-            <button
-              onClick={() => changeRole(ROLES.AUTHORITY)}
-              className="gov-btn-secondary text-xs font-semibold py-2 px-4 flex items-center gap-1.5 w-full sm:w-auto justify-center border-amber-500/40 text-amber-900 bg-amber-50 hover:bg-amber-100"
+            <Link
+              to="/login?role=authority"
+              className="gov-btn-secondary text-xs font-semibold py-2 px-4 flex items-center gap-1.5 w-full sm:w-auto justify-center border-emerald-500/40 text-emerald-900 bg-emerald-50 hover:bg-emerald-100"
             >
-              <UserCog className="w-4 h-4 text-amber-600" />
-              <span>{t('roles.switch_role', 'Switch to Authority View')}</span>
-            </button>
+              <UserCog className="w-4 h-4 text-emerald-600" />
+              <span>Login as District Authority</span>
+            </Link>
           </div>
         </div>
       </div>

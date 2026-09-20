@@ -1,14 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { RoleProvider } from './context/RoleContext';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import DisclaimerBanner from './components/common/DisclaimerBanner';
 import ErrorBoundary from './components/common/ErrorBoundary';
+import ProtectedRoute from './components/common/ProtectedRoute';
 
 // Pages
 import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
 import OverviewPage from './pages/OverviewPage';
 import DashboardPage from './pages/DashboardPage';
 import ExplorerPage from './pages/ExplorerPage';
@@ -45,20 +47,44 @@ export function App() {
               <DisclaimerBanner />
               <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
                 <Routes>
-                  {/* Public / Overview Routes */}
-                  <Route path="/" element={<OverviewPage />} />
+                  {/* Default Gateway & Authentication Routes */}
+                  <Route path="/" element={<LandingPage />} />
                   <Route path="/landing" element={<LandingPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/login/:roleParam" element={<LoginPage />} />
+                  <Route path="/overview" element={<OverviewPage />} />
                   
-                  {/* MP Routes */}
-                  <Route path="/constituency" element={<MPConstituencyPage />} />
-                  <Route path="/mp" element={<MPConstituencyPage />} />
-                  <Route path="/mp/reports" element={<MPCitizenReportsPage />} />
+                  {/* MP Protected Routes */}
+                  <Route 
+                    path="/constituency" 
+                    element={<ProtectedRoute allowedRoles={['mp']}><MPConstituencyPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/mp" 
+                    element={<ProtectedRoute allowedRoles={['mp']}><MPConstituencyPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/mp/reports" 
+                    element={<ProtectedRoute allowedRoles={['mp']}><MPCitizenReportsPage /></ProtectedRoute>} 
+                  />
                   
-                  {/* Authority Routes */}
-                  <Route path="/dashboard" element={<DashboardPage />} />
-                  <Route path="/authority/reports" element={<AuthorityComplaintQueuePage />} />
-                  <Route path="/complaints" element={<AuthorityComplaintQueuePage />} />
-                  <Route path="/anomalies" element={<AnomalyPage />} />
+                  {/* Authority Protected Routes */}
+                  <Route 
+                    path="/dashboard" 
+                    element={<ProtectedRoute allowedRoles={['authority']}><DashboardPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/authority/reports" 
+                    element={<ProtectedRoute allowedRoles={['authority']}><AuthorityComplaintQueuePage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/complaints" 
+                    element={<ProtectedRoute allowedRoles={['authority']}><AuthorityComplaintQueuePage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/anomalies" 
+                    element={<ProtectedRoute allowedRoles={['authority']}><AnomalyPage /></ProtectedRoute>} 
+                  />
                   
                   {/* Citizen Routes */}
                   <Route path="/reports/new" element={<CitizenReportPage />} />
@@ -73,20 +99,62 @@ export function App() {
                   <Route path="/analytics" element={<AnalyticsPage />} />
                   <Route path="/methodology" element={<MethodologyPage />} />
 
-                  {/* System Administrator Platform Routes */}
-                  <Route path="/admin" element={<AdminDashboardPage />} />
-                  <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
-                  <Route path="/admin/users" element={<AdminUserManagementPage />} />
-                  <Route path="/admin/access-management" element={<AdminUserManagementPage />} />
-                  <Route path="/admin/datasets" element={<AdminDatasetHistoryPage />} />
-                  <Route path="/admin/datasets/import" element={<AdminDatasetImportPage />} />
-                  <Route path="/admin/datasets/history" element={<AdminDatasetHistoryPage />} />
-                  <Route path="/admin/data-sources" element={<AdminDataSourcesPage />} />
-                  <Route path="/admin/system-logs" element={<AdminSystemLogsPage />} />
-                  <Route path="/admin/audit-logs" element={<AdminAuditLogsPage />} />
-                  <Route path="/admin/system-health" element={<AdminSystemHealthPage />} />
-                  <Route path="/admin/settings" element={<AdminSettingsPage />} />
-                  <Route path="/admin/configuration" element={<AdminSettingsPage />} />
+                  {/* System Administrator Protected Platform Routes */}
+                  <Route 
+                    path="/admin" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminDashboardPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/dashboard" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminDashboardPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/users" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminUserManagementPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/access-management" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminUserManagementPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/datasets" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminDatasetHistoryPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/datasets/import" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminDatasetImportPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/datasets/history" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminDatasetHistoryPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/data-sources" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminDataSourcesPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/system-logs" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminSystemLogsPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/audit-logs" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminAuditLogsPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/system-health" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminSystemHealthPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/settings" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminSettingsPage /></ProtectedRoute>} 
+                  />
+                  <Route 
+                    path="/admin/configuration" 
+                    element={<ProtectedRoute allowedRoles={['system_admin']}><AdminSettingsPage /></ProtectedRoute>} 
+                  />
+
+                  {/* Fallback route */}
+                  <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </main>
               <Footer />

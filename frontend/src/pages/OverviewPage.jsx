@@ -25,10 +25,6 @@ export const OverviewPage = () => {
   const { t } = useLanguage();
   const { viewRole, isCitizen, isMP, isAuthority } = useRole();
 
-  if (isMP) {
-    return <MPConstituencyPage />;
-  }
-
   const [loading, setLoading] = useState(false);
   const [selfTestOpen, setSelfTestOpen] = useState(false);
   // Live stats state

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { ProjectsAPI } from '../services/api';
+import { ProjectsAPI, AuthAPI } from '../services/api';
 
 const RoleContext = createContext();
 
@@ -11,9 +11,9 @@ export const ROLES = {
 };
 
 export const ROLE_LABELS = {
-  [ROLES.CITIZEN]: 'Citizen',
-  [ROLES.MP]: 'MP',
-  [ROLES.AUTHORITY]: 'Authority',
+  [ROLES.CITIZEN]: 'Citizen / Public',
+  [ROLES.MP]: 'Member of Parliament',
+  [ROLES.AUTHORITY]: 'District Authority',
   [ROLES.SYSTEM_ADMIN]: 'System Administrator',
 };
 
@@ -37,10 +37,30 @@ export const DEFAULT_CONSTITUENCIES = [
 ];
 
 export const RoleProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('mplads_current_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const [authToken, setAuthToken] = useState(() => {
+    try {
+      return localStorage.getItem('mplads_auth_token') || null;
+    } catch (e) {
+      return null;
+    }
+  });
+
   const [viewRole, setViewRole] = useState(() => {
     try {
       const saved = localStorage.getItem('mplads_view_role');
-      return saved && Object.values(ROLES).includes(saved) ? saved : ROLES.CITIZEN;
+      if (saved && Object.values(ROLES).includes(saved)) {
+        return saved;
+      }
+      return ROLES.CITIZEN;
     } catch (e) {
       return ROLES.CITIZEN;
     }
@@ -50,6 +70,11 @@ export const RoleProvider = ({ children }) => {
 
   const [selectedConstituency, setSelectedConstituency] = useState(() => {
     try {
+      const savedUser = localStorage.getItem('mplads_current_user');
+      if (savedUser) {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.constituency) return parsed.constituency;
+      }
       const saved = localStorage.getItem('mplads_mp_constituency');
       return saved || 'Varanasi';
     } catch (e) {
@@ -72,52 +97,52 @@ export const RoleProvider = ({ children }) => {
     fetchConstituencies();
   }, []);
 
-  const [currentUser, setCurrentUser] = useState(() => {
-    try {
-      const saved = localStorage.getItem('mplads_current_user');
-      return saved ? JSON.parse(saved) : null;
-    } catch (e) {
-      return null;
+  // Validate session against /auth/me on mount if token exists
+  useEffect(() => {
+    if (authToken && currentUser) {
+      AuthAPI.getMe()
+        .then((res) => {
+          if (res && res.username) {
+            setCurrentUser(res);
+            setViewRole(res.role);
+            if (res.constituency) {
+              setSelectedConstituency(res.constituency);
+            }
+          }
+        })
+        .catch((err) => {
+          if (err.status === 401 || err.status === 403) {
+            console.warn('Session expired or invalidated by server, clearing state.');
+            logoutUser();
+          }
+        });
     }
-  });
-
-  const [authToken, setAuthToken] = useState(() => {
-    try {
-      return localStorage.getItem('mplads_auth_token') || null;
-    } catch (e) {
-      return null;
-    }
-  });
-
-  const changeRole = (newRole) => {
-    if (Object.values(ROLES).includes(newRole)) {
-      setViewRole(newRole);
-      try {
-        localStorage.setItem('mplads_view_role', newRole);
-      } catch (e) {
-        console.warn('Failed to persist view role:', e);
-      }
-    }
-  };
+  }, [authToken]);
 
   const loginUser = (authData) => {
     if (authData && authData.token && authData.user) {
+      const user = authData.user;
       setAuthToken(authData.token);
-      setCurrentUser(authData.user);
-      setViewRole(authData.user.role);
-      if (authData.user.constituency) {
-        setSelectedConstituency(authData.user.constituency);
+      setCurrentUser(user);
+      setViewRole(user.role);
+
+      const assignedConstituency = user.constituency || 'Varanasi';
+      if (user.role === ROLES.MP) {
+        setSelectedConstituency(assignedConstituency);
       }
+
       try {
         localStorage.setItem('mplads_auth_token', authData.token);
-        localStorage.setItem('mplads_current_user', JSON.stringify(authData.user));
-        localStorage.setItem('mplads_view_role', authData.user.role);
-        localStorage.setItem('mplads_user_id', authData.user.username);
-        if (authData.user.district) {
-          localStorage.setItem('mplads_user_district', authData.user.district);
+        localStorage.setItem('mplads_current_user', JSON.stringify(user));
+        localStorage.setItem('mplads_view_role', user.role);
+        localStorage.setItem('mplads_user_id', user.username);
+        if (user.district) {
+          localStorage.setItem('mplads_user_district', user.district);
+        } else {
+          localStorage.removeItem('mplads_user_district');
         }
-        if (authData.user.constituency) {
-          localStorage.setItem('mplads_mp_constituency', authData.user.constituency);
+        if (user.role === ROLES.MP) {
+          localStorage.setItem('mplads_mp_constituency', assignedConstituency);
         }
       } catch (e) {
         console.warn('Failed to persist auth data:', e);
@@ -126,6 +151,9 @@ export const RoleProvider = ({ children }) => {
   };
 
   const logoutUser = () => {
+    if (authToken) {
+      AuthAPI.logout().catch(() => {});
+    }
     setAuthToken(null);
     setCurrentUser(null);
     setViewRole(ROLES.CITIZEN);
@@ -134,6 +162,7 @@ export const RoleProvider = ({ children }) => {
       localStorage.removeItem('mplads_current_user');
       localStorage.removeItem('mplads_user_id');
       localStorage.removeItem('mplads_user_district');
+      localStorage.removeItem('mplads_mp_constituency');
       localStorage.setItem('mplads_view_role', ROLES.CITIZEN);
     } catch (e) {
       console.warn('Failed to clear auth storage:', e);
@@ -141,6 +170,11 @@ export const RoleProvider = ({ children }) => {
   };
 
   const changeConstituency = (newConst) => {
+    // If authenticated MP, enforce locked constituency
+    if (currentUser && currentUser.role === ROLES.MP && currentUser.constituency) {
+      console.warn('MP constituency is locked to assigned parliamentary constituency:', currentUser.constituency);
+      return;
+    }
     if (newConst && newConst.trim()) {
       setSelectedConstituency(newConst);
       try {
@@ -151,6 +185,13 @@ export const RoleProvider = ({ children }) => {
     }
   };
 
+  // Direct role switching is deprecated in production auth mode
+  const changeRole = (newRole) => {
+    console.warn('Direct changeRole() is deprecated. Users must authenticate through /login.');
+  };
+
+  const isAuthenticated = Boolean(currentUser && authToken);
+
   return (
     <RoleContext.Provider
       value={{
@@ -158,6 +199,7 @@ export const RoleProvider = ({ children }) => {
         changeRole,
         currentUser,
         authToken,
+        isAuthenticated,
         loginUser,
         logoutUser,
         selectedConstituency,

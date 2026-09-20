@@ -1107,6 +1107,7 @@ class UserRoleUpdateSchema(BaseModel):
 class LoginRequestSchema(BaseModel):
     username: str = Field(..., min_length=3, max_length=64)
     password: str = Field(..., min_length=1, max_length=128)
+    requested_role: Optional[str] = Field(None, description="Optional role workspace hint for cross-role access prevention")
 
 
 class LoginResponseSchema(BaseModel):

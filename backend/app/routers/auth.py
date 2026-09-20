@@ -94,6 +94,29 @@ def login(payload: LoginRequestSchema, request: Request, db: Session = Depends(g
             detail="Invalid username or password.",
         )
 
+    # Verify role match if client requested a specific role portal
+    if payload.requested_role:
+        clean_requested = payload.requested_role.strip().lower()
+        if clean_requested in ["system-admin", "sysadmin", "systemadmin"]:
+            clean_requested = "system_admin"
+        if clean_requested != user.role.lower():
+            log_system_event(
+                db=db,
+                event_type=EVENT_LOGIN_FAILURE,
+                severity="WARNING",
+                module="AUTH",
+                action="ROLE_MISMATCH",
+                detail=f"Login rejected: user '{username}' (role '{user.role}') attempted login to '{clean_requested}' workspace.",
+                user_id=username,
+                user_role=user.role,
+                ip_address=client_ip,
+            )
+            db.commit()
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access Denied: These credentials belong to a '{user.role}' account and are not authorized for the '{payload.requested_role}' workspace. Please sign in through your designated role portal.",
+            )
+
     # Update last login timestamp
     now_iso = datetime.now(timezone.utc).isoformat()
     user.last_login = now_iso

@@ -106,6 +106,54 @@ def test_auth_me_and_logout_flow():
     assert logout_res.json()["message"] == "Logged out successfully."
 
 
+def test_auth_login_role_matching_and_mismatch_protection():
+    """Verify that logging in with requested_role succeeds if matched and is rejected with 403 Forbidden if mismatched."""
+    # 1. Matching role should succeed
+    res_mp = client.post("/api/auth/login", json={
+        "username": "mp_varanasi",
+        "password": "MP@Varanasi2026",
+        "requested_role": "mp"
+    })
+    assert res_mp.status_code == 200
+    assert res_mp.json()["user"]["role"] == "mp"
+
+    # 2. Mismatched role should return 403 Forbidden with clear explanation
+    res_mismatch = client.post("/api/auth/login", json={
+        "username": "authority_nodal",
+        "password": "Authority@Varanasi2026",
+        "requested_role": "mp"
+    })
+    assert res_mismatch.status_code == 403
+    assert "These credentials belong to a 'authority' account and are not authorized for the 'mp' workspace" in res_mismatch.json()["detail"]
+
+    # 3. Citizen trying to log into System Admin portal
+    res_citizen_admin = client.post("/api/auth/login", json={
+        "username": "citizen_public",
+        "password": "Citizen@India2026",
+        "requested_role": "system_admin"
+    })
+    assert res_citizen_admin.status_code == 403
+    assert "These credentials belong to a 'citizen' account and are not authorized for the 'system_admin' workspace" in res_citizen_admin.json()["detail"]
+
+    # 4. System admin alias normalization (e.g. 'sysadmin' or 'system-admin')
+    res_sysadmin_alias = client.post("/api/auth/login", json={
+        "username": "sysadmin_platform",
+        "password": "Admin@Samiksha2026",
+        "requested_role": "sysadmin"
+    })
+    assert res_sysadmin_alias.status_code == 200
+    assert res_sysadmin_alias.json()["user"]["role"] == "system_admin"
+
+    # 5. Backward compatibility (requested_role is None)
+    res_none = client.post("/api/auth/login", json={
+        "username": "authority_nodal",
+        "password": "Authority@Varanasi2026",
+        "requested_role": None
+    })
+    assert res_none.status_code == 200
+    assert res_none.json()["user"]["role"] == "authority"
+
+
 # =========================================================================
 # 2. Account Status Governance (SUSPENDED / DISABLED)
 # =========================================================================
