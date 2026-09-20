@@ -199,9 +199,135 @@ class ComplaintEvidence(Base):
     complaint = relationship("Complaint", back_populates="evidence")
 
 
-# Compound & Additional Indexes per Frozen Contract §3
+class User(Base):
+    """Platform user profile for RBAC and identity management."""
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(64), unique=True, nullable=False, index=True)
+    full_name = Column(String(128), nullable=False)
+    role = Column(String(32), nullable=False, index=True)  # citizen, mp, authority, system_admin
+    constituency = Column(String(64), nullable=True)
+    state = Column(String(64), nullable=True)
+    email = Column(String(128), nullable=True)
+    created_at = Column(String(32), nullable=False)
+    is_active = Column(Integer, nullable=False, default=1)
+
+
+class DatasetImport(Base):
+    """Dataset ingestion execution log for data provenance and auditability."""
+    __tablename__ = "dataset_imports"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    import_id = Column(String(32), unique=True, nullable=False, index=True)
+    dataset_name = Column(String(128), nullable=False)
+    source = Column(String(64), nullable=False)
+    source_url = Column(String(256), nullable=True)
+    filename = Column(String(256), nullable=False)
+    uploaded_by = Column(String(64), nullable=False)
+    uploaded_at = Column(String(32), nullable=False)
+    total_rows = Column(Integer, nullable=False, default=0)
+    processed_rows = Column(Integer, nullable=False, default=0)
+    rejected_rows = Column(Integer, nullable=False, default=0)
+    duplicate_rows = Column(Integer, nullable=False, default=0)
+    validation_errors_json = Column(Text, nullable=True)
+    duration_seconds = Column(Float, nullable=False, default=0.0)
+    status = Column(String(32), nullable=False, default="PENDING")  # PENDING, VALIDATING, PROCESSING, COMPLETED, PARTIAL, FAILED
+    dataset_version = Column(String(32), nullable=False, default="1.0.0")
+    lok_sabha_term = Column(Integer, nullable=True)
+
+
+class DataSource(Base):
+    """Registered official and supplementary data sources."""
+    __tablename__ = "data_sources"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    source_name = Column(String(128), nullable=False)
+    dataset_name = Column(String(128), nullable=False)
+    source_type = Column(String(64), nullable=False, default="CSV")
+    source_url = Column(String(256), nullable=True)
+    last_update = Column(String(32), nullable=False)
+    last_ingestion = Column(String(32), nullable=True)
+    record_count = Column(Integer, nullable=False, default=0)
+    dataset_version = Column(String(32), nullable=False, default="1.0.0")
+    status = Column(String(32), nullable=False, default="ACTIVE")
+    description = Column(Text, nullable=True)
+
+
+class SystemLog(Base):
+    """Technical platform event log for operations, security, and diagnostics."""
+    __tablename__ = "system_logs"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    log_id = Column(String(32), unique=True, nullable=False, index=True)
+    event_type = Column(String(64), nullable=False, index=True)  # LOGIN, FAILED_LOGIN, IMPORT, VALIDATION, API_ERROR, CONFIG_CHANGE, HEALTH
+    severity = Column(String(16), nullable=False, index=True)  # INFO, WARNING, ERROR, CRITICAL
+    user_id = Column(String(64), nullable=True)
+    user_role = Column(String(32), nullable=True)
+    module = Column(String(64), nullable=False)
+    action = Column(String(128), nullable=False)
+    detail = Column(Text, nullable=True)
+    ip_address = Column(String(64), nullable=True)
+    timestamp = Column(String(32), nullable=False, index=True)
+
+
+class AuditLog(Base):
+    """Append-only official operational data change audit log."""
+    __tablename__ = "audit_logs"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    audit_id = Column(String(32), unique=True, nullable=False, index=True)
+    actor_id = Column(String(64), nullable=False)
+    actor_role = Column(String(32), nullable=False)
+    timestamp = Column(String(32), nullable=False, index=True)
+    entity_type = Column(String(64), nullable=False)  # PROJECT, COMPLAINT
+    entity_id = Column(String(64), nullable=False, index=True)
+    field_name = Column(String(64), nullable=False)
+    old_value = Column(Text, nullable=True)
+    new_value = Column(Text, nullable=True)
+    reason = Column(Text, nullable=False)
+    evidence_id = Column(String(128), nullable=True)
+    action = Column(String(32), nullable=False)  # CREATE, CORRECT, VERIFY, RESOLVE, STATUS_CHANGE
+    record_version = Column(Integer, nullable=False, default=1)
+
+
+class ProjectVersion(Base):
+    """Official allocation record version snapshot for complete change history."""
+    __tablename__ = "project_versions"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False, index=True)
+    source_record_id = Column(String(32), nullable=False, index=True)
+    version_number = Column(Integer, nullable=False, default=1)
+    changed_by = Column(String(64), nullable=False)
+    changed_by_role = Column(String(32), nullable=False)
+    timestamp = Column(String(32), nullable=False)
+    reason = Column(Text, nullable=False)
+    evidence_reference = Column(String(256), nullable=True)
+    changed_fields_json = Column(Text, nullable=False)
+    snapshot_json = Column(Text, nullable=False)
+
+
+class SystemConfig(Base):
+    """Technical platform settings (feature flags, limits, maintenance mode)."""
+    __tablename__ = "system_config"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    config_key = Column(String(64), unique=True, nullable=False, index=True)
+    config_value = Column(Text, nullable=False)
+    category = Column(String(64), nullable=False, default="GENERAL")
+    description = Column(Text, nullable=True)
+    updated_at = Column(String(32), nullable=False)
+    updated_by = Column(String(64), nullable=False)
+
+
+# Compound & Additional Indexes per Frozen Contract §3 & RBAC Expansion
 Index("idx_projects_category_status", Project.category, Project.status)
 Index("idx_risk_scores_total_score", RiskScore.total_score.desc())
 Index("idx_complaints_status_category", Complaint.status, Complaint.category)
 Index("idx_evidence_complaint_id", ComplaintEvidence.complaint_id)
+Index("idx_system_logs_severity_timestamp", SystemLog.severity, SystemLog.timestamp.desc())
+Index("idx_audit_logs_entity_timestamp", AuditLog.entity_type, AuditLog.entity_id, AuditLog.timestamp.desc())
+Index("idx_project_versions_lookup", ProjectVersion.source_record_id, ProjectVersion.version_number.desc())
+
 

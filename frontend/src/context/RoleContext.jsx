@@ -7,12 +7,14 @@ export const ROLES = {
   CITIZEN: 'citizen',
   MP: 'mp',
   AUTHORITY: 'authority',
+  SYSTEM_ADMIN: 'system_admin',
 };
 
 export const ROLE_LABELS = {
   [ROLES.CITIZEN]: 'Citizen',
   [ROLES.MP]: 'MP',
   [ROLES.AUTHORITY]: 'Authority',
+  [ROLES.SYSTEM_ADMIN]: 'System Administrator',
 };
 
 // Initial fallback authentic constituencies
@@ -106,6 +108,7 @@ export const RoleProvider = ({ children }) => {
         isCitizen: viewRole === ROLES.CITIZEN,
         isMP: viewRole === ROLES.MP,
         isAuthority: viewRole === ROLES.AUTHORITY,
+        isSystemAdmin: viewRole === ROLES.SYSTEM_ADMIN,
       }}
     >
       {children}

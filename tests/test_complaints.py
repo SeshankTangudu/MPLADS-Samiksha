@@ -15,9 +15,19 @@ import pytest
 from fastapi.testclient import TestClient
 from backend.app.main import app
 from backend.app.database import SessionLocal
-from backend.app.models import Project, RiskScore, RiskFlag
+from backend.app.models import Project, RiskScore, RiskFlag, Complaint
 
 client = TestClient(app)
+
+AUTHORITY_HEADERS = {
+    "X-User-Role": "authority",
+    "X-User-Id": "authority_nodal"
+}
+
+MP_HEADERS = {
+    "X-User-Role": "mp",
+    "X-User-Id": "mp_varanasi"
+}
 
 
 @pytest.fixture
@@ -111,14 +121,15 @@ def test_complaint_lifecycle_and_state_transitions(valid_project_source_id):
     invalid_res = client.post(f"/api/complaints/{complaint_id}/status", json={
         "status": "RESOLVED",
         "reason": "Direct jump should be forbidden"
-    })
+    }, headers=AUTHORITY_HEADERS)
     assert invalid_res.status_code == 400
     assert "Invalid status transition" in invalid_res.json()["detail"]
 
     # 3. MP Acknowledges complaint with remark
+    mp_headers = {"X-User-Role": "mp", "X-User-Id": "mp_rep", "X-User-Constituency": c_data.get("constituency") or "Varanasi"}
     ack_res = client.post(f"/api/complaints/{complaint_id}/acknowledge", json={
         "remark": "I have taken note of this report and instructed the local Nodal Officer to inspect."
-    })
+    }, headers=mp_headers)
     assert ack_res.status_code == 200
     ack_data = ack_res.json()
     assert ack_data["status"] == "ACKNOWLEDGED"
@@ -126,7 +137,7 @@ def test_complaint_lifecycle_and_state_transitions(valid_project_source_id):
     assert "instructed the local Nodal Officer" in ack_data["mp_remark"]
 
     # 4. MP Requests field verification
-    verify_res = client.post(f"/api/complaints/{complaint_id}/request-verification")
+    verify_res = client.post(f"/api/complaints/{complaint_id}/request-verification", headers=mp_headers)
     assert verify_res.status_code == 200
     verify_data = verify_res.json()
     assert verify_data["verification_requested"] == 1
@@ -135,7 +146,7 @@ def test_complaint_lifecycle_and_state_transitions(valid_project_source_id):
     # 5. MP adds additional remark
     remark_res = client.post(f"/api/complaints/{complaint_id}/remark", json={
         "remark": "Followed up with District Magistrate regarding inspection status."
-    })
+    }, headers=mp_headers)
     assert remark_res.status_code == 200
     assert "Followed up with District Magistrate" in remark_res.json()["mp_remark"]
 
@@ -143,14 +154,14 @@ def test_complaint_lifecycle_and_state_transitions(valid_project_source_id):
     review_res = client.post(f"/api/complaints/{complaint_id}/status", json={
         "status": "UNDER_REVIEW",
         "reason": "Junior Engineer assigned for physical site verification."
-    })
+    }, headers=AUTHORITY_HEADERS)
     assert review_res.status_code == 200
     assert review_res.json()["status"] == "UNDER_REVIEW"
 
     # 7. Authority adds officer note
     note_res = client.post(f"/api/complaints/{complaint_id}/note", json={
         "note": "Site visit scheduled for 15th of next month with Executive Agency team."
-    })
+    }, headers=AUTHORITY_HEADERS)
     assert note_res.status_code == 200
     assert "Site visit scheduled" in note_res.json()["officer_note"]
     assert note_res.json()["officer_note_at"] is not None
@@ -159,7 +170,7 @@ def test_complaint_lifecycle_and_state_transitions(valid_project_source_id):
     ev_res = client.post(f"/api/complaints/{complaint_id}/status", json={
         "status": "EVIDENCE_REQUESTED",
         "reason": "Requesting measurement book and geo-tagged photographs from implementing agency."
-    })
+    }, headers=AUTHORITY_HEADERS)
     assert ev_res.status_code == 200
     assert ev_res.json()["status"] == "EVIDENCE_REQUESTED"
 
@@ -167,7 +178,7 @@ def test_complaint_lifecycle_and_state_transitions(valid_project_source_id):
     resolve_res = client.post(f"/api/complaints/{complaint_id}/status", json={
         "status": "RESOLVED",
         "reason": "Field inspection completed; rectified installation verified by Executive Engineer."
-    })
+    }, headers=AUTHORITY_HEADERS)
     assert resolve_res.status_code == 200
     resolve_data = resolve_res.json()
     assert resolve_data["status"] == "RESOLVED"
@@ -314,20 +325,21 @@ def test_phase6_mp_reports_and_constituency_scoping():
     assert matching[0]["risk_score"] is not None or matching[0]["risk_score"] == 0.0 or matching[0]["risk_level"] is not None
 
     # 2. MP Acknowledges
-    ack_res = client.post(f"/api/complaints/{complaint_id}/acknowledge")
+    mp_headers = {"X-User-Role": "mp", "X-User-Id": "mp_rep", "X-User-Constituency": constituency}
+    ack_res = client.post(f"/api/complaints/{complaint_id}/acknowledge", headers=mp_headers)
     assert ack_res.status_code == 200
     assert ack_res.json()["status"] == "ACKNOWLEDGED"
 
     # 3. MP Adds Remark
     remark_res = client.post(f"/api/complaints/{complaint_id}/remark", json={
         "remark": "I have instructed the District Development Officer to verify local records."
-    })
+    }, headers=mp_headers)
     assert remark_res.status_code == 200
     assert remark_res.json()["mp_remark"] == "I have instructed the District Development Officer to verify local records."
     assert remark_res.json()["status"] == "ACKNOWLEDGED"  # Remark does NOT alter status
 
     # 4. MP Requests Field Verification
-    ver_res = client.post(f"/api/complaints/{complaint_id}/request-verification")
+    ver_res = client.post(f"/api/complaints/{complaint_id}/request-verification", headers=mp_headers)
     assert ver_res.status_code == 200
     assert ver_res.json()["verification_requested"] == 1
     assert ver_res.json()["status"] == "ACKNOWLEDGED"  # Verification request does NOT alter status to EVIDENCE_REQUESTED
@@ -344,7 +356,7 @@ def test_phase6_mp_permission_boundaries():
     complaint_id = submit_res.json()["complaint_id"]
 
     # Verification request must NOT change status to EVIDENCE_REQUESTED or RESOLVED
-    ver_res = client.post(f"/api/complaints/{complaint_id}/request-verification")
+    ver_res = client.post(f"/api/complaints/{complaint_id}/request-verification", headers=MP_HEADERS)
     assert ver_res.status_code == 200
     assert ver_res.json()["verification_requested"] == 1
     assert ver_res.json()["status"] == "SUBMITTED"
@@ -353,7 +365,7 @@ def test_phase6_mp_permission_boundaries():
     bad_transition = client.post(f"/api/complaints/{complaint_id}/status", json={
         "status": "RESOLVED",
         "reason": "Direct closure attempt"
-    })
+    }, headers=AUTHORITY_HEADERS)
     assert bad_transition.status_code == 400
     assert "Invalid status transition" in bad_transition.json()["detail"]
 
@@ -376,7 +388,7 @@ def test_phase6_authority_queue_and_transitions():
     # Authority adds officer note
     note_res = client.post(f"/api/complaints/{complaint_id}/note", json={
         "note": "Assigned to Junior Technical Officer for core sample review."
-    })
+    }, headers=AUTHORITY_HEADERS)
     assert note_res.status_code == 200
     assert "Junior Technical Officer" in note_res.json()["officer_note"]
 
@@ -384,7 +396,7 @@ def test_phase6_authority_queue_and_transitions():
     t1 = client.post(f"/api/complaints/{complaint_id}/status", json={
         "status": "UNDER_REVIEW",
         "reason": "Commencing technical review"
-    })
+    }, headers=AUTHORITY_HEADERS)
     assert t1.status_code == 200
     assert t1.json()["status"] == "UNDER_REVIEW"
 
@@ -392,7 +404,7 @@ def test_phase6_authority_queue_and_transitions():
     t2 = client.post(f"/api/complaints/{complaint_id}/status", json={
         "status": "EVIDENCE_REQUESTED",
         "reason": "Requesting concrete batch test receipts from executing agency"
-    })
+    }, headers=AUTHORITY_HEADERS)
     assert t2.status_code == 200
     assert t2.json()["status"] == "EVIDENCE_REQUESTED"
 
@@ -400,7 +412,7 @@ def test_phase6_authority_queue_and_transitions():
     t3 = client.post(f"/api/complaints/{complaint_id}/status", json={
         "status": "RESOLVED",
         "reason": "Rectification completed by contractor under defect liability."
-    })
+    }, headers=AUTHORITY_HEADERS)
     assert t3.status_code == 200
     assert t3.json()["status"] == "RESOLVED"
     assert t3.json()["resolved_at"] is not None
@@ -477,12 +489,12 @@ def test_phase6_analytical_isolation_and_invariance(valid_project_source_id):
         "linked_allocation_id": valid_project_source_id
     })
     cid = sub_res.json()["complaint_id"]
-    client.post(f"/api/complaints/{cid}/acknowledge")
-    client.post(f"/api/complaints/{cid}/remark", json={"remark": "MP inspection noted."})
-    client.post(f"/api/complaints/{cid}/request-verification")
-    client.post(f"/api/complaints/{cid}/note", json={"note": "Internal engineering report received."})
-    client.post(f"/api/complaints/{cid}/status", json={"status": "UNDER_REVIEW", "reason": "Triage"})
-    client.post(f"/api/complaints/{cid}/status", json={"status": "RESOLVED", "reason": "Completed"})
+    client.post(f"/api/complaints/{cid}/acknowledge", headers=MP_HEADERS)
+    client.post(f"/api/complaints/{cid}/remark", json={"remark": "MP inspection noted."}, headers=MP_HEADERS)
+    client.post(f"/api/complaints/{cid}/request-verification", headers=MP_HEADERS)
+    client.post(f"/api/complaints/{cid}/note", json={"note": "Internal engineering report received."}, headers=AUTHORITY_HEADERS)
+    client.post(f"/api/complaints/{cid}/status", json={"status": "UNDER_REVIEW", "reason": "Triage"}, headers=AUTHORITY_HEADERS)
+    client.post(f"/api/complaints/{cid}/status", json={"status": "RESOLVED", "reason": "Completed"}, headers=AUTHORITY_HEADERS)
 
     # Check analytical scores
     db = SessionLocal()

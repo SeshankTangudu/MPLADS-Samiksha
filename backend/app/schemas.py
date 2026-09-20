@@ -3,6 +3,7 @@
 Conforms strictly to docs/contracts/api_contract.md and docs/contracts/db_contract.md.
 """
 
+from enum import Enum
 from typing import List, Optional, Generic, TypeVar, Dict, Any
 from pydantic import BaseModel, Field, computed_field, ConfigDict, field_validator
 
@@ -907,6 +908,253 @@ class StatusUpdateRequestSchema(BaseModel):
                 f"Invalid status '{v}'. Allowed statuses are: {', '.join(ALLOWED_COMPLAINT_STATUSES)}"
             )
         return v_clean
+
+
+# ==============================================================================
+# RBAC & Identity Schemas
+# ==============================================================================
+
+class UserRoleEnum(str, Enum):
+    CITIZEN = "citizen"
+    MP = "mp"
+    AUTHORITY = "authority"
+    SYSTEM_ADMIN = "system_admin"
+
+
+class UserContextSchema(BaseModel):
+    id: int
+    username: str
+    full_name: str
+    role: str
+    constituency: Optional[str] = None
+    state: Optional[str] = None
+    email: Optional[str] = None
+    is_active: int = 1
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UserAuthResponseSchema(BaseModel):
+    user: UserContextSchema
+    token: str
+    role: str
+    permissions: List[str]
+
+
+# ==============================================================================
+# Dataset Ingestion & Validation Schemas
+# ==============================================================================
+
+class DatasetValidationItemError(BaseModel):
+    row_number: int
+    field: str
+    rejected_value: Optional[str] = None
+    error_type: str
+    message: str
+
+
+class DatasetValidationResponseSchema(BaseModel):
+    is_valid: bool
+    total_rows: int
+    valid_rows: int
+    rejected_rows: int
+    duplicate_rows: int
+    missing_required_fields_count: int
+    detected_columns: List[str]
+    column_mapping: Dict[str, str]
+    preview_records: List[Dict[str, Any]]
+    validation_errors: List[DatasetValidationItemError]
+    summary_message: str
+
+
+class DatasetImportResponseSchema(BaseModel):
+    import_id: str
+    dataset_name: str
+    status: str
+    total_rows: int
+    processed_rows: int
+    rejected_rows: int
+    duplicate_rows: int
+    duration_seconds: float
+    dataset_version: str
+    lok_sabha_term: Optional[int] = None
+    created_at: str
+    message: str
+
+
+class DatasetImportHistoryItemSchema(BaseModel):
+    id: int
+    import_id: str
+    dataset_name: str
+    source: str
+    source_url: Optional[str] = None
+    filename: str
+    uploaded_by: str
+    uploaded_at: str
+    total_rows: int
+    processed_rows: int
+    rejected_rows: int
+    duplicate_rows: int
+    duration_seconds: float
+    status: str
+    dataset_version: str
+    lok_sabha_term: Optional[int] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class DataSourceSchema(BaseModel):
+    id: int
+    source_name: str
+    dataset_name: str
+    source_type: str
+    source_url: Optional[str] = None
+    last_update: str
+    last_ingestion: Optional[str] = None
+    record_count: int
+    dataset_version: str
+    status: str
+    description: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class DataSourceCreateSchema(BaseModel):
+    source_name: str = Field(..., min_length=2, max_length=128)
+    dataset_name: str = Field(..., min_length=2, max_length=128)
+    source_type: str = Field("CSV", max_length=64)
+    source_url: Optional[str] = None
+    dataset_version: str = Field("1.0.0", max_length=32)
+    description: Optional[str] = None
+
+
+# ==============================================================================
+# Logging & Audit Schemas (Separate Technical vs Official Logs)
+# ==============================================================================
+
+class SystemLogSchema(BaseModel):
+    id: int
+    log_id: str
+    event_type: str
+    severity: str
+    user_id: Optional[str] = None
+    user_role: Optional[str] = None
+    module: str
+    action: str
+    detail: Optional[str] = None
+    ip_address: Optional[str] = None
+    timestamp: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class AuditLogSchema(BaseModel):
+    id: int
+    audit_id: str
+    actor_id: str
+    actor_role: str
+    timestamp: str
+    entity_type: str
+    entity_id: str
+    field_name: str
+    old_value: Optional[str] = None
+    new_value: Optional[str] = None
+    reason: str
+    evidence_id: Optional[str] = None
+    action: str
+    record_version: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ==============================================================================
+# Official Record Correction & Versioning Schemas
+# ==============================================================================
+
+class ProjectCorrectionRequestSchema(BaseModel):
+    status: Optional[str] = Field(None, description="Updated implementation status")
+    expenditure: Optional[float] = Field(None, ge=0.0, description="Verified expenditure amount in Crores")
+    sanctioned_cost: Optional[float] = Field(None, ge=0.0, description="Verified sanctioned cost in Crores")
+    pending_reason: Optional[str] = Field(None, description="Official pending or delay reason description")
+    completion_date: Optional[str] = Field(None, description="Verified work completion date (YYYY-MM-DD)")
+    reason: str = Field(..., min_length=5, max_length=1000, description="Mandatory official justification for administrative correction")
+    evidence_reference: Optional[str] = Field(None, max_length=256, description="Official verification order or certificate document reference")
+
+    @field_validator("reason")
+    @classmethod
+    def validate_reason(cls, v: str) -> str:
+        v_clean = str(v).strip()
+        if len(v_clean) < 5:
+            raise ValueError("Reason must contain at least 5 characters explaining the official correction.")
+        return v_clean
+
+
+class ProjectVersionSchema(BaseModel):
+    id: int
+    project_id: int
+    source_record_id: str
+    version_number: int
+    changed_by: str
+    changed_by_role: str
+    timestamp: str
+    reason: str
+    evidence_reference: Optional[str] = None
+    changed_fields: Dict[str, Any]
+    snapshot: Optional[Dict[str, Any]] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ProjectVersionHistoryResponseSchema(BaseModel):
+    source_record_id: str
+    current_version: int
+    versions: List[ProjectVersionSchema]
+
+
+# ==============================================================================
+# System Health, Diagnostics & Admin Dashboard Schemas
+# ==============================================================================
+
+class SystemHealthDeepResponseSchema(BaseModel):
+    status: str
+    api_status: str
+    database_status: str
+    ingestion_status: str
+    auth_status: str
+    db_table_counts: Dict[str, int]
+    uptime_seconds: float
+    timestamp: str
+
+
+class SystemConfigSchema(BaseModel):
+    config_key: str
+    config_value: str
+    category: str
+    description: Optional[str] = None
+    updated_at: str
+    updated_by: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class SystemConfigUpdateSchema(BaseModel):
+    config_key: str
+    config_value: str
+
+
+class AdminDashboardStatsSchema(BaseModel):
+    total_datasets: int
+    total_allocations: int
+    total_mps: int
+    total_districts: int
+    latest_import_timestamp: Optional[str] = None
+    last_successful_ingestion: Optional[str] = None
+    total_records_imported: int
+    failed_imports_count: int
+    system_health: SystemHealthDeepResponseSchema
+    recent_system_logs: List[SystemLogSchema]
+    recent_ingestions: List[DatasetImportHistoryItemSchema]
+
 
 
 

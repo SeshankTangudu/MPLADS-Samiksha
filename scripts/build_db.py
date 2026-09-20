@@ -26,12 +26,16 @@ CENTROIDS_CSV = os.path.join(PROJECT_ROOT, "data", "reference", "centroids.csv")
 def build_database():
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 
+    engine = create_engine(DATABASE_URL, echo=False)
+
     # Remove existing database file if present to guarantee idempotent clean build
     if os.path.exists(DB_PATH):
-        os.remove(DB_PATH)
-        print(f"Removed existing database at {DB_PATH}")
-
-    engine = create_engine(DATABASE_URL, echo=False)
+        try:
+            os.remove(DB_PATH)
+            print(f"Removed existing database at {DB_PATH}")
+        except PermissionError:
+            print(f"Database file is currently open by another process. Dropping all tables via SQLAlchemy...")
+            Base.metadata.drop_all(engine)
 
     # Enforce SQLite foreign key constraints
     with engine.connect() as conn:
@@ -164,6 +168,11 @@ def build_database():
     assert count_projects == len(df_projects), f"Project row count mismatch: {count_projects} != {len(df_projects)}"
 
     session.close()
+    
+    # Ensure platform metadata and data sources are seeded
+    from backend.app.database import ensure_db_schema
+    ensure_db_schema()
+    
     print(f"\nDatabase built successfully at {DB_PATH}")
 
 

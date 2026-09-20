@@ -17,7 +17,14 @@ import {
   FileText,
   TrendingUp,
   MessageSquareWarning,
-  FileSearch
+  FileSearch,
+  Server,
+  UploadCloud,
+  Clock,
+  ShieldCheck,
+  Terminal,
+  FileCheck,
+  Settings
 } from 'lucide-react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useRole, ROLES } from '../../context/RoleContext';
@@ -52,6 +59,18 @@ export const Navbar = () => {
           { path: '/analytics', key: 'nav.analytics', fallback: 'Risk & Trajectory', icon: TrendingUp },
           { path: '/methodology', key: 'nav.methodology', fallback: 'Peer Comparison', icon: Users },
           { path: '/projects', key: 'common.investigate', fallback: 'Dossier', icon: FileText, query: '?view=dossier' },
+        ];
+
+      case ROLES.SYSTEM_ADMIN:
+        return [
+          { path: '/admin', key: 'nav.admin_dashboard', fallback: 'Ops Console', icon: Server },
+          { path: '/admin/datasets/import', key: 'nav.admin_import', fallback: 'Dataset Ingestion', icon: UploadCloud },
+          { path: '/admin/datasets/history', key: 'nav.admin_history', fallback: 'Ingestion Logs', icon: Clock },
+          { path: '/admin/data-sources', key: 'nav.admin_sources', fallback: 'Data Sources', icon: Layers },
+          { path: '/admin/system-health', key: 'nav.admin_health', fallback: 'Health Probes', icon: ShieldCheck },
+          { path: '/admin/system-logs', key: 'nav.admin_syslogs', fallback: 'System Logs', icon: Terminal },
+          { path: '/admin/audit-logs', key: 'nav.admin_audit', fallback: 'Audit Trail', icon: FileCheck },
+          { path: '/admin/settings', key: 'nav.admin_settings', fallback: 'Platform Config', icon: Settings },
         ];
 
       case ROLES.AUTHORITY:
@@ -116,7 +135,7 @@ export const Navbar = () => {
             {navItems.map((item) => {
               const Icon = item.icon;
               const targetPath = item.query ? `${item.path}${item.query}` : item.path;
-              const isActive = !item.query && (location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path)));
+              const isActive = !item.query && (location.pathname === item.path || (item.path !== '/' && item.path !== '/admin' && location.pathname.startsWith(item.path)));
               const label = item.key ? t(item.key, item.fallback) : item.fallback;
               return (
                 <Link
@@ -163,7 +182,7 @@ export const Navbar = () => {
           {navItems.map((item) => {
             const Icon = item.icon;
             const targetPath = item.query ? `${item.path}${item.query}` : item.path;
-            const isActive = !item.query && (location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path)));
+            const isActive = !item.query && (location.pathname === item.path || (item.path !== '/' && item.path !== '/admin' && location.pathname.startsWith(item.path)));
             const label = item.key ? t(item.key, item.fallback) : item.fallback;
             return (
               <Link

@@ -32,11 +32,26 @@ import { useRole } from '../context/RoleContext';
 
 export const InvestigationPage = () => {
   const { id } = useParams();
-  const { isCitizen, isMP, isAuthority } = useRole();
+  const { isCitizen, isMP, isAuthority, isSystemAdmin, viewRole } = useRole();
   const { t } = useLanguage();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Official Versioning & Record Correction State
+  const [versions, setVersions] = useState([]);
+  const [correcting, setCorrecting] = useState(false);
+  const [correctionSuccess, setCorrectionSuccess] = useState(null);
+  const [correctionError, setCorrectionError] = useState(null);
+  const [correctionForm, setCorrectionForm] = useState({
+    status: '',
+    expenditure: '',
+    sanctioned_cost: '',
+    pending_reason: '',
+    completion_date: '',
+    reason: '',
+    evidence_reference: '',
+  });
 
   // Phase 2.4 / P1-4: Auditor Review Triage Workflow State & Persistence
   const [reviewState, setReviewState] = useState({
@@ -154,25 +169,70 @@ export const InvestigationPage = () => {
     { key: 'administrative_clarification', label: 'District Authority Written Administrative Clarification' }
   ];
 
-  useEffect(() => {
-    const fetchDetail = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await ProjectsAPI.getProjectById(id);
-        setData(res);
-      } catch (err) {
-        console.error('Failed to load project details:', err);
-        setError(err.message || `Constituency allocation record '${id}' could not be loaded.`);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchDetail = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await ProjectsAPI.getProjectById(id);
+      setData(res);
+    } catch (err) {
+      console.error('Failed to load project details:', err);
+      setError(err.message || `Constituency allocation record '${id}' could not be loaded.`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const fetchVersions = async () => {
+    try {
+      const res = await ProjectsAPI.getProjectVersions(id);
+      if (res && res.versions) {
+        setVersions(res.versions);
+      }
+    } catch (e) {
+      // Fallback silently if versions unavailable
+    }
+  };
+
+  useEffect(() => {
     if (id) {
       fetchDetail();
+      fetchVersions();
     }
   }, [id]);
+
+  const handleOfficialCorrection = async (e) => {
+    e.preventDefault();
+    if (!correctionForm.reason || correctionForm.reason.trim().length < 5) {
+      setCorrectionError('Mandatory official justification reason (at least 5 characters) is required.');
+      return;
+    }
+
+    try {
+      setCorrecting(true);
+      setCorrectionError(null);
+      const payload = {
+        reason: correctionForm.reason.trim(),
+        evidence_reference: correctionForm.evidence_reference ? correctionForm.evidence_reference.trim() : null,
+      };
+      if (correctionForm.status) payload.status = correctionForm.status;
+      if (correctionForm.expenditure) payload.expenditure = parseFloat(correctionForm.expenditure);
+      if (correctionForm.sanctioned_cost) payload.sanctioned_cost = parseFloat(correctionForm.sanctioned_cost);
+      if (correctionForm.pending_reason) payload.pending_reason = correctionForm.pending_reason.trim();
+      if (correctionForm.completion_date) payload.completion_date = correctionForm.completion_date.trim();
+
+      await ProjectsAPI.correctProject(id, payload);
+      setCorrectionSuccess('Official verified correction saved to audit history and new version snapshot created.');
+      setTimeout(() => setCorrectionSuccess(null), 4000);
+      setCorrectionForm({ status: '', expenditure: '', sanctioned_cost: '', pending_reason: '', completion_date: '', reason: '', evidence_reference: '' });
+      fetchDetail();
+      fetchVersions();
+    } catch (err) {
+      setCorrectionError(err.message || 'Failed to apply official correction.');
+    } finally {
+      setCorrecting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -368,6 +428,19 @@ export const InvestigationPage = () => {
           </button>
         </div>
       </div>
+
+      {/* System Administrator Platform Diagnostics Read-Only Banner */}
+      {isSystemAdmin && (
+        <div className="p-4 bg-purple-500/10 border-2 border-purple-500/40 rounded-xl text-xs text-purple-950 flex items-start gap-3 shadow-sm print:hidden">
+          <ShieldAlert className="w-5 h-5 text-purple-700 flex-shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <span className="font-bold uppercase tracking-wider text-purple-900">System Administrator Platform Diagnostic View (Least-Privilege Active)</span>
+            <p className="text-slate-700 leading-relaxed">
+              You are viewing allocation record <strong>{allocation.source_record_id}</strong> in platform diagnostic mode. In accordance with strict least-privilege RBAC boundaries, System Administrators cannot directly alter official project financial parameters, completion records, citizen complaints, or ML risk scores. Official verified updates are exclusively executed by authorized District Authority officers.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Printable Audit Case File Banner (Visible on Screen in Print Mode) */}
       <div className="hidden print:block p-4 border-b-2 border-slate-900 mb-4">
@@ -1586,6 +1659,164 @@ export const InvestigationPage = () => {
           *Human review disposition is administrative review metadata and does not modify the underlying Model A risk score, risk tier, or analytical flags.
         </div>
       </div>
+      )}
+
+      {/* Official Verified Operational Record Correction (Authority Only) */}
+      {isAuthority && (
+        <div className="gov-card p-6 space-y-6 border-2 border-emerald-300 bg-white">
+          <div className="flex justify-between items-start pb-3 border-b border-slate-200">
+            <div>
+              <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded text-[11px] font-bold">
+                <FileCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Authority Operational Record Correction</span>
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 mt-1">Submit Official Verified Correction</h3>
+              <p className="text-xs text-slate-500">
+                Authorized corrections update official project implementation and financial fields. Every correction requires a mandatory official justification, preserves historical snapshots, and generates an append-only audit trail.
+              </p>
+            </div>
+            <span className="text-[10px] font-mono font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded">
+              Current Ver: v{versions.length > 0 ? versions[0].version_number : 1}
+            </span>
+          </div>
+
+          {correctionSuccess && (
+            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-lg flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <span>{correctionSuccess}</span>
+            </div>
+          )}
+
+          {correctionError && (
+            <div className="p-3 bg-red-50 border border-red-200 text-red-800 text-xs rounded-lg flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" />
+              <span>{correctionError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleOfficialCorrection} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Official Status</label>
+                <select
+                  value={correctionForm.status}
+                  onChange={(e) => setCorrectionForm({ ...correctionForm, status: e.target.value })}
+                  className="w-full p-2 border border-slate-300 rounded-lg bg-white"
+                >
+                  <option value="">Leave Current ({allocation.status})</option>
+                  <option value="Completed">Completed (Work Verified)</option>
+                  <option value="In Progress">In Progress (Active Work)</option>
+                  <option value="Delayed">Delayed (Administrative Hold)</option>
+                  <option value="Sanctioned">Sanctioned (Pending Tendering)</option>
+                  <option value="Cancelled">Cancelled (Fund Returned)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Verified Expenditure (₹ Cr)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder={`Current: ₹${allocation.expenditure} Cr`}
+                  value={correctionForm.expenditure}
+                  onChange={(e) => setCorrectionForm({ ...correctionForm, expenditure: e.target.value })}
+                  className="w-full p-2 border border-slate-300 rounded-lg"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Evidence / Certificate Ref</label>
+                <input
+                  type="text"
+                  placeholder="e.g. UC/2026/GFR-19A/042"
+                  value={correctionForm.evidence_reference}
+                  onChange={(e) => setCorrectionForm({ ...correctionForm, evidence_reference: e.target.value })}
+                  className="w-full p-2 border border-slate-300 rounded-lg"
+                />
+              </div>
+            </div>
+
+            <div className="text-xs space-y-1">
+              <label className="block font-bold text-slate-700">
+                Mandatory Official Justification Reason <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                required
+                rows={2}
+                placeholder="Explain the official verification basis (e.g., Physical civil inspection certificate verified by Assistant Engineer; fund disbursement reconciled)..."
+                value={correctionForm.reason}
+                onChange={(e) => setCorrectionForm({ ...correctionForm, reason: e.target.value })}
+                className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+              />
+            </div>
+
+            <div className="flex justify-between items-center pt-2">
+              <p className="text-[11px] text-slate-400 italic">
+                *ML composite risk scores are generated by analytical models and remain immutable to manual overrides.
+              </p>
+              <button
+                type="submit"
+                disabled={correcting}
+                className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1.5"
+              >
+                <FileCheck className="w-4 h-4" />
+                <span>{correcting ? 'Submitting...' : 'Record Verified Correction'}</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* Chronological Version History & Official Audit Snapshots */}
+      {versions.length > 0 && (
+        <div className="gov-card p-6 space-y-4 bg-white">
+          <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <Clock className="w-4 h-4 text-gov-navy" />
+              Chronological Record Version History ({versions.length} Versions)
+            </h3>
+            <span className="text-[11px] text-slate-500 font-mono">Immutable Version Log</span>
+          </div>
+
+          <div className="divide-y divide-slate-100 text-xs">
+            {versions.map((v) => (
+              <div key={v.id} className="py-3 space-y-2">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono font-bold text-xs bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded">
+                      Version {v.version_number}
+                    </span>
+                    <span className="font-semibold text-slate-800">Changed by: {v.changed_by} ({v.changed_by_role})</span>
+                  </div>
+                  <span className="text-slate-400 text-[11px]">{v.timestamp?.replace('T', ' ').slice(0, 16)} UTC</span>
+                </div>
+
+                <p className="text-slate-700 bg-slate-50 p-2.5 rounded border border-slate-100">
+                  <strong className="text-slate-900 font-semibold">Reason:</strong> {v.reason}
+                  {v.evidence_reference && (
+                    <span className="ml-2 text-slate-500 font-mono text-[11px]">(Ref: {v.evidence_reference})</span>
+                  )}
+                </p>
+
+                {v.changed_fields && Object.keys(v.changed_fields).length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] font-mono">
+                    {Object.entries(v.changed_fields).map(([fld, diff]) => (
+                      <div key={fld} className="p-1.5 bg-slate-50 rounded border border-slate-200 flex justify-between">
+                        <span className="text-purple-700 font-semibold">{fld}:</span>
+                        <span>
+                          <span className="text-red-600 line-through mr-1">{diff?.old}</span>
+                          <span className="text-slate-400">→</span>
+                          <span className="text-emerald-600 font-bold ml-1">{diff?.new}</span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
       )}
 
       {/* Recommended Review Actions (Phase 1.3 G) */}

@@ -28,7 +28,9 @@ from backend.app.schemas import (
     OfficerNoteRequestSchema,
     StatusUpdateRequestSchema,
     ImageScreeningResponseSchema,
+    UserContextSchema,
 )
+from backend.app.auth import get_current_user, require_role, create_audit_entry, log_system_event
 from backend.app.services.evidence_service import (
     extract_image_metadata,
     evaluate_location_consistency,
@@ -552,6 +554,7 @@ def get_complaint(
 def acknowledge_complaint(
     complaint_id: str,
     payload: Optional[MPAcknowledgeRequestSchema] = None,
+    current_user: UserContextSchema = Depends(require_role(["mp", "authority"])),
     db: Session = Depends(get_db)
 ) -> ComplaintResponseSchema:
     """MP Action: Acknowledges a citizen complaint and optionally records an initial remark."""
@@ -561,6 +564,15 @@ def acknowledge_complaint(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Complaint with ID '{complaint_id}' was not found."
         )
+
+    # Constituency Isolation: If MP has constituency, ensure linked allocation matches
+    if current_user.role == "mp" and current_user.constituency and complaint.linked_allocation_id:
+        proj = db.query(Project).filter(Project.source_record_id == complaint.linked_allocation_id).first()
+        if proj and proj.constituency and current_user.constituency.lower() not in proj.constituency.lower():
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Constituency Isolation: MP for {current_user.constituency} cannot acknowledge complaints in {proj.constituency}."
+            )
 
     now_iso = datetime.now(timezone.utc).isoformat()
     complaint.acknowledged_at = now_iso
@@ -582,6 +594,7 @@ def acknowledge_complaint(
 def add_mp_remark(
     complaint_id: str,
     payload: MPRemarkRequestSchema,
+    current_user: UserContextSchema = Depends(require_role(["mp", "authority"])),
     db: Session = Depends(get_db)
 ) -> ComplaintResponseSchema:
     """MP Action: Adds or updates an MP remark on the complaint."""
@@ -591,6 +604,15 @@ def add_mp_remark(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Complaint with ID '{complaint_id}' was not found."
         )
+
+    # Constituency Isolation: If MP has constituency, ensure linked allocation matches
+    if current_user.role == "mp" and current_user.constituency and complaint.linked_allocation_id:
+        proj = db.query(Project).filter(Project.source_record_id == complaint.linked_allocation_id).first()
+        if proj and proj.constituency and current_user.constituency.lower() not in proj.constituency.lower():
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Constituency Isolation: MP for {current_user.constituency} cannot post remarks on complaints in {proj.constituency}."
+            )
 
     now_iso = datetime.now(timezone.utc).isoformat()
     complaint.mp_remark = payload.remark.strip()
@@ -604,6 +626,7 @@ def add_mp_remark(
 @router.post("/{complaint_id}/request-verification", response_model=ComplaintResponseSchema)
 def request_field_verification(
     complaint_id: str,
+    current_user: UserContextSchema = Depends(require_role(["mp", "authority"])),
     db: Session = Depends(get_db)
 ) -> ComplaintResponseSchema:
     """MP Action: Requests formal administrative field verification for the complaint."""
@@ -613,6 +636,15 @@ def request_field_verification(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Complaint with ID '{complaint_id}' was not found."
         )
+
+    # Constituency Isolation: If MP has constituency, ensure linked allocation matches
+    if current_user.role == "mp" and current_user.constituency and complaint.linked_allocation_id:
+        proj = db.query(Project).filter(Project.source_record_id == complaint.linked_allocation_id).first()
+        if proj and proj.constituency and current_user.constituency.lower() not in proj.constituency.lower():
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Constituency Isolation: MP for {current_user.constituency} cannot request verification on complaints in {proj.constituency}."
+            )
 
     now_iso = datetime.now(timezone.utc).isoformat()
     complaint.verification_requested = 1
@@ -627,6 +659,7 @@ def request_field_verification(
 def update_complaint_status(
     complaint_id: str,
     payload: StatusUpdateRequestSchema,
+    current_user: UserContextSchema = Depends(require_role(["authority"])),
     db: Session = Depends(get_db)
 ) -> ComplaintResponseSchema:
     """Authority Action: Updates complaint workflow status with enforced state transition validation."""
@@ -653,6 +686,7 @@ def update_complaint_status(
             )
 
     now_iso = datetime.now(timezone.utc).isoformat()
+    old_st = complaint.status
     complaint.status = target_status
 
     if target_status in ["RESOLVED", "FALSE_POSITIVE_INVALID"]:
@@ -666,6 +700,21 @@ def update_complaint_status(
             complaint.officer_note = note_entry
         complaint.officer_note_at = now_iso
 
+    # Append to official audit log
+    create_audit_entry(
+        db,
+        actor_id=current_user.username,
+        actor_role=current_user.role,
+        entity_type="COMPLAINT",
+        entity_id=complaint.complaint_id,
+        field_name="status",
+        old_value=old_st,
+        new_value=target_status,
+        reason=payload.reason or f"Status transitioned to {target_status}",
+        action="STATUS_CHANGE",
+        record_version=1,
+    )
+
     db.commit()
     db.refresh(complaint)
     return _build_complaint_response(complaint, db)
@@ -675,6 +724,7 @@ def update_complaint_status(
 def add_officer_note(
     complaint_id: str,
     payload: OfficerNoteRequestSchema,
+    current_user: UserContextSchema = Depends(require_role(["authority"])),
     db: Session = Depends(get_db)
 ) -> ComplaintResponseSchema:
     """Authority Action: Records administrative officer investigation / review note."""
@@ -688,6 +738,20 @@ def add_officer_note(
     now_iso = datetime.now(timezone.utc).isoformat()
     complaint.officer_note = payload.note.strip()
     complaint.officer_note_at = now_iso
+
+    create_audit_entry(
+        db,
+        actor_id=current_user.username,
+        actor_role=current_user.role,
+        entity_type="COMPLAINT",
+        entity_id=complaint.complaint_id,
+        field_name="officer_note",
+        old_value=None,
+        new_value=payload.note.strip(),
+        reason="Administrative investigation note added",
+        action="VERIFY",
+        record_version=1,
+    )
 
     db.commit()
     db.refresh(complaint)

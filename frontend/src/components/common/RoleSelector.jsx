@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { UserCheck, ChevronDown, Check, ShieldAlert, Users, Landmark, UserCog, Info } from 'lucide-react';
+import { UserCheck, ChevronDown, Check, ShieldAlert, Users, Landmark, UserCog, Info, Server } from 'lucide-react';
 import { useRole } from '../../context/RoleContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 
@@ -27,6 +27,8 @@ export const RoleSelector = () => {
         return <Landmark className="w-3.5 h-3.5 text-amber-400" />;
       case ROLES.AUTHORITY:
         return <UserCog className="w-3.5 h-3.5 text-emerald-400" />;
+      case ROLES.SYSTEM_ADMIN:
+        return <Server className="w-3.5 h-3.5 text-purple-400" />;
       default:
         return <UserCheck className="w-3.5 h-3.5 text-slate-300" />;
     }
@@ -40,6 +42,8 @@ export const RoleSelector = () => {
         return t('roles.mp_title', 'MP / Representative');
       case ROLES.AUTHORITY:
         return t('roles.authority_title', 'Authority / Officer');
+      case ROLES.SYSTEM_ADMIN:
+        return t('roles.system_admin_title', 'System Administrator');
       default:
         return ROLE_LABELS[role] || role;
     }
@@ -64,10 +68,10 @@ export const RoleSelector = () => {
         </button>
 
         {isOpen && (
-          <div className="origin-top-right absolute right-0 mt-1.5 w-64 rounded-lg shadow-xl bg-slate-900 border border-slate-700 py-2 z-50 text-xs animate-in fade-in zoom-in-95 duration-150">
+          <div className="origin-top-right absolute right-0 mt-1.5 w-72 rounded-lg shadow-xl bg-slate-900 border border-slate-700 py-2 z-50 text-xs animate-in fade-in zoom-in-95 duration-150">
             <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800 flex justify-between items-center">
-              <span>{t('landing.disclosure_title', 'Prototype Role Simulator')}</span>
-              <span className="bg-amber-500/20 text-amber-300 px-1 py-0.2 rounded text-[9px]">{t('roles.demo_badge', 'Demo')}</span>
+              <span>{t('landing.disclosure_title', 'Role Simulator & RBAC')}</span>
+              <span className="bg-amber-500/20 text-amber-300 px-1 py-0.2 rounded text-[9px]">{t('roles.demo_badge', '4 Roles')}</span>
             </div>
 
             {/* Role Options */}
@@ -114,10 +118,26 @@ export const RoleSelector = () => {
                   <UserCog className="w-4 h-4 text-emerald-400" />
                   <div>
                     <div className="font-semibold">{t('roles.authority_title', 'Authority / Officer')}</div>
-                    <div className="text-[10px] text-slate-400 font-normal">{t('roles.authority_desc', 'Full analytical intelligence & workflow')}</div>
+                    <div className="text-[10px] text-slate-400 font-normal">{t('roles.authority_desc', 'Official data corrections & investigation workflow')}</div>
                   </div>
                 </div>
                 {viewRole === ROLES.AUTHORITY && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+              </button>
+
+              <button
+                onClick={() => { changeRole(ROLES.SYSTEM_ADMIN); setIsOpen(false); }}
+                className={`w-full text-left px-3 py-2 flex items-center justify-between transition-colors ${
+                  viewRole === ROLES.SYSTEM_ADMIN ? 'bg-purple-500/20 text-purple-300 font-bold' : 'text-slate-200 hover:bg-slate-800'
+                }`}
+              >
+                <div className="flex items-center space-x-2">
+                  <Server className="w-4 h-4 text-purple-400" />
+                  <div>
+                    <div className="font-semibold">{t('roles.system_admin_title', 'System Administrator')}</div>
+                    <div className="text-[10px] text-slate-400 font-normal">{t('roles.system_admin_desc', 'Platform operations, dataset ingestion & health')}</div>
+                  </div>
+                </div>
+                {viewRole === ROLES.SYSTEM_ADMIN && <Check className="w-3.5 h-3.5 text-purple-400" />}
               </button>
             </div>
 
@@ -125,7 +145,7 @@ export const RoleSelector = () => {
             <div className="px-3 pt-2 mt-1 border-t border-slate-800 text-[10px] text-slate-400 flex items-start space-x-1.5">
               <Info className="w-3 h-3 text-amber-400 flex-shrink-0 mt-0.5" />
               <p className="leading-tight">
-                {t('roles.simulation_notice', 'Prototype role simulation. Production deployment would require authenticated identity and authorization controls.')}
+                {t('roles.simulation_notice', 'Least-privilege RBAC active: System Admin controls platform operations, while Authority verifies official data.')}
               </p>
             </div>
           </div>

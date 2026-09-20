@@ -24,6 +24,7 @@ from backend.app.routers import (
     duplicate_candidates,
     isolation_forest,
     complaints,
+    admin,
 )
 
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",")
@@ -127,5 +128,7 @@ app.include_router(self_test.router, prefix="/api")
 app.include_router(duplicate_candidates.router, prefix="/api")
 app.include_router(isolation_forest.router, prefix="/api")
 app.include_router(complaints.router, prefix="/api")
+app.include_router(admin.router, prefix="/api")
+
 
 

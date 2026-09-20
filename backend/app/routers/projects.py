@@ -4,13 +4,15 @@ Implements GET /api/projects (list with filters) and GET /api/projects/{id} (dee
 """
 
 import math
+import json
+from datetime import datetime, timezone
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, desc, asc, func
 
 from backend.app.database import get_db
-from backend.app.models import Project, RiskScore, RiskFlag, Complaint
+from backend.app.models import Project, RiskScore, RiskFlag, Complaint, ProjectVersion, AuditLog
 from backend.app.schemas import (
     ProjectItemSchema,
     AllocationDetailSchema,
@@ -23,8 +25,13 @@ from backend.app.schemas import (
     RiskTrajectorySchema,
     InvestmentDurabilityResponseSchema,
     NaturalEventContextResponseSchema,
-    PaginationEnvelope
+    PaginationEnvelope,
+    ProjectCorrectionRequestSchema,
+    ProjectVersionSchema,
+    ProjectVersionHistoryResponseSchema,
+    UserContextSchema,
 )
+from backend.app.auth import get_current_user, require_role, create_audit_entry, log_system_event
 from ml.risk_engine import evaluate_allocation, load_baselines
 from backend.app.services.durability_service import evaluate_investment_durability
 from backend.app.services.natural_event_service import evaluate_natural_event_context
@@ -484,3 +491,254 @@ def get_project_by_id(id: str, db: Session = Depends(get_db)):
         natural_event_context=nat_event_context,
         disclaimer="Risk indicators are analytical signals intended to support review. They do not constitute proof of wrongdoing."
     )
+
+
+@router.post("/{id}/correct", response_model=AllocationDetailSchema)
+def correct_project_record(
+    id: str,
+    payload: ProjectCorrectionRequestSchema,
+    current_user: UserContextSchema = Depends(require_role(["authority"])),
+    db: Session = Depends(get_db)
+):
+    """Authority Action: Submits verified operational correction with reason and optional evidence reference.
+
+    Enforces:
+    - Authenticated Authority user only (Citizen, MP, and System Administrator will receive 403 Forbidden)
+    - Non-destructive versioning (stores prior snapshot in project_versions)
+    - Append-only official audit log generation in audit_logs
+    - ML risk score remains intact from original analytical model calculation
+    """
+    if id.isdigit():
+        project = db.query(Project).filter(Project.id == int(id)).first()
+    else:
+        project = db.query(Project).filter(Project.source_record_id == id.strip()).first()
+
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Constituency allocation record '{id}' not found."
+        )
+
+    # 1. Determine next version number
+    current_ver = (
+        db.query(func.max(ProjectVersion.version_number))
+        .filter(ProjectVersion.project_id == project.id)
+        .scalar()
+        or 1
+    )
+    next_ver = current_ver + 1
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    # 2. Capture old state snapshot
+    old_snapshot = {
+        "status": project.status,
+        "expenditure": project.expenditure,
+        "sanctioned_cost": project.sanctioned_cost,
+        "unspent_balance": project.unspent_balance,
+        "pending_reason": project.pending_reason,
+        "completion_date": project.completion_date,
+    }
+
+    changed_fields = {}
+
+    # 3. Apply permitted official corrections
+    if payload.status is not None and payload.status.strip() != project.status:
+        old_val = project.status
+        project.status = payload.status.strip()
+        changed_fields["status"] = {"old": old_val, "new": project.status}
+        create_audit_entry(
+            db,
+            actor_id=current_user.username,
+            actor_role=current_user.role,
+            entity_type="PROJECT",
+            entity_id=project.source_record_id,
+            field_name="status",
+            old_value=old_val,
+            new_value=project.status,
+            reason=payload.reason,
+            evidence_id=payload.evidence_reference,
+            action="STATUS_CHANGE",
+            record_version=next_ver,
+        )
+
+    if payload.expenditure is not None and payload.expenditure != project.expenditure:
+        old_val = project.expenditure
+        project.expenditure = round(payload.expenditure, 2)
+        project.unspent_balance = round(max(0.0, project.sanctioned_cost - project.expenditure), 2)
+        changed_fields["expenditure"] = {"old": old_val, "new": project.expenditure}
+        create_audit_entry(
+            db,
+            actor_id=current_user.username,
+            actor_role=current_user.role,
+            entity_type="PROJECT",
+            entity_id=project.source_record_id,
+            field_name="expenditure",
+            old_value=str(old_val),
+            new_value=str(project.expenditure),
+            reason=payload.reason,
+            evidence_id=payload.evidence_reference,
+            action="CORRECT",
+            record_version=next_ver,
+        )
+
+    if payload.sanctioned_cost is not None and payload.sanctioned_cost != project.sanctioned_cost:
+        old_val = project.sanctioned_cost
+        project.sanctioned_cost = round(payload.sanctioned_cost, 2)
+        project.unspent_balance = round(max(0.0, project.sanctioned_cost - project.expenditure), 2)
+        changed_fields["sanctioned_cost"] = {"old": old_val, "new": project.sanctioned_cost}
+        create_audit_entry(
+            db,
+            actor_id=current_user.username,
+            actor_role=current_user.role,
+            entity_type="PROJECT",
+            entity_id=project.source_record_id,
+            field_name="sanctioned_cost",
+            old_value=str(old_val),
+            new_value=str(project.sanctioned_cost),
+            reason=payload.reason,
+            evidence_id=payload.evidence_reference,
+            action="CORRECT",
+            record_version=next_ver,
+        )
+
+    if payload.pending_reason is not None and payload.pending_reason.strip() != (project.pending_reason or ""):
+        old_val = project.pending_reason or ""
+        project.pending_reason = payload.pending_reason.strip()
+        project.has_reasons_flag = 1 if project.pending_reason else 0
+        changed_fields["pending_reason"] = {"old": old_val, "new": project.pending_reason}
+        create_audit_entry(
+            db,
+            actor_id=current_user.username,
+            actor_role=current_user.role,
+            entity_type="PROJECT",
+            entity_id=project.source_record_id,
+            field_name="pending_reason",
+            old_value=old_val,
+            new_value=project.pending_reason,
+            reason=payload.reason,
+            evidence_id=payload.evidence_reference,
+            action="CORRECT",
+            record_version=next_ver,
+        )
+
+    if payload.completion_date is not None and payload.completion_date.strip() != (project.completion_date or ""):
+        old_val = project.completion_date or ""
+        project.completion_date = payload.completion_date.strip()
+        changed_fields["completion_date"] = {"old": old_val, "new": project.completion_date}
+        create_audit_entry(
+            db,
+            actor_id=current_user.username,
+            actor_role=current_user.role,
+            entity_type="PROJECT",
+            entity_id=project.source_record_id,
+            field_name="completion_date",
+            old_value=old_val,
+            new_value=project.completion_date,
+            reason=payload.reason,
+            evidence_id=payload.evidence_reference,
+            action="VERIFY",
+            record_version=next_ver,
+        )
+
+    if not changed_fields:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No field modifications were detected in correction payload."
+        )
+
+    # 4. Save Version Record
+    version_record = ProjectVersion(
+        project_id=project.id,
+        source_record_id=project.source_record_id,
+        version_number=next_ver,
+        changed_by=current_user.username,
+        changed_by_role=current_user.role,
+        timestamp=now_iso,
+        reason=payload.reason,
+        evidence_reference=payload.evidence_reference,
+        changed_fields_json=json.dumps(changed_fields),
+        snapshot_json=json.dumps(old_snapshot),
+    )
+    db.add(version_record)
+    db.commit()
+    db.refresh(project)
+
+    financial_util = round((project.expenditure / project.sanctioned_cost * 100), 2) if project.sanctioned_cost > 0 else 0.0
+
+    return AllocationDetailSchema(
+        id=project.id,
+        source_record_id=project.source_record_id,
+        mp_name=project.mp_name,
+        house=project.house,
+        lok_sabha_term=project.lok_sabha_term,
+        state=project.state,
+        district=project.district,
+        constituency=project.constituency,
+        category=project.category,
+        description=project.description,
+        sanction_date=project.sanction_date,
+        completion_date=project.completion_date or "",
+        sanctioned_cost=project.sanctioned_cost,
+        expenditure=project.expenditure,
+        entitlement=project.entitlement,
+        released_amount=project.released_amount,
+        unspent_balance=project.unspent_balance,
+        financial_utilization=financial_util,
+        status=project.status,
+        pending_reason=project.pending_reason or "",
+        citizen_report_count=0
+    )
+
+
+@router.get("/{id}/versions", response_model=ProjectVersionHistoryResponseSchema)
+def get_project_versions(
+    id: str,
+    db: Session = Depends(get_db)
+):
+    """Retrieves immutable chronological version history and administrative corrections for an allocation."""
+    if id.isdigit():
+        project = db.query(Project).filter(Project.id == int(id)).first()
+    else:
+        project = db.query(Project).filter(Project.source_record_id == id.strip()).first()
+
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Constituency allocation record '{id}' not found."
+        )
+
+    versions = (
+        db.query(ProjectVersion)
+        .filter(ProjectVersion.project_id == project.id)
+        .order_by(ProjectVersion.version_number.desc())
+        .all()
+    )
+
+    items = []
+    for v in versions:
+        changed_dict = json.loads(v.changed_fields_json) if v.changed_fields_json else {}
+        snap_dict = json.loads(v.snapshot_json) if v.snapshot_json else {}
+        items.append(
+            ProjectVersionSchema(
+                id=v.id,
+                project_id=v.project_id,
+                source_record_id=v.source_record_id,
+                version_number=v.version_number,
+                changed_by=v.changed_by,
+                changed_by_role=v.changed_by_role,
+                timestamp=v.timestamp,
+                reason=v.reason,
+                evidence_reference=v.evidence_reference,
+                changed_fields=changed_dict,
+                snapshot=snap_dict,
+            )
+        )
+
+    curr_ver = items[0].version_number if items else 1
+
+    return ProjectVersionHistoryResponseSchema(
+        source_record_id=project.source_record_id,
+        current_version=curr_ver,
+        versions=items
+    )
+
